@@ -1,0 +1,126 @@
+#container{
+    left: 5%;
+    border: 10px solid #4CAF50;
+    background-color: rgb(60,60,60);
+    padding: .5rem;
+    width: 50%;
+    height: 100%;
+    overflow: scroll;
+    border-radius: 2%;
+}
+.row
+{
+    background-color: white;
+    border: 10px ridge #f00;
+    margin: 5;
+    width: 100px;
+    height: 100;
+    display: inline-block;
+}
+
+.background{
+  background-color: rgb(20,20,20);
+}
+
+.playList-container{
+  left:40%;
+  top:0%;
+  width:60%;
+  height: 80%;
+  background-color: rgb(200,200,200);
+  position:absolute;
+  border-radius: 2%;
+}
+
+.profile-container {
+  width:20%;
+  height:60%;
+  background-color: rgb(200,200,200);
+  position: absolute;
+  border-radius: 1vh;
+}
+
+.loginButton {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:relative;
+  top: 100px;
+  border-radius: 20px;
+}
+
+.profile-picture{
+  left:20%;
+  top: 5%;
+  width: 50%;
+  height: 30%;
+  overflow:hidden;
+  border: 0.3vh solid black;
+  position:relative;
+  border-radius: 100%;
+}
+
+.profile-displayText{
+  top: 5%;
+  left: 1vh;
+  padding: 1%;
+  font-size: 2vh;
+  position:relative;
+}
+button{
+  display: block;
+  width :75%;
+  height: 8vh;
+  background-color: #4CAF50;
+}
+
+.add-song-button{
+  position:absolute;
+  left:52%;
+  top: 52%;
+  width:22%;
+}
+
+.remove-song-button{
+  position:absolute;
+  left:52%;
+  top: 52%;
+  width:47%;
+}
+
+.finish-button{
+  position:absolute;
+  left:52%;
+  top: 85%;
+  width:47%;
+}
+
+.generate-remove-button{
+  position:absolute;
+  left:52%;
+  top: 73%;
+  width:47%;
+}
+
+.slider{
+  position:absolute;
+  top:67%;
+  left:52%;
+  width: 47%;
+  overflow:hidden;
+}
+
+#header
+{
+  font-family: Tahoma;
+  font-size: 50px;
+  text-align: center;
+  color: red;
+}
