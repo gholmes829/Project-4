@@ -1,0 +1,17 @@
+Backend - Grant and Peyton
+Connecting back and front end - Luke S
+Test cases - Luke B, Fares, and Luke S
+Video - Grant and Luke S 
+Estimate of person-hours - Peyton
+Integration strategy - Luke S
+Deployment Plan - Fares
+Maintenance plan - Luke B
+
+Front End to do list
+
+Shoot for the 4th
+Add Tabs to allow for different options - Luke B/fares/Luke S
+Add graph capabilities - Luke S
+Add music play button - Fares
+Make pretty - Luke B
+Add/Remove Tab - Luke B
