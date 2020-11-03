@@ -12,8 +12,8 @@ def main():
 	plt.rc("axes", axisbelow=True)
 	
 	# generating test data
-	d0, d1 = (50, 2)
-	scale = 2.5  # how much points should deviate from center
+	d0, d1 = (25, 2)
+	scale = 1  # how much points should deviate from center
 	c0 = np.full((d0, d1), [1.5, 3.5]) + unitNoise(d0, d1)*scale  # modify values to adjust center
 	c1 = np.full((d0, d1), [-0.25, -0.65]) + unitNoise(d0, d1)*scale
 	c2 = np.full((d0, d1), [-3.5, 2.15]) + unitNoise(d0, d1)*scale
