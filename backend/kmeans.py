@@ -2,6 +2,9 @@
 Note:
 	Consider having "playlist put togetherness metric" based on how well clustered all songs are.
 		Or maybe based on average distance from mean of data
+
+Things to consider:
+	Handling 1 or few songs
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,7 +12,7 @@ import cProfile
 from time import process_time as time
 
 class Clusters(dict):
-	def __init__(self, data: np.ndarray, k: int = 0, maxK=6, maxIterations: int = 50, samples=5, alpha=0.85, accuracy=4) -> None:
+	def __init__(self, data: np.ndarray, k: int = 0, maxK=6, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4) -> None:
 		super().__init__(self)
 		self.data = data
 		self.k = k
@@ -85,6 +88,10 @@ class Clusters(dict):
 		for k in range(2, self.maxK+1):
 			print("\nAnalyzing K="+str(k))
 			if k > 2:
+				self.clear()
+				for centroid in optimal:
+					self._add(centroid)
+				self._assign()
 				self._prevIteration = self._simpleCopy()
 				self.clear()
 				
@@ -96,11 +103,15 @@ class Clusters(dict):
 			if k > 2:
 				#print(k, self._scores)
 				if self._scores[k-1] >= self._scores[k]:
-					if (self._scores[k-1] - self._scores[k]) <= 0.025 and pivot is None:
+					if pivot is not None and self._scores[k] >= pivot:
+						pivot = None
+					if (self._scores[k-1] - self._scores[k]) <= 0.05 and pivot is None:
 						pivot = self._scores[k-1]
-					elif pivot is None or (pivot - self._scores[k]) > 0.025:
+					if pivot is None or (pivot - self._scores[k]) > 0.05 or k==self.maxK:
 						self.score = self._scores[k-1]
+						#print("REVERTING")
 						self._revert(self._prevIteration)
+						print(min([len(points) for points in self.values()]))
 						print("\nFound near optimal K: " + str(k-1))
 						break
 				elif k==self.maxK:
@@ -122,10 +133,12 @@ class Clusters(dict):
 		
 		for i in range(1, len(samples)):
 			cost = self._cost(samples[i])
-			if cost is -1:
+			if cost == -1:
+				#print("EMPTY")
 				continue
+				
 			elif not initialized:
-				best, bestCost = samples[0], self._cost(samples[0])
+				best, bestCost = samples[0], cost
 				initialized = True
 			elif cost <= bestCost:
 				best, bestCost = samples[i], cost
@@ -135,17 +148,22 @@ class Clusters(dict):
 	def _cost(self, copy):
 		cost = 0
 		totalDist = 0
-		size = len(copy.values())
-		if size <= 1:
-			return -1
+		maxDist = 0
+		
 		for bufferCentroid, points in copy.items():
+			size = len(points)
+			if size == 0:
+				return -1
 			centroid = np.frombuffer(bufferCentroid)
 			for pt in points:
 				dist = Clusters.optimizedDist(pt, centroid)	
 				cost+=dist
 				totalDist += dist
+				if dist > maxDist:
+					maxDist = dist
 		#print(cost)
-		return cost*((totalDist/size)**2)
+		#print(cost*((10*maxDist)**2), cost, ((10*maxDist)**2))
+		return cost*((maxDist*10)**2)
 
 	def _silhouette(self, partition):
 		#print("Starting...")
@@ -170,7 +188,7 @@ class Clusters(dict):
 				#print(parent, centroidScore/len(points))
 				partitionScore += centroidScore/len(points)
 			else:
-				partitionScore += -1
+				return -1
 		#score = sum(score)/num_centroids
 		return partitionScore/len(centroids)
 
@@ -181,15 +199,15 @@ class Clusters(dict):
 		totalDist = 0
 		size = len(points) - 1
 		for otherPt in points:
-			totalDist += Clusters.dist(pt, otherPt)
-		return totalDist/size
+			totalDist += Clusters.optimizedDist(pt, otherPt)
+		return np.sqrt(totalDist)/size
 
 	def _computeB(self, pt, points):
 		totalDist = 0
 		size = len(points)
 		for otherPt in points:
-			totalDist += Clusters.dist(pt, otherPt)
-		return totalDist/size
+			totalDist += Clusters.optimizedDist(pt, otherPt)
+		return np.sqrt(totalDist)/size
 
 	def _simplify(self):
 		simplified = self._simpleCopy()
