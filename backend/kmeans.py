@@ -10,9 +10,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cProfile
 from time import process_time as time
+from mpl_toolkits.mplot3d import Axes3D
 
 class Clusters(dict):
-	def __init__(self, data: np.ndarray, k: int = 0, maxK=6, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4) -> None:
+	def __init__(self, data: np.ndarray, k: int = 0, maxK=10, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4) -> None:
 		if not k>=0:
 			raise ValueError("K must be greater than or equal to zero")
 
@@ -30,12 +31,21 @@ class Clusters(dict):
 		self.autoSolve = (k==0)
 
 		# data attributes
-		self._bounds = np.array([[data[:,0].min(), data[:,0].max()], [data[:,1].min(), data[:,1].max()]])
-		self._xRange, self._yRange = np.diff(self._bounds).flatten()
-		self._range = self.dist(*np.array([[self._xRange, 0], [0, self._yRange]]))
+		self._bounds = np.zeros((self.data.shape[1], 2))
+		for dimension in range(len(self._bounds)):
+			self._bounds[dimension][0] = self.data[:,dimension].min()
+			self._bounds[dimension][1] = self.data[:,dimension].max()
 
+		self._ranges = np.diff(self._bounds).flatten()
+
+		space = np.zeros((2, self.data.shape[1]))
+		for dimension in range(len(self._bounds)):
+			space[1][dimension] = self._ranges[dimension]
+			
+		self._range = self.dist(space[0], space[1])
+		
 		self._convergenceLimit = 1*(10**(-1*self.accuracy))
-		self._scoreTolerance = 0.05
+		self._scoreTolerance = 0.0375
 		
 		# state attributes
 		self._dp = 0
@@ -46,13 +56,7 @@ class Clusters(dict):
 		# evaluation attributes
 		self._scores = {}
 		
-		
-		pr = cProfile.Profile()
-		pr.enable()
 		self._solve()
-		pr.disable()
-		print()
-		pr.print_stats(sort="cumulative")
 			
 	def keys(self) -> np.ndarray:  # return centroid positions
 		return np.array([np.frombuffer(centroid) for centroid in super().keys()])
@@ -128,7 +132,7 @@ class Clusters(dict):
 		initialized = False
 		best, bestCost = None, 0
 		
-		for i in range(1, len(samples)):
+		for i in range(len(samples)):
 			cost = self._cost(samples[i])
 			if cost == -1:
 				continue
@@ -139,6 +143,7 @@ class Clusters(dict):
 			elif cost <= bestCost:
 				best, bestCost = samples[i], cost
 		print("Completed randomized sampling...")
+	
 		return best
 
 	def _cost(self, copy):
@@ -157,10 +162,12 @@ class Clusters(dict):
 				totalDist+=dist
 				if dist > maxDist:
 					maxDist = dist
-		#print("Cost: "+str((totalDist/size)*(maxDist)) +", Avg: "+ str(totalDist/size) +", Max: " +str(maxDist))
+
 		return (totalDist/ptCount)*(maxDist**2)  # average distance * max distance^2
 
 	def _silhouette(self, partition):
+		if partition is None:
+			return -1
 		partitionScore = 0
 		centroids = [np.frombuffer(bufferCentroid) for bufferCentroid in partition.keys()]
 		for bufferCentroid, points in partition.items():  # for each centroid
@@ -185,6 +192,8 @@ class Clusters(dict):
 	def _computeA(self, pt, points):
 		totalDist = 0
 		size = len(points) - 1
+		if size == 0:
+			return 0
 		for otherPt in points:
 			totalDist += Clusters.optimizedDist(pt, otherPt)
 		return np.sqrt(totalDist)/size
@@ -223,8 +232,10 @@ class Clusters(dict):
 				break
 
 	def _getRandomCentroid(self):
-		x, y = Clusters.rand(self._bounds[0].min(), self._bounds[0].max()), Clusters.rand(self._bounds[1].min(), self._bounds[1].max())
-		return np.array([x, y])
+		coords = np.zeros(self.data.shape[1])
+		for dimension in range(self.data.shape[1]):
+			coords[dimension] = Clusters.rand(self._bounds[dimension].min(), self._bounds[dimension].max())
+		return coords
 
 	def _findSecondCentroid(self, pt, parent, centroids):
 		closest, closestDist = None, 0
@@ -241,7 +252,7 @@ class Clusters(dict):
 		return closest
 
 	def _add(self, centroid: np.ndarray) -> None:  # add centroid
-		self[centroid] = {"data": np.zeros((self.data.shape[0], 2)), "size": 0}
+		self[centroid] = {"data": np.zeros((self.data.shape[0], self.data.shape[1])), "size": 0}
 
 	def _assign(self) -> None:  # assign data points to nearest centroid
 		if self._isAssigned:
@@ -268,7 +279,7 @@ class Clusters(dict):
 				center = data.mean(axis=0)
 				
 				dp = self.alpha*(center-centroid)
-				ds = self.dist(*np.array([[dp[0], 0], [0, dp[1]]]))
+				ds = self.dist(np.zeros(self.data.shape[1]), dp)
 
 				if ds > maxDP:
 					maxDP = ds
@@ -292,7 +303,7 @@ class Clusters(dict):
 
 	def _clearAssignments(self) -> None:  # clear all data points assigned to centroids
 		for centroid in self:
-			self[centroid]["data"] = np.zeros((self.data.shape[0], 2))
+			self[centroid]["data"] = np.zeros((self.data.shape[0], self.data.shape[1]))
 			self[centroid]["size"] = 0
 
 	def _bufferKeys(self):
@@ -328,13 +339,7 @@ class Clusters(dict):
 def kmeans(data, k):  # testing kmeans
 	clusters = Clusters(data, k)
 	centroids = clusters.keys()
-	#initial = clusters.getCentroids(initial=True)
-
-	plt.figure()
-	plt.grid()
-	plt.plot(centroids[:,0], centroids[:,1], '*', c="blue", mec="white", ms=20, zorder=3, label="final")
-	#plt.plot(initial[:,0], initial[:,1], 's', c="blue", mec="white", ms=10, zorder=2, label="initial")
-	plt.legend(loc="upper right")
+	
 	
 	colors = {
 		0: "green",
@@ -343,21 +348,52 @@ def kmeans(data, k):  # testing kmeans
 		3: "purple",
 		4: "cyan",
 		5: "magenta",
+		6: "pink",
+		7: "yellow",
 	}
 
-	c=0
-	for centroid in clusters:
-		data = clusters[centroid]
-		#print(data)
-		plt.plot(data[:,0], data[:,1], 'o', c=colors[c], mec="white", ms=7.5, zorder=1)
-		c+=1
-
-	plt.xlabel("x")
-	plt.ylabel("y")
+	plt.figure()
+	#print(clusters[centroids[0]][0].shape[0])
+	if clusters[centroids[0]][0].shape[0] == 2:
+		plt.grid()
+		plt.plot(centroids[:,0], centroids[:,1], '*', c="blue", mec="white", ms=20, zorder=3, label="final")
+		#plt.plot(initial[:,0], initial[:,1], 's', c="blue", mec="white", ms=10, zorder=2, label="initial")
+		plt.legend(loc="upper right")
+		c=0
+		for centroid in clusters:
+			data = clusters[centroid]
+			#print(data)
+			plt.plot(data[:,0], data[:,1], 'o', c=colors[c], mec="white", ms=7.5, zorder=1)
+			c+=1
 	
-	plt.show()	
 
-	return None
+	
+
+	if clusters[centroids[0]][0].shape[0] == 3:
+		ax = plt.axes(projection="3d")
+		ax.scatter3D(centroids[:,0], centroids[:,1], centroids[:,2], '*', c="blue", zorder=3, label="final")
+
+		c=0
+		for centroid in clusters:
+			data = clusters[centroid]
+			#print(data)
+			ax.scatter3D(data[:,0], data[:,1], data[:,2], c=colors[c], zorder=1)
+			c+=1
+	
+	if clusters[centroids[0]][0].shape[0] >= 4:
+		for i, centroid in enumerate(clusters):
+			#print(centroid)
+			data = clusters[centroid]
+			print("Cluster "+str(i)+": "+str(len(data)))
+	#x, y, z = data[:,0], data[:,1], data[:,2]
+
+	#ax.scatter3D(x, y, z, c=z, cmap="hsv")
+
+	#plt.xlabel("x")
+	#plt.ylabel("y")
+	
+	if clusters[centroids[0]][0].shape[0] <= 3:
+		plt.show()
 
 
 
