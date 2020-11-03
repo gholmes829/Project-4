@@ -157,7 +157,7 @@ class Clusters(dict):
 				totalDist+=dist
 				if dist > maxDist:
 					maxDist = dist
-		print("Cost: "+str((totalDist/size)*(maxDist)) +", Avg: "+ str(totalDist/size) +", Max: " +str(maxDist))
+		#print("Cost: "+str((totalDist/size)*(maxDist)) +", Avg: "+ str(totalDist/size) +", Max: " +str(maxDist))
 		return (totalDist/ptCount)*(maxDist**2)  # average distance * max distance^2
 
 	def _silhouette(self, partition):
