@@ -16,9 +16,7 @@ class Clusters(dict):
 	def __init__(self, data: np.ndarray, k: int = None, maxK=10, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4, std=True) -> None:
 		if not (k is None or k>=0):
 			raise ValueError("K must be greater than or equal to zero")
-
 		super().__init__(self)
-		#np.random.seed(1)
 		# public attributes
 		self.data = data
 		self.k, self.maxK = k, maxK
@@ -39,7 +37,6 @@ class Clusters(dict):
 
 		# data attributes
 		self._center = self.data.mean(axis=0)
-		#print(self._center)
 		self._bounds = np.zeros((self.data.shape[1], 2))
 		for dimension in range(len(self._bounds)):
 			self._bounds[dimension][0] = self.data[:,dimension].min()
@@ -241,6 +238,7 @@ class Clusters(dict):
 	def _generateScores(self):
 		size = 0
 		scores = np.zeros(self.data.shape[0])
+		data =  np.zeros(self.data.shape)
 
 		for centroid, points in self.items():
 			clusterDistance = {
@@ -265,34 +263,28 @@ class Clusters(dict):
 				distFromCenter = Clusters.optimizedDist(pt, self._center)
 				score = self._score(pt, distCentroidPt, clusterSize, clusterDistance["max"], clusterDistance["avg"], distFromCenter)
 				scores[size] = score
+				data[size] = pt
 				size += 1
 
 		minScore, maxScore = scores.min(), scores.max()
 		avgScore = scores.mean()
 		scale = lambda pt: ((pt-minScore)/(maxScore-minScore))*100
-		#normalized = np.array(list(map(scale, scores)))
-		#print(len(normalized), normalized)
-		#order = normalized.argsort()
-		#self.orderedScores = normalized[order]
-		#self.orderedData = (self.data.T[:,order]).T
+		normalized = np.array(list(map(scale, scores)))
+		
+		order = normalized.argsort()
+		self.orderedScores = normalized[order]
+		self.orderedData = (data.T[:,order]).T
 
-		order = scores.argsort()
-		self.orderedScores = scores[order]
-		self.orderedData = (self.data.T[:,order]).T
 
 		self.rawScoreMin = minScore
 		self.rawScoreMax = maxScore
 		self.rawScoreAvg = avgScore
-		#self.scoreAvg = np.mean(normalized)
+		self.scoreAvg = np.mean(normalized)
 
 	def _score(self, pt, distCentroidPt, clusterSize, clusterMax, avgClusterDist, distFromCenter):
 		relativeClusterSize = (clusterSize/(self.data.shape[0]/self.k)) 
 		relativeDist = (distCentroidPt/clusterMax)
-		#print(Clusters.optimizedDist(pt, self._center)==distFromCenter)
-		#print(distFromCenter)
-		return pt[0]
-		#return distFromCenter
-		#return (relativeClusterSize)*(np.sqrt(relativeDist**3))*avgClusterDist*(distFromCenter**2)
+		return (relativeClusterSize**2)*(np.sqrt(relativeDist**3))*avgClusterDist*(distFromCenter**2)
 
 	def _simplify(self):
 		simplified = self._simpleCopy()
