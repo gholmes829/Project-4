@@ -69,10 +69,9 @@ function getUser()
      */
     function showTracks(oldDataId){
       document.getElementById("playList").style.display = "none";
-      console.log(oldDataId);
-
       spotifyApi.getPlaylistTracks(oldDataId).then(
         function (data) {
+          createPlaylistDictionary(data);
           selectedPlaylist = data;
           document.getElementById("header").innerHTML = "Choose a Track to play";
           for (let i = 0; i<data.items.length;i++)
@@ -97,6 +96,41 @@ function getUser()
         }
       );
     }
+
+function createPlaylistDictionary(data)
+{
+  let length = data.items.length;
+  var playListDictionary = {"Playlist" : []};
+  var tempFeatures = null;
+  var tempID = "";
+  for(i = 0;i<length;i++)
+  {
+    console.log(i);
+    tempID = data.items[i].track.id;
+    spotifyApi.getAudioFeaturesForTrack(tempID,null).then(
+      function (features) {
+        tempFeatures = {ID : features.id,
+              acousticness : features.acousticness,
+              danceability: features.danceability,
+              energy       : features.energy,
+              instrumentalness: features.instrumentalness,
+              key        : features.key,
+              liveness   : features.liveness,
+              loudness   : features.loudness,
+              speechiness: features.speechiness,
+              tempo      : features.tempo,
+              valence    : features.valence};
+        playListDictionary.Playlist.push(tempFeatures);
+        console.log(JSON.stringify(playListDictionary));
+      },
+      function (err) {
+        console.error(err);
+      });
+  }
+  var data_str = encodeURIComponent(JSON.stringify(playListDictionary));
+  document.getElementById("JSONStorage").innerHTML = data_str;
+}
+
 
 
 /**
@@ -128,19 +162,6 @@ function finishPlaylist()
   }
 function removeSong()
   {
-
-   /* for (let i =0; i<selectedPlaylist.items.length;i++)
-    {
-      var element = document.getElementById(i);
-      if(element.checked == true)
-      {
-        delete selectedPlaylist.items[i];
-        selectedPlaylist.items.length--;
-      }
-    }
-    console.log(selectedPlaylist);
-
-    }*/
     console.log(selectedSong);
     let temp = 0;
     let offset = false;
@@ -200,5 +221,5 @@ function updateIframe(id)
 {
   var url = "https://open.spotify.com/embed/track/" + id
   document.getElementById("playButton").src = url;
-  
+
 }
