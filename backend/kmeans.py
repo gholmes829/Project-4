@@ -1,8 +1,4 @@
 """
-Note:
-	Consider having "playlist put togetherness metric" based on how well clustered all songs are.
-		Or maybe based on average distance from mean of data
-
 Things to consider:
 	Handling 1 or few songs
 """
@@ -13,9 +9,11 @@ from time import process_time as time
 from mpl_toolkits.mplot3d import Axes3D
 
 class Clusters(dict):
-	def __init__(self, data: np.ndarray, k: int = None, maxK=10, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4, std=True) -> None:
+	def __init__(self, data: np.ndarray, k: int = None, maxK=10, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4) -> None:
 		if not (k is None or k>=0):
 			raise ValueError("K must be greater than or equal to zero")
+		if not (data.shape[0] > 1):
+			raise ValueError("Data must have greater that one point")
 		super().__init__(self)
 		# public attributes
 		self.data = data

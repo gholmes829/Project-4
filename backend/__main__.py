@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from kmeans import kmeans
 
-k=5
+k=None
 
 def main():
 	plt.style.use(["dark_background"])
@@ -12,14 +12,14 @@ def main():
 	plt.rc("axes", axisbelow=True)
 
 	# generating test data
-	d0, d1 = (50, 2)
+	d0, d1 = (5, 2)
 	scale = 2  # how much points should deviate from center
 	if d1 == 2:
 		c0 = np.full((d0, d1), [1.5, 3.5]) + unitNoise(d0, d1)*scale  # modify values to adjust center
 		c1 = np.full((d0, d1), [-0.25, -0.65]) + unitNoise(d0, d1)*scale
 		c2 = np.full((d0, d1), [-3.5, 2.15]) + unitNoise(d0, d1)*scale
 		c3 = np.full((d0, d1), [-1.1, 5.65]) + unitNoise(d0, d1)*scale
-		c4 = np.full((d0, d1), [-0.5, 2.5]) + unitNoise(d0, d1)*scale
+		c4 = np.full((d0, d1), [-0.5, 2.5]) + unitNoise(d0L, d1)*scale
 	elif d1 == 3:
 		c0 = np.full((d0, d1), [1.5, 3.5, 4]) + unitNoise(d0, d1)*scale  # modify values to adjust center
 		c1 = np.full((d0, d1), [-0.25, -0.65, 3]) + unitNoise(d0, d1)*scale
@@ -42,6 +42,8 @@ def main():
 
 	data = np.concatenate(clusters, axis=0)
 	standardized = (data-data.mean(axis=0))/data.std(axis=0)
+	print(standardized, standardized.shape)
+	#clusters = kmeans(np.array([[0, 1, 2], [0, 4, 5]]), k)
 	clusters = kmeans(standardized, k)
 
 def unitNoise(d0, d1):
