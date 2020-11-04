@@ -107,6 +107,13 @@ button{
   left:52%;
   top: 73%;
   width:47%;
+  background-color: #4CAF50;
+  color: black;
+  padding: 20px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  position:absolute;
 }
 
 .slider{

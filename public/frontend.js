@@ -188,28 +188,6 @@ function removeSong()
 
 function removeMisMatched()
 {
+  console.log("removed");
 
-  for(x=0;x<selectedPlaylist.items.length;x++)
-  {
-    var element = document.getElementById("trackList");
-    element.removeChild(element.lastChild);
-  }
-
-  for(i=0;i<selectedPlaylist.items.length;i++)
-  {
-    if (selectedPlaylist.items[i].track.name == "Despacito (Featuring Daddy Yankee)")
-    {
-      var newButton = document.createElement("button");
-      var node = document.createTextNode(selectedPlaylist.items[i].track.name);
-      newButton.appendChild(node);
-      var element = document.getElementById("trackList");
-      newButton.onclick = function(){console.log(selectedPlaylist)};
-      element.appendChild(newButton);
-    }
-    else {
-      delete selectedPlaylist.items[i];
-      selectedPlaylist.items.length = selectedPlaylist.items.length-1;
-    }
-  }
-  console.log(selectedPlaylist);
 }
