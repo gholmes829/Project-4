@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from kmeans import Clusters
+from clustering import Clusters
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 

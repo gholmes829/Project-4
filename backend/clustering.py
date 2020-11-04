@@ -1,10 +1,15 @@
 """
-Things to consider:
-	Handling 1 or few songs
+File: kmeans.py
+Author: Grant Holmes
+Date: 11/04/20
+Description: Uses extension of kmeans clustering alongside silhouette coefficient scoring to organize nth dimensional data into k clusters. Can also auto solve for k.
 """
 import numpy as np
 
 class Clusters(dict):
+	"""
+	Uses kmeans clustering and silhoutte coefficient scoring to find clusters amongst data.
+	"""
 	def __init__(self, data: np.ndarray, k: int = None, maxK=10, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4) -> None:
 		if not (k is None or k>=0):
 			raise ValueError("K must be greater than or equal to zero")

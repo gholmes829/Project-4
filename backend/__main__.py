@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import numpy as np
-from kmeans import Clusters
+from clustering import Clusters
 
 def main():
 	print("Running...")	
