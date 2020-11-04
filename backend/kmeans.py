@@ -3,10 +3,6 @@ Things to consider:
 	Handling 1 or few songs
 """
 import numpy as np
-import matplotlib.pyplot as plt
-import cProfile
-from time import process_time as time
-from mpl_toolkits.mplot3d import Axes3D
 
 class Clusters(dict):
 	def __init__(self, data: np.ndarray, k: int = None, maxK=10, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4) -> None:
@@ -110,23 +106,19 @@ class Clusters(dict):
 		self._solved = True
 
 	def _singleSolve(self):
-		print("Solving for K="+str(self.k) + "...")
 		optimal = self._optimalPartition(self.k)
 		self._revert(optimal)
 
 	def _autoSolve(self):
-		print("Using heuristics to auto solve for K...")
 		pivot = None
 		optimal = None
 
 		for k in range(2, self.maxK+1):
-			print("\nAnalyzing K="+str(k))
 			if k > 2:  # store current configuration as previous
 				self._prevIteration = optimal
 				
 			optimal = self._optimalPartition(k)
 			self._silhouettes[k] = self._silhouette(optimal)
-			print("Silhouette score: " + str(self._silhouettes[k]))
 
 			if k > 2:
 				dScore = (self._silhouettes[k-1] - self._silhouettes[k])
@@ -170,8 +162,6 @@ class Clusters(dict):
 				initialized = True
 			elif cost <= bestCost:
 				best, bestCost = samples[i], cost
-		print("Completed randomized sampling...")
-	
 		return best
 
 	def _cost(self, copy):
@@ -415,76 +405,4 @@ class Clusters(dict):
 
 	def __iter__(self) -> iter(list()):
 		return [np.frombuffer(centroid) for centroid in self.keys()].__iter__()
-
-def kmeans(data, k):  # testing kmeans
-	clusters = Clusters(data, k)
-	centroids = clusters.keys()
-
-	d, s = clusters.orderedData, clusters.orderedScores
-	t = 0.75
-	a, b = d[:int(t*len(d))], d[int(t*len(d)):]
-	
-	colors = {
-		0: "green",
-		1: "red",
-		2: "orange",
-		3: "purple",
-		4: "cyan",
-		5: "magenta",
-		6: "pink",
-		7: "yellow",
-	}
-
-	if clusters[centroids[0]][0].shape[0] == 2:
-		plt.figure()
-		plt.grid()
-		plt.plot(centroids[:,0], centroids[:,1], '*', c="blue", mec="white", ms=20, zorder=3, label="final")
-		plt.legend(loc="upper right")
-
-		c=0
-		for centroid in clusters:
-			data = clusters[centroid]
-			plt.plot(data[:,0], data[:,1], 'o', c=colors[c], mec="white", ms=7.5, zorder=1)
-			c+=1
-
-		plt.xlabel("x")
-		plt.ylabel("y")
-
-		plt.figure()
-		plt.grid()
-		plt.xlabel("x")
-		plt.ylabel("y")
-		plt.plot(centroids[:,0], centroids[:,1], '*', c="green", mec="white", ms=15, zorder=3, label="final")
-		plt.plot(clusters._center[0], clusters._center[1], 's', c="purple", mec="white", ms=15, zorder=1)
-		plt.plot(a[:,0], a[:,1], 'o', c="blue", mec="white", ms=7.5, zorder=1)
-		plt.plot(b[:,0], b[:,1], 'o', c="red", mec="white", ms=7.5, zorder=1)
-	
-	elif clusters[centroids[0]][0].shape[0] == 3:
-		plt.figure()
-		ax = plt.axes(projection="3d")
-		ax.scatter3D(centroids[:,0], centroids[:,1], centroids[:,2], '*', c="blue", zorder=3, label="final")
-
-		c=0
-		for centroid in clusters:
-			data = clusters[centroid]
-			ax.scatter3D(data[:,0], data[:,1], data[:,2], c=colors[c], zorder=1)
-			c+=1
-		
-		plt.figure()
-		ax = plt.axes(projection="3d")
-
-		ax.scatter3D(a[:,0], a[:,1], a[:,2], 'o', c="blue", zorder=1)
-		ax.scatter3D(b[:,0], b[:,1], b[:,2], 'o', c="red", zorder=1)
-		
-	if clusters[centroids[0]][0].shape[0] > 3:
-		for i, centroid in enumerate(clusters):
-			data = clusters[centroid]
-			print("Cluster "+str(i)+": "+str(len(data)))
-	
-	if clusters[centroids[0]][0].shape[0] <= 3:
-		plt.show()
-
-
-
-
 
