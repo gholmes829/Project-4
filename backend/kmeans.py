@@ -13,24 +13,33 @@ from time import process_time as time
 from mpl_toolkits.mplot3d import Axes3D
 
 class Clusters(dict):
-	def __init__(self, data: np.ndarray, k: int = 0, maxK=10, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4) -> None:
-		if not k>=0:
+	def __init__(self, data: np.ndarray, k: int = None, maxK=10, maxIterations: int = 50, samples=10, alpha=0.85, accuracy=4, std=True) -> None:
+		if not (k is None or k>=0):
 			raise ValueError("K must be greater than or equal to zero")
 
 		super().__init__(self)
-		
+		#np.random.seed(1)
 		# public attributes
 		self.data = data
 		self.k, self.maxK = k, maxK
 		self.alpha = alpha
 		self.accuracy = accuracy
-		self.score = 0
+		self.partitionQuality = 0
+
+		self.orderedData = None
+		self.orderedScores = None
+		
+		self.rawScoreMin, self.rawScoreMax = None, None
+		self.rawScoreAvg = None
+		self.scoreAvg = None
 
 		self.maxIterations = maxIterations
 		self.samples = samples
-		self.autoSolve = (k==0)
+		self.autoSolve = k is None
 
 		# data attributes
+		self._center = self.data.mean(axis=0)
+		#print(self._center)
 		self._bounds = np.zeros((self.data.shape[1], 2))
 		for dimension in range(len(self._bounds)):
 			self._bounds[dimension][0] = self.data[:,dimension].min()
@@ -45,7 +54,7 @@ class Clusters(dict):
 		self._range = self.dist(space[0], space[1])
 		
 		self._convergenceLimit = 1*(10**(-1*self.accuracy))
-		self._scoreTolerance = 0.0375
+		self._silhouetteThreshold = 0.0375
 		
 		# state attributes
 		self._dp = 0
@@ -54,15 +63,36 @@ class Clusters(dict):
 		self._solved = False
 
 		# evaluation attributes
-		self._scores = {}
+		self._silhouettes = {}
 		
 		self._solve()
+		self._generateScores()
 			
 	def keys(self) -> np.ndarray:  # return centroid positions
 		return np.array([np.frombuffer(centroid) for centroid in super().keys()])
 
 	def items(self) -> list:
 		return [(np.frombuffer(centroid), self._getPoints(centroid)) for centroid, points in super().items()]
+
+	def split(self, threshold):  # rework to use score
+		valid, invalid = np.zeros(self.data.shape), np.zeros(self.data.shape)
+		numValid, numInvalid = 0, 0
+		for centroid, points in self.items():
+			cache = {}
+			localMax = 0
+			for pt in points:
+				dist = Clusters.dist(centroid, pt)
+				cache[pt.tobytes()] = dist
+				if dist > localMax:
+					localMax = dist
+			for bufferPt, dist in cache.items():
+				if dist > threshold*localMax:
+					invalid[numInvalid] = np.frombuffer(bufferPt)
+					numInvalid += 1
+				else:			
+					valid[numValid] = np.frombuffer(bufferPt)
+					numValid += 1
+		return valid[:numValid], invalid[:numInvalid]
 
 	@staticmethod
 	def dist(pt1: np.ndarray, pt2: np.ndarray) -> np.float64:
@@ -77,7 +107,7 @@ class Clusters(dict):
 		return np.random.uniform(low, high, size=size)
 
 	def _solve(self):
-		if self.k != 0:
+		if self.k is not None:
 			self._singleSolve()
 		else:
 			self._autoSolve()
@@ -100,26 +130,29 @@ class Clusters(dict):
 				self._prevIteration = optimal
 				
 			optimal = self._optimalPartition(k)
-			self._scores[k] = self._silhouette(optimal)
-			print("Silhouette score: " + str(self._scores[k]))
+			self._silhouettes[k] = self._silhouette(optimal)
+			print("Silhouette score: " + str(self._silhouettes[k]))
 
 			if k > 2:
-				dScore = (self._scores[k-1] - self._scores[k])
+				dScore = (self._silhouettes[k-1] - self._silhouettes[k])
 				if dScore <= 0:  # if new score is better than prev score
-					if pivot is not None and (pivot-self._scores[k]) <= 0:  # if pivot is set and new score is better than or euqal to pivot score
+					if pivot is not None and (pivot-self._silhouettes[k]) <= 0:  # if pivot is set and new score is better than or euqal to pivot score
 						pivot = None
 					if k==self.maxK:
 						self._simplify()
-						self.score = self._scores[k]
-				elif dScore <= self._scoreTolerance and (pivot is None or (pivot-self._scores[k]) <= self._scoreTolerance):  # new score is worse but within tolerance
+						self.k = k
+						self.partitionQuality = self._silhouettes[k]
+				elif dScore <= self._silhouetteThreshold and (pivot is None or (pivot-self._silhouettes[k]) <= self._silhouetteThreshold):  # new score is worse but within tolerance
 					if pivot is None:
-						pivot = self._scores[k-1]
+						pivot = self._silhouettes[k-1]
 					if k==self.maxK:
 						self._simplify()
-						self.score = self._scores[k-1]
+						self.k = k-1
+						self.partitionQuality = self._silhouettes[k-1]
 				else:   # new score is worse and exceeds tolerance
 					self._revert(self._prevIteration)
-					self.score = self._scores[k-1]
+					self.k = k-1
+					self.partitionQuality = self._silhouettes[k-1]
 					break
 
 	def _optimalPartition(self, k):
@@ -204,6 +237,62 @@ class Clusters(dict):
 		for otherPt in points:
 			totalDist += Clusters.optimizedDist(pt, otherPt)
 		return np.sqrt(totalDist)/size
+
+	def _generateScores(self):
+		size = 0
+		scores = np.zeros(self.data.shape[0])
+
+		for centroid, points in self.items():
+			clusterDistance = {
+				"avg": 0,
+				"total": 0,
+				"max": 0,	
+			}
+			clusterSize = len(points)
+			cache = {}
+
+			for pt in points:
+				distCentroidPt = Clusters.dist(centroid, pt)
+				clusterDistance["total"] += distCentroidPt
+				cache[pt.tobytes()] = distCentroidPt
+				if distCentroidPt > clusterDistance["max"]:
+					clusterDistance["max"] = distCentroidPt
+
+			clusterDistance["avg"] = clusterDistance["total"]/clusterSize
+
+			for bufferPt, distCentroidPt in cache.items():
+				pt = np.frombuffer(bufferPt)
+				distFromCenter = Clusters.optimizedDist(pt, self._center)
+				score = self._score(pt, distCentroidPt, clusterSize, clusterDistance["max"], clusterDistance["avg"], distFromCenter)
+				scores[size] = score
+				size += 1
+
+		minScore, maxScore = scores.min(), scores.max()
+		avgScore = scores.mean()
+		scale = lambda pt: ((pt-minScore)/(maxScore-minScore))*100
+		#normalized = np.array(list(map(scale, scores)))
+		#print(len(normalized), normalized)
+		#order = normalized.argsort()
+		#self.orderedScores = normalized[order]
+		#self.orderedData = (self.data.T[:,order]).T
+
+		order = scores.argsort()
+		self.orderedScores = scores[order]
+		self.orderedData = (self.data.T[:,order]).T
+
+		self.rawScoreMin = minScore
+		self.rawScoreMax = maxScore
+		self.rawScoreAvg = avgScore
+		#self.scoreAvg = np.mean(normalized)
+
+	def _score(self, pt, distCentroidPt, clusterSize, clusterMax, avgClusterDist, distFromCenter):
+		relativeClusterSize = (clusterSize/(self.data.shape[0]/self.k)) 
+		relativeDist = (distCentroidPt/clusterMax)
+		#print(Clusters.optimizedDist(pt, self._center)==distFromCenter)
+		#print(distFromCenter)
+		return pt[0]
+		#return distFromCenter
+		#return (relativeClusterSize)*(np.sqrt(relativeDist**3))*avgClusterDist*(distFromCenter**2)
 
 	def _simplify(self):
 		simplified = self._simpleCopy()
@@ -339,7 +428,10 @@ class Clusters(dict):
 def kmeans(data, k):  # testing kmeans
 	clusters = Clusters(data, k)
 	centroids = clusters.keys()
-	
+
+	d, s = clusters.orderedData, clusters.orderedScores
+	t = 0.75
+	a, b = d[:int(t*len(d))], d[int(t*len(d)):]
 	
 	colors = {
 		0: "green",
@@ -352,45 +444,51 @@ def kmeans(data, k):  # testing kmeans
 		7: "yellow",
 	}
 
-	plt.figure()
-	#print(clusters[centroids[0]][0].shape[0])
 	if clusters[centroids[0]][0].shape[0] == 2:
+		plt.figure()
 		plt.grid()
 		plt.plot(centroids[:,0], centroids[:,1], '*', c="blue", mec="white", ms=20, zorder=3, label="final")
-		#plt.plot(initial[:,0], initial[:,1], 's', c="blue", mec="white", ms=10, zorder=2, label="initial")
 		plt.legend(loc="upper right")
+
 		c=0
 		for centroid in clusters:
 			data = clusters[centroid]
-			#print(data)
 			plt.plot(data[:,0], data[:,1], 'o', c=colors[c], mec="white", ms=7.5, zorder=1)
 			c+=1
-	
 
-	
+		plt.xlabel("x")
+		plt.ylabel("y")
 
-	if clusters[centroids[0]][0].shape[0] == 3:
+		plt.figure()
+		plt.grid()
+		plt.xlabel("x")
+		plt.ylabel("y")
+		plt.plot(centroids[:,0], centroids[:,1], '*', c="green", mec="white", ms=15, zorder=3, label="final")
+		plt.plot(clusters._center[0], clusters._center[1], 's', c="purple", mec="white", ms=15, zorder=1)
+		plt.plot(a[:,0], a[:,1], 'o', c="blue", mec="white", ms=7.5, zorder=1)
+		plt.plot(b[:,0], b[:,1], 'o', c="red", mec="white", ms=7.5, zorder=1)
+	
+	elif clusters[centroids[0]][0].shape[0] == 3:
+		plt.figure()
 		ax = plt.axes(projection="3d")
 		ax.scatter3D(centroids[:,0], centroids[:,1], centroids[:,2], '*', c="blue", zorder=3, label="final")
 
 		c=0
 		for centroid in clusters:
 			data = clusters[centroid]
-			#print(data)
 			ax.scatter3D(data[:,0], data[:,1], data[:,2], c=colors[c], zorder=1)
 			c+=1
-	
-	if clusters[centroids[0]][0].shape[0] >= 4:
+		
+		plt.figure()
+		ax = plt.axes(projection="3d")
+
+		ax.scatter3D(a[:,0], a[:,1], a[:,2], 'o', c="blue", zorder=1)
+		ax.scatter3D(b[:,0], b[:,1], b[:,2], 'o', c="red", zorder=1)
+		
+	if clusters[centroids[0]][0].shape[0] > 3:
 		for i, centroid in enumerate(clusters):
-			#print(centroid)
 			data = clusters[centroid]
 			print("Cluster "+str(i)+": "+str(len(data)))
-	#x, y, z = data[:,0], data[:,1], data[:,2]
-
-	#ax.scatter3D(x, y, z, c=z, cmap="hsv")
-
-	#plt.xlabel("x")
-	#plt.ylabel("y")
 	
 	if clusters[centroids[0]][0].shape[0] <= 3:
 		plt.show()
