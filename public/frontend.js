@@ -17,6 +17,7 @@ else {
 
 var userID;
 var selectedSong;
+var selectedSongid;
 var selectedPlaylist;
 var selected_playlist_name;
 
@@ -81,7 +82,11 @@ function getUser()
 
               newButton.appendChild(node);
               var element = document.getElementById("trackList");
-              newButton.onclick = function(){selectedSong =i};
+              newButton.onclick = function(){
+              selectedSong =i;
+              selectedSongid = data.items[i].track.id
+              updateIframe(selectedSongid);
+              console.log(data);};
               element.appendChild(newButton);
 
           }
@@ -149,7 +154,7 @@ function removeSong()
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
         newButton.onclick = function(){selectedSong = i;
-        };
+        updateIframe(selectedSongid)};
         element.appendChild(newButton);
       }
       else if (i==selectedSong){
@@ -190,4 +195,10 @@ function removeMisMatched()
 {
   console.log("removed");
 
+}
+function updateIframe(id)
+{
+  var url = "https://open.spotify.com/embed/track/" + id
+  document.getElementById("playButton").src = url;
+  
 }
