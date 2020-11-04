@@ -124,3 +124,8 @@ button{
   text-align: center;
   color: red;
 }
+#playButton
+{
+  margin-bottom:10%;
+  margin-top: 50%;
+}
