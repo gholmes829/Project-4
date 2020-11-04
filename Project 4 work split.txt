@@ -1,7 +1,7 @@
 Backend - Grant and Peyton
 Connecting back and front end - Luke S
 Test cases - Luke B, Fares, and Luke S
-Video - Grant and Luke S 
+Video - Grant and Luke S
 Estimate of person-hours - Peyton
 Integration strategy - Luke S
 Deployment Plan - Fares

@@ -5,9 +5,12 @@ var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
+
+// server code
 var client_id = '9586133394724f65b7fc986b34fa1a2c';
 var client = 'c0b7e24f80c54b5e92c2109c31d58eaf';
 var redirect_uri = 'http://localhost:8888/callback';
+var access;
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
@@ -32,7 +35,6 @@ app.use(express.static(__dirname + '/public'))
    .use(cookieParser());
 
 app.get('/login', function(req, res) {
-
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -48,11 +50,44 @@ app.get('/login', function(req, res) {
     }));
 });
 
+/**
+* This detects mismatched song
+*/
+
+
+app.get('/misMatch', function(req, res) {
+
+var spawn = require("child_process").spawn;
+var process = spawn('python',["backend/main.py"]);
+
+
+var data_str = document.getElementById("JSONStorage").innerHTML;
+var playListData = JSON.parse(decodeURIComponent(data_str));
+var playListDict = JSON.stringify(playListData);
+
+var fs = require('fs');
+fs.writeFile("playlist.json", playListDict, function(err, result) {
+    if(err) console.log('error', err);
+});
+
+process.stdout.on('data',function(chunk){
+
+    var textChunk = chunk.toString('utf8');// buffer to string
+
+    console.log(textChunk);
+    });
+    var access_token = access;
+      res.redirect('/#' +
+          querystring.stringify({
+            access_token: access_token
+          }));
+    console.log("redirect");
+});
+
 app.get('/callback', function(req, res) {
 
   // your application requests refresh and access tokens
   // after checking the state parameter
-
   var code = req.query.code || null;
   var state = req.query.state || null;
   var storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -81,6 +116,7 @@ app.get('/callback', function(req, res) {
 
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
+        access = access_token;
         var options = {
           url: 'https://api.spotify.com/v1/me',
           headers: { 'Authorization': 'Bearer ' + access_token },
@@ -132,5 +168,5 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
-console.log('Listening on 8888');
+
 app.listen(8888);

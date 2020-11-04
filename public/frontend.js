@@ -5,6 +5,7 @@ if(html_access_token.innerHTML.length > 0)
 {
   spotifyApi.setAccessToken(html_access_token.innerHTML);
   console.log("cashe loaded");
+  getUser();
 }
 else {
   html_access_token.addEventListener('change', (event) => {
@@ -13,37 +14,29 @@ else {
   });
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    const list = new FrontEnd("#container")
 
-});
+var userID;
+var selectedSong;
+var selectedSongid;
+var selectedPlaylist;
+var selected_playlist_name;
 
-  var userID;
-  var selectedSong;
-  var selectedPlaylist;
-  var selected_playlist_name;
-class FrontEnd
+
+function getUser()
 {
-
-  constructor(list)
-  {
-    this.list
-    this.createContainer()
-  }
-
-  createContainer()
-  {
-    /**
-      * Find the userId of the user and call a function that gets the users playlist if promise is fulfilled.
-      */
-    spotifyApi.getMe(null).then(
+  spotifyApi.getMe(null).then(
       function (data) {
-        updateUser(data);
         callGetUserPlayerList(data);
+        userID = data.id;
+        document.getElementById("profile-userName").innerHTML = "Username: " + data.display_name;
+        document.getElementById("profile-userID").innerHTML = ("userID: " + data.id);
+        document.getElementById("profile-pic").src = data.images[0].url;
       },
       function (err) {
         console.error(err);
       });
+  }
+
     /**
      * makes playlists into button options and calls a function that gets tracks in playlist
      * @param {object} oldData data of all the user playlists
@@ -76,10 +69,9 @@ class FrontEnd
      */
     function showTracks(oldDataId){
       document.getElementById("playList").style.display = "none";
-      console.log(oldDataId);
-
       spotifyApi.getPlaylistTracks(oldDataId).then(
         function (data) {
+          createPlaylistDictionary(data);
           selectedPlaylist = data;
           document.getElementById("header").innerHTML = "Choose a Track to play";
           for (let i = 0; i<data.items.length;i++)
@@ -89,7 +81,11 @@ class FrontEnd
 
               newButton.appendChild(node);
               var element = document.getElementById("trackList");
-              newButton.onclick = function(){selectedSong =i};
+              newButton.onclick = function(){
+              selectedSong =i;
+              selectedSongid = data.items[i].track.id
+              updateIframe(selectedSongid);
+              console.log(data);};
               element.appendChild(newButton);
 
           }
@@ -100,22 +96,42 @@ class FrontEnd
         }
       );
     }
-    /**
-    * This function updates the current users information on screen.
-    * @param {json} data A json file containing information about the users profile
-    */
-    function updateUser(data)
-    {
-      userID = data.id;
-      document.getElementById("profile-userName").innerHTML = "Username: " + data.display_name;
-      document.getElementById("profile-userID").innerHTML = ("userID: " + data.id);
-      document.getElementById("profile-pic").src = data.images[0].url;
-    }
 
+function createPlaylistDictionary(data)
+{
+  let length = data.items.length;
+  var playListDictionary = {"Playlist" : []};
+  var tempFeatures = null;
+  var tempID = "";
+  for(i = 0;i<length;i++)
+  {
+    console.log(i);
+    tempID = data.items[i].track.id;
+    spotifyApi.getAudioFeaturesForTrack(tempID,null).then(
+      function (features) {
+        tempFeatures = {ID : features.id,
+              acousticness : features.acousticness,
+              danceability: features.danceability,
+              energy       : features.energy,
+              instrumentalness: features.instrumentalness,
+              key        : features.key,
+              liveness   : features.liveness,
+              loudness   : features.loudness,
+              speechiness: features.speechiness,
+              tempo      : features.tempo,
+              valence    : features.valence};
+        playListDictionary.Playlist.push(tempFeatures);
+        console.log(JSON.stringify(playListDictionary));
+      },
+      function (err) {
+        console.error(err);
+      });
   }
-
-
+  var data_str = encodeURIComponent(JSON.stringify(playListDictionary));
+  document.getElementById("JSONStorage").innerHTML = data_str;
 }
+
+
 
 /**
 * This function takes the current selected playlist and creates a clone of it on spotify
@@ -146,19 +162,6 @@ function finishPlaylist()
   }
 function removeSong()
   {
-
-   /* for (let i =0; i<selectedPlaylist.items.length;i++)
-    {
-      var element = document.getElementById(i);
-      if(element.checked == true)
-      {
-        delete selectedPlaylist.items[i];
-        selectedPlaylist.items.length--;
-      }
-    }
-    console.log(selectedPlaylist);
-
-    }*/
     console.log(selectedSong);
     let temp = 0;
     let offset = false;
@@ -172,7 +175,7 @@ function removeSong()
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
         newButton.onclick = function(){selectedSong = i;
-        };
+        updateIframe(selectedSongid)};
         element.appendChild(newButton);
       }
       else if (i==selectedSong){
@@ -211,28 +214,12 @@ function removeSong()
 
 function removeMisMatched()
 {
+  console.log("removed");
 
-  for(x=0;x<selectedPlaylist.items.length;x++)
-  {
-    var element = document.getElementById("trackList");
-    element.removeChild(element.lastChild);
-  }
+}
+function updateIframe(id)
+{
+  var url = "https://open.spotify.com/embed/track/" + id
+  document.getElementById("playButton").src = url;
 
-  for(i=0;i<selectedPlaylist.items.length;i++)
-  {
-    if (selectedPlaylist.items[i].track.name == "Despacito (Featuring Daddy Yankee)")
-    {
-      var newButton = document.createElement("button");
-      var node = document.createTextNode(selectedPlaylist.items[i].track.name);
-      newButton.appendChild(node);
-      var element = document.getElementById("trackList");
-      newButton.onclick = function(){console.log(selectedPlaylist)};
-      element.appendChild(newButton);
-    }
-    else {
-      delete selectedPlaylist.items[i];
-      selectedPlaylist.items.length = selectedPlaylist.items.length-1;
-    }
-  }
-  console.log(selectedPlaylist);
 }

@@ -4,6 +4,7 @@
     <title>Flow</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="">
   </head>
 
   <body class = "background">
@@ -21,6 +22,7 @@
 
 
     <h2 id = "access" style = "visibility:hidden;position:relative"></h2>
+    <h2 id = "JSONStorage" style = "visibility:hidden;position:relative"></h2>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -79,7 +81,8 @@
     <!--  <div class = "slider">
         <input type = "range" min="1" max = "3" value = "1" id = "range">
       </div> -->
-      <button id = "generate-remove" class = "generate-remove-button" onclick = "removeMisMatched()">Detect mismatched songs</button>
+
+      <a href="/misMatch" id = "generate-remove" class = "generate-remove-button" onclick = "removeMisMatched()">Detect mismatched songs</a>
       <div id = "container">
         <div id = "header" style = "color:rgb(10,0,190);"></div>
         <div id = "playList"></div>
@@ -87,6 +90,8 @@
       </div>
 
     </div>
-
+    <div >
+      <iframe id = playButton src="https://open.spotify.com/embed/track/4fyfSlNiD969Wou0LBtku6" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    </div>
   </body>
 </html>

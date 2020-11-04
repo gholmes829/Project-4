@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from kmeans import kmeans
@@ -10,7 +10,7 @@ def main():
 	plt.style.use(["dark_background"])
 	plt.rc("grid", linestyle="--", color="white", alpha=0.5)
 	plt.rc("axes", axisbelow=True)
-	#np.random.seed(1)
+
 	# generating test data
 	d0, d1 = (50, 3)
 	scale = 2  # how much points should deviate from center
