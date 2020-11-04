@@ -275,7 +275,6 @@ class Clusters(dict):
 		self.orderedScores = normalized[order]
 		self.orderedData = (data.T[:,order]).T
 
-
 		self.rawScoreMin = minScore
 		self.rawScoreMax = maxScore
 		self.rawScoreAvg = avgScore
@@ -352,7 +351,9 @@ class Clusters(dict):
 
 	def _update(self) -> None:  # update position of centroids
 		maxDP = 0
-		for bufferCentroid in self._bufferKeys():
+		bufferCentroids = self._bufferKeys()
+	
+		for bufferCentroid in bufferCentroids:
 			if self[bufferCentroid]["size"] > 0:
 				centroid = np.frombuffer(bufferCentroid)
 

@@ -12,7 +12,7 @@ def main():
 	plt.rc("axes", axisbelow=True)
 
 	# generating test data
-	d0, d1 = (50, 3)
+	d0, d1 = (50, 2)
 	scale = 2  # how much points should deviate from center
 	if d1 == 2:
 		c0 = np.full((d0, d1), [1.5, 3.5]) + unitNoise(d0, d1)*scale  # modify values to adjust center
