@@ -4,6 +4,7 @@ import numpy as np
 from clustering import Clusters
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import cProfile
 
 k=None
 
@@ -114,6 +115,8 @@ def testKMeans(data, k):  # testing kmeans
 	
 	if clusters[centroids[0]][0].shape[0] <= 3:
 		plt.show()
+
+	print("Done!")
 
 
 def unitNoise(d0, d1):
