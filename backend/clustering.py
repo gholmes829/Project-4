@@ -181,17 +181,18 @@ class Clusters(dict):
 		
 		initialized = False
 		optimal, bestCost = None, 0
+		emptyCluster = True
 		
 		for i in range(len(samples)):
 			cost = self._cost(samples[i])
-			if cost == -1:
-				continue
 				
-			elif not initialized:
+			if not initialized:
 				optimal, bestCost = samples[i], cost
 				initialized = True
+				emptyCluster = False
 			elif cost <= bestCost:
-				optimal, bestCost = samples[i], cost
+				optimal, bestCost = samples[i], cost		
+
 		return optimal
 
 	def _cost(self, partition: dict) -> float:
@@ -343,7 +344,7 @@ class Clusters(dict):
 		"""
 		relativeClusterSize = (clusterSize/(self.data.shape[0]/self.k)) 
 		relativeDist = (distCentroidPt/clusterMax)
-		return (relativeClusterSize**2)*(np.sqrt(relativeDist**3))*avgClusterDist*(distFromCenter**2)
+		return (relativeClusterSize**2)*(np.sqrt(relativeDist**3))*(np.sqrt(avgClusterDist))*(distFromCenter**2)
 
 	def _simplify(self) -> None:
 		"""
