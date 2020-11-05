@@ -356,7 +356,7 @@ class Clusters(dict):
 		"""
 		relativeClusterSize = (clusterSize/(self.data.shape[0]/self.k)) 
 		relativeDist = (distCentroidPt/clusterMax)
-		return (relativeClusterSize**2)*(np.sqrt(relativeDist**3))*(np.sqrt(avgClusterDist))*(distFromCenter**2)
+		return (1/(relativeClusterSize**2))*(np.sqrt(relativeDist**3))*(np.sqrt(avgClusterDist))*(distFromCenter**2)
 
 	def _simplify(self) -> None:
 		"""
