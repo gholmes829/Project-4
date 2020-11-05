@@ -191,18 +191,16 @@ class Clusters(dict):
 		initialized = False
 		backupInitialized = False
 		optimal, bestCost = None, 0
-		backup, backupCost = None, 0
+		backup = None
 		emptyCluster = True
 		
 		for i in range(len(samples)):
 			cost = self._cost(samples[i])
 
-			if not backupInitialized:
-				backup, backupCost = samples[i], cost
-				backupInitialized = True
-
-			if cost == -1 and cost<=backupCost:
-				backup, backupCost = samples[i], cost
+			if cost == -1:
+				if not backupInitialized:
+					backup = samples[i]
+					backupInitialized = True
 			elif not initialized:
 				optimal, bestCost = samples[i], cost
 				initialized = True
