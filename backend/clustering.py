@@ -189,13 +189,20 @@ class Clusters(dict):
 			samples.append(self._simpleCopy())
 		
 		initialized = False
+		backupInitialized = False
 		optimal, bestCost = None, 0
+		backup, backupCost = None, 0
 		emptyCluster = True
 		
 		for i in range(len(samples)):
 			cost = self._cost(samples[i])
-			if cost == -1:
-				continue	
+
+			if not backupInitialized:
+				backup, backupCost = samples[i], cost
+				backupInitialized = True
+
+			if cost == -1 and cost<=backupCost:
+				backup, backupCost = samples[i], cost
 			elif not initialized:
 				optimal, bestCost = samples[i], cost
 				initialized = True
@@ -203,7 +210,11 @@ class Clusters(dict):
 			elif cost <= bestCost:
 				optimal, bestCost = samples[i], cost		
 
-		return optimal
+		if optimal is not None:
+			return optimal
+		else:
+			print("Warning: forced to select non optimal partition with empty clusters...")
+			return backup
 
 	def _cost(self, partition: dict) -> float:
 		"""
