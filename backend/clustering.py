@@ -154,9 +154,6 @@ class Clusters(dict):
 				
 			optimal = self._optimalPartition(k)
 			self._silhouettes[k] = self._silhouette(optimal)
-			print()
-			print(k)
-			print(self._silhouettes[k])
 
 			if k > 2:
 				dScore = (self._silhouettes[k-1] - self._silhouettes[k])
