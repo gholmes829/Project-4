@@ -1,5 +1,5 @@
 """
-File: kmeans.py
+File: clustering.py
 Author: Grant Holmes
 Date: 11/04/20
 Description: Uses extension of kmeans clustering alongside silhouette coefficient scoring to organize nth dimensional data into k clusters. Can also auto solve for k.
