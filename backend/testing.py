@@ -65,7 +65,7 @@ def testKMeans(data, k):  # testing kmeans
 		7: "yellow",
 	}
 
-	print("Plotting")
+	print("Plotting...")
 	if clusters[centroids[0]][0].shape[0] == 2:
 		plt.figure()
 		plt.grid()
