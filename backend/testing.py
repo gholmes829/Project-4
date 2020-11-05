@@ -11,8 +11,8 @@ k=None
 def main():
 	print("Testing...")
 	# generating test data
-	d0, d1 = (75, 2)
-	scale = 2  # how much points should deviate from center
+	d0, d1 = (50, 2)
+	scale = 1  # how much points should deviate from center
 	if d1 == 2:
 		c0 = np.full((d0, d1), [1.5, 3.5]) + unitNoise(d0, d1)*scale  # modify values to adjust center
 		c1 = np.full((d0, d1), [-0.25, -0.65]) + unitNoise(d0, d1)*scale
@@ -50,6 +50,8 @@ def testKMeans(data, k):  # testing kmeans
 
 	clusters = Clusters(data, k)
 	centroids = clusters.keys()
+
+	clusters.printInfo()
 
 	d, s = clusters.orderedData, clusters.orderedScores
 	t = 0.5

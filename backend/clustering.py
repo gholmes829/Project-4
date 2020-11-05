@@ -77,6 +77,15 @@ class Clusters(dict):
 		self._solve()
 		self._generateScores()
 			
+	def printInfo(self) -> None:
+		"""
+		Prints important info relating to clusters.
+		"""
+		print("CLUSTERS INFO:")
+		print("\tNumber of clusters: " + str(self.k))
+		print("\tQuality of partition: " + str(round(self.partitionQuality, 3))+"%")
+		print("\tAverage \"matchness\" score: " + str(round(self.scoreAvg, 3)) + "/100")
+
 	def keys(self) -> np.ndarray:  # return centroid positions
 		"""
 		Returns np.array of centroid positions 
@@ -154,18 +163,18 @@ class Clusters(dict):
 					if k==self.maxK:
 						self._simplify()
 						self.k = k
-						self.partitionQuality = self._silhouettes[k]
+						self.partitionQuality = self._silhouettes[k]*100
 				elif dScore <= self._silhouetteThreshold and (pivot is None or (pivot-self._silhouettes[k]) <= self._silhouetteThreshold):  # new score is worse but within tolerance
 					if pivot is None:
 						pivot = self._silhouettes[k-1]
 					if k==self.maxK:
 						self._simplify()
 						self.k = k-1
-						self.partitionQuality = self._silhouettes[k-1]
+						self.partitionQuality = self._silhouettes[k-1]*100
 				else:  # new score is worse and exceeds tolerance
 					self._revert(self._prevIteration)
 					self.k = k-1
-					self.partitionQuality = self._silhouettes[k-1]
+					self.partitionQuality = self._silhouettes[k-1]*100
 					break
 
 	def _optimalPartition(self, k: int) -> dict:
