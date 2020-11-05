@@ -154,6 +154,9 @@ class Clusters(dict):
 				
 			optimal = self._optimalPartition(k)
 			self._silhouettes[k] = self._silhouette(optimal)
+			print()
+			print(k)
+			print(self._silhouettes[k])
 
 			if k > 2:
 				dScore = (self._silhouettes[k-1] - self._silhouettes[k])
@@ -194,8 +197,9 @@ class Clusters(dict):
 		
 		for i in range(len(samples)):
 			cost = self._cost(samples[i])
-				
-			if not initialized:
+			if cost == -1:
+				continue	
+			elif not initialized:
 				optimal, bestCost = samples[i], cost
 				initialized = True
 				emptyCluster = False
@@ -247,7 +251,7 @@ class Clusters(dict):
 					
 				partitionScore += centroidScore/len(points)
 			else:  # has undesirable empty clusters
-				return -1
+				partitionScore-=1
 		return partitionScore/len(centroids)
 
 	def _silhouetteCoeffient(self, a: float, b: float) -> float:
