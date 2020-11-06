@@ -11,11 +11,11 @@ k=None
 def main():
 	print("Testing...")
 	# generating test data
-	d0, d1 = (100, 2)
+	d0, d1 = (75, 3)
 	scale = 1  # how much points should deviate from center
 	if d1 == 2:
 		c0 = np.full((d0, d1), [1.5, 3.5]) + unitNoise(d0, d1)*scale  # modify values to adjust center
-		c1 = np.full((25, d1), [-0.25, -0.65]) + unitNoise(25, d1)*scale
+		c1 = np.full((d0, d1), [-0.25, -0.65]) + unitNoise(d0, d1)*scale
 		c2 = np.full((d0, d1), [-3.5, 2.15]) + unitNoise(d0, d1)*scale
 		c3 = np.full((d0, d1), [-1.1, 5.65]) + unitNoise(d0, d1)*scale
 		c4 = np.full((d0, d1), [-0.5, 2.5]) + unitNoise(d0, d1)*scale
@@ -35,9 +35,9 @@ def main():
 	clusters = []
 	clusters.append(c0)
 	clusters.append(c1)
-	#clusters.append(c2)
-	#clusters.append(c3)
-	#clusters.append(c4)
+	clusters.append(c2)
+	clusters.append(c3)
+	clusters.append(c4)
 
 	data = np.concatenate(clusters, axis=0)
 	standardized = (data-data.mean(axis=0))/data.std(axis=0)

@@ -45,8 +45,9 @@ class Clusters(dict):
 		self.samples = samples
 		self.autoSolve = k is None
 
+		self.center = self.data.mean(axis=0)
+
 		# data attributes
-		self._center = self.data.mean(axis=0)
 		self._bounds = np.zeros((self.data.shape[1], 2))
 
 		for dimension in range(len(self._bounds)):
@@ -82,9 +83,12 @@ class Clusters(dict):
 		Prints important info relating to clusters.
 		"""
 		print("CLUSTERS INFO:")
-		print("\tNumber of clusters: " + str(self.k))
-		print("\tQuality of partition: " + str(round(self.partitionQuality, 3))+"%")
-		print("\tAverage \"matchness\" score: " + str(round(self.scoreAvg, 3)) + "/100")
+		print(" "*4 + "Number of clusters: " + str(self.k))
+		print(" "*4 + "Size of each cluster:")
+		for count, centroid in enumerate(self):
+			print(" "*8 + "Cluster " + str(count) + ": " + str(len(self[centroid])))
+		print(" "*4 + "Quality of partition: " + str(round(self.partitionQuality, 3))+"%")
+		print(" "*4 + "Average \"matchness\" score: " + str(round(self.scoreAvg, 3)) + "/100")
 
 	def keys(self) -> np.ndarray:  # return centroid positions
 		"""
@@ -235,7 +239,7 @@ class Clusters(dict):
 		Returns average silhouette score for all points in partition.
 		"""
 		if partition is None:
-			return -1
+			return -1.1
 		partitionScore = 0
 		centroids = [np.frombuffer(bufferCentroid) for bufferCentroid in partition.keys()]
 		for bufferCentroid, points in partition.items():  # for each centroid
@@ -322,7 +326,7 @@ class Clusters(dict):
 			# compute scores for each pt
 			for bufferPt, distCentroidPt in cache.items():
 				pt = np.frombuffer(bufferPt)
-				distFromCenter = Clusters.optimizedDist(pt, self._center)
+				distFromCenter = Clusters.optimizedDist(pt, self.center)
 				score = self._score(pt, distCentroidPt, clusterSize, clusterDistance["max"], clusterDistance["avg"], distFromCenter)
 				scores[size] = score
 				data[size] = pt
@@ -356,7 +360,7 @@ class Clusters(dict):
 		"""
 		relativeClusterSize = (clusterSize/(self.data.shape[0]/self.k)) 
 		relativeDist = (distCentroidPt/clusterMax)
-		return (relativeClusterSize**2)*(np.sqrt(relativeDist**3))*(np.sqrt(avgClusterDist))*(distFromCenter**2)
+		return (1/(relativeClusterSize**2))*(np.sqrt(relativeDist**3))*(np.sqrt(avgClusterDist))*(distFromCenter**2)
 
 	def _simplify(self) -> None:
 		"""
