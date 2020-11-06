@@ -103,13 +103,13 @@ function createPlaylistDictionary(data)
   var playListDictionary = {"Playlist" : []};
   var tempFeatures = null;
   var tempID = "";
-  for(i = 0;i<length;i++)
+  for(let i = 0;i<length;i++)
   {
     console.log(i);
     tempID = data.items[i].track.id;
     spotifyApi.getAudioFeaturesForTrack(tempID,null).then(
       function (features) {
-        tempFeatures = {ID : features.id,
+        tempFeatures = {ID : i,
               acousticness : features.acousticness,
               danceability: features.danceability,
               energy       : features.energy,
