@@ -28,28 +28,27 @@ def main():
     spotify = json.load(open(filePath))
     
     amount = spotify["Playlist"]
-    a=len(amount)
-    print(a)
+    g=len(amount)
     newDict = {}
     i=0
     
-    for i in range(a):
-        list = []
+    for i in range(g):
+        prop = []
         temp = spotify["Playlist"][i]
         x = temp["ID"]
         newDict[x] = None
-        list.append(temp["acousticness"])
-        list.append(temp["danceability"]) 
-        list.append(temp["energy"]) 
-        """list.append(temp["instrumentalness"]) 
-        list.append(temp["key"]) 
-        list.append(temp["liveness"]) 
-        list.append(temp["loudness"]) 
-        list.append(temp["speechiness"]) 
-        list.append(temp["tempo"]) 
-        list.append(temp["valence"])"""
-
-        newDict[x] = list
+        prop.append(temp["acousticness"])
+        prop.append(temp["danceability"]) 
+        prop.append(temp["energy"]) 
+        """prop.append(temp["instrumentalness"]) 
+        prop.append(temp["key"]) 
+        prop.append(temp["liveness"]) 
+        prop.append(temp["loudness"]) 
+        prop.append(temp["speechiness"]) 
+        prop.append(temp["tempo"]) 
+        prop.append(temp["valence"])"""
+        print(x, prop)
+        newDict[x] = prop
         
     newList = []
     for key in newDict:
@@ -86,6 +85,30 @@ def main():
     threshold = 0.7  # change this value to change 
     a, b = d[:int(threshold*len(d))], d[int(threshold*len(d)):]
     
+    
+   
+    d = d*converted.std(axis = 0) + converted.mean(axis = 0)
+
+    finalDict = {}
+    for i in range(g):
+        temp = spotify["Playlist"][i]
+        x = temp["ID"]
+        finalDict[x] = None
+    
+    count = 0
+    original = std*converted.std(axis = 0) + converted.mean(axis = 0)
+    for i in range(8):
+        for j in range(8):
+            if(np.all(original[i] == d[j])):
+                temp = spotify["Playlist"][i]
+                x = temp["ID"]
+                finalDict[x] = s[j]
+                count+=1
+
+    print("added" + str(count) + " times")
+    for song, score in finalDict.items():
+        print(song, score)
+                
     plt.figure()
     ax = plt.axes(projection="3d")
     ax.scatter3D(0, 0, 0, '*', c="green", zorder=1)
