@@ -40,14 +40,13 @@ def main():
         prop.append(temp["acousticness"])
         prop.append(temp["danceability"]) 
         prop.append(temp["energy"]) 
-        """prop.append(temp["instrumentalness"]) 
+        prop.append(temp["instrumentalness"]) 
         prop.append(temp["key"]) 
         prop.append(temp["liveness"]) 
         prop.append(temp["loudness"]) 
         prop.append(temp["speechiness"]) 
         prop.append(temp["tempo"]) 
-        prop.append(temp["valence"])"""
-        print(x, prop)
+        prop.append(temp["valence"])
         newDict[x] = prop
         
     newList = []
@@ -88,7 +87,13 @@ def main():
     
    
     d = d*converted.std(axis = 0) + converted.mean(axis = 0)
-
+    
+    """print(converted)
+    print("\n")
+    print(d)
+    print("\n")
+    print(s)"""
+    
     finalDict = {}
     for i in range(g):
         temp = spotify["Playlist"][i]
@@ -97,18 +102,16 @@ def main():
     
     count = 0
     original = std*converted.std(axis = 0) + converted.mean(axis = 0)
-    for i in range(8):
-        for j in range(8):
+    for i in range(g):
+        for j in range(g):
             if(np.all(original[i] == d[j])):
                 temp = spotify["Playlist"][i]
                 x = temp["ID"]
+                #print(x)
                 finalDict[x] = s[j]
                 count+=1
-
-    print("added" + str(count) + " times")
-    for song, score in finalDict.items():
-        print(song, score)
-                
+    
+    #print(finalDict)
     plt.figure()
     ax = plt.axes(projection="3d")
     ax.scatter3D(0, 0, 0, '*', c="green", zorder=1)
@@ -116,6 +119,10 @@ def main():
     ax.scatter3D(b[:,0], b[:,1], b[:,2], 'o', c="red", zorder=1)
     plt.show()
 
+    f = open("newPlaylist.json", "w")
+    f.truncate()
+    f.write(json.dumps(finalDict))
+    
     print("Done!")
     
 if __name__ == "__main__":
