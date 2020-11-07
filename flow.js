@@ -109,56 +109,43 @@ app.get('/callback', function(req, res) {
   }
 });
 
-/**
-function kickOff() {
-  return new Promise(function(resolve, reject) {
-    $("#output").append("start");
+var spawn = require("child_process").spawn;
+var fs = require('fs');
 
-    setTimeout(function() {
-      resolve();
-    }, 1000);
-  }).then(function() {
-    $("#output").append(" middle");
-    return " end";
-  });
-}
-*/
-
-function calculateBack(req,res)
+var textChunk;
+function check(playList,access_token,res)
 {
-  return new Promise((resolve, reject) => {
-    var spawn = require("child_process").spawn;
-    var fs = require('fs');
-    fs.writeFile("playlist.json", req.query.somevalue, function(err, result) {
-
-        if(err) console.log('error', err)
+  textChunk = "";
+  setTimeout(() => {
+        if(textChunk.includes("Done!"))
+        {
+          let start = textChunk.indexOf("{"),
+              stop  = textChunk.indexOf("}");
+          textChunk = textChunk.substr(start,stop);
+          redirectBack(playList,access_token,res);
+        }
         else {
-          var process = spawn('python',["backend/__main__.py"]);
+          var process = spawn('python',["-u","./backend/__main__.py",playList]);
           process.stdout.on('data',function(chunk){
 
-              var textChunk = chunk.toString('utf8');// buffer to string
-
-              console.log(textChunk);
+              textChunk = chunk.toString('utf8');// buffer to string
               });
-          }
-        });
-      });
+          check(playList,access_token,res);
+        }
+      },1000);
 }
-
-async function processBack(req,res)
+function redirectBack(playList,access_token,res)
 {
-  var finishedProcess = await calculateBack(req,res);
   res.redirect('/#' +
       querystring.stringify({
-            access_token: access
+            access_token: access_token,
+            playList    : textChunk
       }));
 }
 
-
 app.get('/misMatch', function(req, res) {
-      processBack(req,res).then(function(result) {
-        console.log(result);
-        });
+    console.log(req.query);
+    check(req.query.somevalue,req.query.access_token,res);
     });
 
 app.listen(8888);

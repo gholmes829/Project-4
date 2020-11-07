@@ -5,6 +5,7 @@ import json
 import os
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import sys
 
 """
 Post: This will return the current directory that I am in.
@@ -34,53 +35,52 @@ def standardized(arr):
 """
 Post: Runs the main code for the backend
 """
-def main():
+def main(argv):
     print("Running...")
-
+    #print(argv[0])
     """
     This code is loading in the json file and creating a variable spotify to hold the dictionary in the file
     """
     current = getCurrent()
     parent = getParent(current)
 
-    filePath = getChild(parent, 'playlist.json')
-    spotify = json.load(open(filePath))
-    
+    #filePath = getChild(parent, 'playlist.json')
+    #file = open(filePath)
+    spotify = json.loads(argv[0])
+    #print(spotify)
+    #file.close()
     amount = spotify["Playlist"]
     g=len(amount)
     newDict = {}
     i=0
 
-    """
-    This for loop creates a new dictionary and will make the keys the ID of the songs and give
-    each key a list of the attributes that match that song
-    """
+
+    #This for loop creates a new dictionary and will make the keys the ID of the songs and give
+    #each key a list of the attributes that match that song
+
     for i in range(g):
         prop = []
         temp = spotify["Playlist"][i]
         x = temp["ID"]
         newDict[x] = None
-        prop.append(temp["acousticness"])
+        #prop.append(temp["acousticness"])
         prop.append(temp["danceability"])
         prop.append(temp["energy"])
-        prop.append(temp["instrumentalness"])
+        #prop.append(temp["instrumentalness"])
         prop.append(temp["key"])
-        prop.append(temp["liveness"])
-        prop.append(temp["loudness"])
-        prop.append(temp["speechiness"])
+        #prop.append(temp["liveness"])
+        #prop.append(temp["loudness"])
+        #prop.append(temp["speechiness"])
         prop.append(temp["tempo"])
         prop.append(temp["valence"])
         newDict[x] = prop
 
-    """
-    Creates a 2d list of the of the lists of attributes that are connected to each song
-    """
+
+    #Creates a 2d list of the of the lists of attributes that are connected to each song
     newList = []
     for key in newDict:
         newList.append(newDict[key])
-        """
-        Plots the centroids on a graph with the other data points
-        """
+    #Plots the centroids on a graph with the other data points
     converted = np.array(newList)
     std = standardized(converted)
     clusters = Clusters(std)
@@ -113,11 +113,9 @@ def main():
     a, b = d[:int(threshold*len(d))], d[int(threshold*len(d)):]
 
 
-    """
-    Creates a new dictionary called finalDict that, when filled, will have the IDs of the songs as the keys
-    and a score as the value to each key. The score is meant to help us figure out
-    if we should remove the song from the playlist or not
-    """
+
+    #Creates a new dictionary called finalDict that, when filled, will have the IDs of the songs as the keys
+    #and a score as the value to each key.
     d = d*converted.std(axis = 0) + converted.mean(axis = 0)
 
     finalDict = {}
@@ -136,9 +134,9 @@ def main():
                 finalDict[x] = s[j]
                 count+=1
 
-    """
-    This will create a final graph of clusters with the blue points being songs we keep
-    and the red points being songs that we get rid of
+
+    #This will create a final graph of clusters with the blue points being songs we keep
+    #and the red points being songs that we get rid of
     """
     plt.figure()
     ax = plt.axes(projection="3d")
@@ -146,17 +144,17 @@ def main():
     ax.scatter3D(a[:,0], a[:,1], a[:,2], 'o', c="blue", zorder=1)
     ax.scatter3D(b[:,0], b[:,1], b[:,2], 'o', c="red", zorder=1)
     plt.show()
+    """
 
-    """
-    Opens a new json file and will write finalDict to the file. finalDict will be
-    used by the front end to remove songs from the playlist. Also will erase anything on the
-    file before writing to it
-    """
-    f = open("newPlaylist.json", "w")
-    f.truncate()
-    f.write(json.dumps(finalDict))
+    #Opens a new json file and will write finalDict to the file. finalDict will be
+    #used by the front end to remove songs from the playlist. Also will erase anything on the
+    #file before writing to it
+    #f = open("newPlaylist.json", "w")
+    #f.truncate()
+    print(finalDict)
+    #f.close()
 
     print("Done!")
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

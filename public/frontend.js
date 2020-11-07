@@ -14,6 +14,13 @@ else {
   });
 }
 
+if(window.location.href.includes("&playList="))
+{
+  let location = window.location.href;
+  let newPlaylist = location.substr((location.indexOf("&playList=")+10));
+  newPlaylist = decodeURIComponent(JSON.stringify(newPlaylist));
+  console.log(newPlaylist);
+}
 
 var userID;
 var selectedSong;
@@ -110,6 +117,13 @@ function createPlaylistDictionary(data)
     spotifyApi.getAudioFeaturesForTrack(tempID,null).then(
       function (features) {
         tempFeatures = {ID : i,
+              danceability: features.danceability,
+              energy       : features.energy,
+              key        : features.key,
+              tempo      : features.tempo,
+              valence    : features.valence};
+        /**
+        tempFeatures = {ID : i,
               acousticness : features.acousticness,
               danceability: features.danceability,
               energy       : features.energy,
@@ -119,15 +133,16 @@ function createPlaylistDictionary(data)
               loudness   : features.loudness,
               speechiness: features.speechiness,
               tempo      : features.tempo,
-              valence    : features.valence};
+              valence    : features.valence}; */
         playListDictionary.Playlist.push(tempFeatures);
         data_str = encodeURIComponent(JSON.stringify(playListDictionary));
-        misMatchURL.href = '/misMatch/?somevalue=' + data_str;
+        misMatchURL.href = '/misMatch/?somevalue=' + data_str + "&access_token=" + spotifyApi.getAccessToken();
       },
       function (err) {
         console.error(err);
       });
   }
+
 }
 
 
