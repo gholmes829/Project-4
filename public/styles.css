@@ -153,16 +153,17 @@ button{
   width: 47%;
 }
 
-#h2
-{
-  overflow:hidden;
-}
 
 .graph-container{
   top: 5%;
-  width: 40%;
+  width: 22%;
   height: 20%;
-  background-color: white;
-  height: 100%;
+  background-color: #1F1F1F;
+  height: 90%;
   display: block;
+  right: 2%;
+
+
+  position:absolute;
+  border-radius: 1vh;
 }
