@@ -42,7 +42,9 @@ def main():
     parent = getParent(current)
         
     filePath = getChild(parent, 'playlist.json')
-    spotify = json.load(open(filePath))
+    file = open(filePath)
+    spotify = json.load(file)
+    file.close()
 
     amount = spotify["Playlist"]
     g=len(amount)
