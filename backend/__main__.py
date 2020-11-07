@@ -147,7 +147,7 @@ def main():
     #used by the front end to remove songs from the playlist. Also will erase anything on the 
     #file before writing to it
     f = open("newPlaylist.json", "w")
-    f.truncate()
+    f.truncate(0)
     f.write(json.dumps(finalDict))
     f.close()
     
