@@ -147,6 +147,7 @@ def main():
     f = open("newPlaylist.json", "w")
     f.truncate()
     f.write(json.dumps(finalDict))
+    f.close()
     
     print("Done!")
     
