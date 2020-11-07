@@ -78,23 +78,21 @@
     </script>
     <script src = "frontend.js"> </script>
     <div class = "playList-container">
-      <!--<button id = "add_song" class = "add-song-button">Add a song back</button> -->
-      <button id = "remove_song" class = "remove-song-button" onclick="removeSong()">Remove a song</button>
-      <button id = "finish" class = "finish-button" onclick = "finishPlaylist()">Finish and generate new spotify playlist</button>
-    <!--  <div class = "slider">
-        <input type = "range" min="1" max = "3" value = "1" id = "range">
-      </div> -->
-
-      <a href="/misMatch" id = "generate-remove" class = "generate-remove-button" onclick = "removeMisMatched()">Detect mismatched songs</a>
       <div id = "container">
         <div id = "header" style = "color:rgb(10,0,190);"></div>
         <div id = "playList"></div>
         <div id = "trackList"></div>
       </div>
+      <!--<button id = "add_song" class = "add-song-button">Add a song back</button> -->
+      <iframe id = playButton width="330" height="88" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <button id = "remove_song" class = "remove-song-button" onclick="removeSong()">Remove a song</button>
+      <button id = "finish" class = "finish-button" onclick = "finishPlaylist()">Finish and generate new spotify playlist</button>
+    <!--  <div class = "slider">
+        <input type = "range" min="1" max = "3" value = "1" id = "range">
+      </div> -->
+      <button id = "generate-remove" class = "generate-remove-button" onclick = "removeMisMatched()">Detect mismatched songs</button>
+      <!--<a href="/misMatch" id = "generate-remove" class = "generate-remove-button" onclick = "removeMisMatched()">Detect mismatched songs</a> -->
 
-    </div>
-    <div >
-      <iframe id = playButton src="https://open.spotify.com/embed/track/4fyfSlNiD969Wou0LBtku6" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
     </div>
   </body>
 </html>
