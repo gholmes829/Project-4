@@ -43,7 +43,6 @@ function getUser()
      */
     function callGetUserPlayerList(oldData)
     {
-
       spotifyApi.getUserPlaylists(oldData.id).then(
         function (data) {
           document.getElementById("header").innerHTML = "Choose a Playlist to be Edited";
@@ -97,15 +96,16 @@ function getUser()
       );
     }
 
+var data_str;
 function createPlaylistDictionary(data)
 {
   let length = data.items.length;
   var playListDictionary = {"Playlist" : []};
   var tempFeatures = null;
   var tempID = "";
+  misMatchURL = document.getElementById("generate-remove");
   for(let i = 0;i<length;i++)
   {
-    console.log(i);
     tempID = data.items[i].track.id;
     spotifyApi.getAudioFeaturesForTrack(tempID,null).then(
       function (features) {
@@ -121,14 +121,13 @@ function createPlaylistDictionary(data)
               tempo      : features.tempo,
               valence    : features.valence};
         playListDictionary.Playlist.push(tempFeatures);
-        console.log(JSON.stringify(playListDictionary));
+        data_str = encodeURIComponent(JSON.stringify(playListDictionary));
+        misMatchURL.href = '/misMatch/?somevalue=' + data_str;
       },
       function (err) {
         console.error(err);
       });
   }
-  var data_str = encodeURIComponent(JSON.stringify(playListDictionary));
-  document.getElementById("JSONStorage").innerHTML = data_str;
 }
 
 
@@ -211,11 +210,15 @@ function removeSong()
 }
 
 
-
 function removeMisMatched()
 {
-  console.log("removed");
-
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    document.getElementById("demo").innerHTML = this.responseText;
+  }};
+  xhttp.open("POST","../flow.js",true);
+  xhttp.send();
 }
 function updateIframe(id)
 {

@@ -4,13 +4,14 @@ var request = require('request');
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
-
+var fs = require('fs');
 
 // server code
 var client_id = '9586133394724f65b7fc986b34fa1a2c';
 var client = 'c0b7e24f80c54b5e92c2109c31d58eaf';
 var redirect_uri = 'http://localhost:8888/callback';
 var access;
+
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
@@ -53,37 +54,6 @@ app.get('/login', function(req, res) {
 /**
 * This detects mismatched song
 */
-
-
-app.get('/misMatch', function(req, res) {
-
-var spawn = require("child_process").spawn;
-var process = spawn('python',["backend/main.py"]);
-
-
-var data_str = document.getElementById("JSONStorage").innerHTML;
-var playListData = JSON.parse(decodeURIComponent(data_str));
-var playListDict = JSON.stringify(playListData);
-
-var fs = require('fs');
-fs.writeFile("playlist.json", playListDict, function(err, result) {
-    if(err) console.log('error', err);
-});
-
-process.stdout.on('data',function(chunk){
-
-    var textChunk = chunk.toString('utf8');// buffer to string
-
-    console.log(textChunk);
-    });
-    var access_token = access;
-      res.redirect('/#' +
-          querystring.stringify({
-            access_token: access_token
-          }));
-    console.log("redirect");
-});
-
 app.get('/callback', function(req, res) {
 
   // your application requests refresh and access tokens
@@ -123,11 +93,6 @@ app.get('/callback', function(req, res) {
           json: true
         };
 
-        // use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
-          console.log(body);
-        });
-
         // we can also pass the token to the browser to make requests from there
         res.redirect('/#' +
           querystring.stringify({
@@ -144,29 +109,56 @@ app.get('/callback', function(req, res) {
   }
 });
 
-app.get('/refresh_token', function(req, res) {
+/**
+function kickOff() {
+  return new Promise(function(resolve, reject) {
+    $("#output").append("start");
 
-  // requesting access token from refresh token
-  var refresh_token = req.query.refresh_token;
-  var authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client).toString('base64')) },
-    form: {
-      grant_type: 'refresh_token',
-      refresh_token: refresh_token
-    },
-    json: true
-  };
-
-  request.post(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      var access_token = body.access_token;
-      res.send({
-        'access_token': access_token
-      });
-    }
+    setTimeout(function() {
+      resolve();
+    }, 1000);
+  }).then(function() {
+    $("#output").append(" middle");
+    return " end";
   });
-});
+}
+*/
 
+function calculateBack(req,res)
+{
+  return new Promise((resolve, reject) => {
+    var spawn = require("child_process").spawn;
+    var fs = require('fs');
+    fs.writeFile("playlist.json", req.query.somevalue, function(err, result) {
+
+        if(err) console.log('error', err)
+        else {
+          var process = spawn('python',["backend/__main__.py"]);
+          process.stdout.on('data',function(chunk){
+
+              var textChunk = chunk.toString('utf8');// buffer to string
+
+              console.log(textChunk);
+              });
+          }
+        });
+      });
+}
+
+async function processBack(req,res)
+{
+  var finishedProcess = await calculateBack(req,res);
+  res.redirect('/#' +
+      querystring.stringify({
+            access_token: access
+      }));
+}
+
+
+app.get('/misMatch', function(req, res) {
+      processBack(req,res).then(function(result) {
+        console.log(result);
+        });
+    });
 
 app.listen(8888);
