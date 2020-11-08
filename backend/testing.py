@@ -90,21 +90,11 @@ def checkEmpty():
      
 def generateClusters(density, dimension, scale, numClust):
     """
-    Parameters
-    ----------
-    density : TYPE
-        DESCRIPTION.
-    dimension : TYPE
-        DESCRIPTION.
-    scale : TYPE
-        DESCRIPTION.
-    numClust : TYPE
-        DESCRIPTION.
-
-    Returns
-    -------
-    standardized : TYPE
-        DESCRIPTION.
+    Parameters: numClust is the number of clusters. Density in the tightness of the clusters. 
+    Dimension is if its 2d, 3d, etc. Scale determines how much will deviate
+    
+    Post: The function will create clusters with the information and the data that is given. These clusters
+    will help determine what songs fit best with the playlist and what dont
     """
     d0, d1 = (density, dimension) 
     if d1 == 2:
