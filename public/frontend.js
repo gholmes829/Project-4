@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   {
     spotifyApi.setAccessToken(html_access_token.innerHTML);
     console.log("cashe loaded");
-    
+
     getUser();
 
   }
@@ -30,6 +30,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     showTracks(playListID);
     setTimeout(() => {
       let newPlaylist = location.substr(start,stop);
+      console.log(newPlaylist);
       let colin = newPlaylist.indexOf(':');
       let comma = 0;
       let newId = newPlaylist.substr(1,colin-comma-1);
@@ -51,12 +52,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
         ratedPlaylist.push(tempObj);
         console.log(ratedPlaylist);
-<<<<<<< HEAD
-=======
-        
->>>>>>> ae93c96bafd0c8571ddf4cd372e3d31c1089a2b3
+
       }
-      
+
       var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
 
@@ -110,7 +108,7 @@ class Tree {
         this.startPosition = { x: 600, y: 44 }
         this.axisX = 400
         this.axisY = 50
-        
+
     }
 
     getPosition({ x, y }, isLeft = false) {
@@ -226,7 +224,7 @@ function getUser()
       function (err) {
         console.error(err);
       });
-      
+
   }
 
 /**
@@ -455,7 +453,7 @@ function removeSpecific(specificSong)
 */
 function removeMisMatched()
 {
-  removeSpecific(1);
+  //removeSpecific(1);
   console.log("Testing Mismatched");
 }
 
@@ -468,5 +466,3 @@ function updateIframe(id)
   document.getElementById("playButton").src = url;
 
 }
-
-

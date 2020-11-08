@@ -10,10 +10,11 @@ import json
 import matplotlib.pyplot as plt
 import sys
 
+print("entered file")
 def standardized(arr):
 	"""
 	Pre: This function takes in an array to be standardized
-	
+
 	Post: This function will return the array that was passed in and have it standardized by taking the mean
 	and dividing it by the standard deviation
 	"""
@@ -21,16 +22,16 @@ def standardized(arr):
 
 def main(argv):
 	"""
-	Pre: Runs the main code for the backend. This will take in the data from the front end and 
-	put it into a new dicitonary called newDict. 
-	
+	Pre: Runs the main code for the backend. This will take in the data from the front end and
+	put it into a new dicitonary called newDict.
+
 	Middle: newDict will take each ID as its keys, with each one having a valule of None. From there, the program
 	will create a list that contains each ID's attributes and then will assign that list to its corresponding key in newDict.
 	Each ID is then given a score based on its attributes attachted to it. The higher the score the more the song is determined
 	to not belong to the playlist
-	
+
 	Post: At the end, the backend will give the front a finalDict, that will contain the ID of each song as its keys
-	and each will have a value that is its corresponding score 
+	and each will have a value that is its corresponding score
 	"""
 	print("Running...")
 	spotify = json.loads(argv[0])
@@ -39,7 +40,6 @@ def main(argv):
 	newDict = {}
 	i=0
 
-
 	#This for loop creates a new dictionary and will make the keys the ID of the songs and give
 	#each key a list of the attributes that match that song
 	for i in range(g):
@@ -47,19 +47,18 @@ def main(argv):
 		temp = spotify["Playlist"][i]
 		x = temp["ID"]
 		newDict[x] = None
-		prop.append(temp["acousticness"])
+		#prop.append(temp["acousticness"])
 		prop.append(temp["danceability"])
 		prop.append(temp["energy"])
-		prop.append(temp["instrumentalness"])
+		#prop.append(temp["instrumentalness"])
 		prop.append(temp["key"])
-		prop.append(temp["liveness"])
-		prop.append(temp["loudness"])
-		prop.append(temp["speechiness"])
+		#prop.append(temp["liveness"])
+		#prop.append(temp["loudness"])
+		#prop.append(temp["speechiness"])
 		prop.append(temp["tempo"])
 		prop.append(temp["valence"])
 		newDict[x] = prop
-
-
+	print("Appending")
 	#Creates a 2d list of the of the lists of attributes that are connected to each song
 	newList = []
 	for key in newDict:
@@ -113,7 +112,7 @@ def main(argv):
 				x = temp["ID"]
 				finalDict[x] = s[j]
 				count+=1
-
+	print(finalDict)
 	print("Done!")
 
 if __name__ == "__main__":

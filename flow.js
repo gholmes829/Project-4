@@ -112,10 +112,9 @@ app.get('/callback', function(req, res) {
 var spawn = require("child_process").spawn;
 var fs = require('fs');
 
-var textChunk;
+var textChunk = "";
 function check(playList,access_token,id,res)
 {
-  textChunk = "";
   setTimeout(() => {
         if(textChunk.includes("Done!"))
         {
