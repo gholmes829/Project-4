@@ -115,25 +115,30 @@ var fs = require('fs');
 var textChunk = "";
 function check(playList,access_token,id,res)
 {
-  setTimeout(() => {
-        if(textChunk.includes("Done!"))
-        {
-          let start = textChunk.indexOf("{"),
-              stop  = textChunk.indexOf("}");
-          textChunk = textChunk.substr(start,stop+1);
-          redirectBack(playList,access_token,id,res);
-        }
-        else {
-          var process = spawn('python',["-u","./backend/__main__.py",playList]);
+	var process = spawn('python3',["-u","./backend/__main__.py",playList]);
+	process.stdout.on('data',function(chunk){
 
-          process.stdout.on('data',function(chunk){
+	  textChunk = chunk.toString('utf8');// buffer to string
+	  });
 
-              textChunk = chunk.toString('utf8');// buffer to string
-              });
-          check(playList,access_token,id,res);
-        }
-      },1000);
+	process.on("close", function(code) {
+	setTimeout(() => {
+	if (textChunk=="Done!\n") {
+		console.log("Trying again...");
+		check(playList, access_token, id, res);
+	}
+	else {
+		let start = textChunk.indexOf("{"),
+		  stop  = textChunk.indexOf("}");
+
+		textChunk = textChunk.substr(start,stop+1);
+		console.log(textChunk);
+		redirectBack(playList,access_token,id,res);
+	}
+	}, 100);
+	});
 }
+
 function redirectBack(playList,access_token,id,res)
 {
   res.redirect('/#' +
@@ -150,25 +155,26 @@ app.get('/misMatch', function(req, res) {
 
 function runTests(req,res)
 {
-  setTimeout(() => {
-        if(textChunk.includes("Done!"))
-        {
-          let start = textChunk.indexOf("["),
-              stop  = textChunk.indexOf("]");
-          textChunk = textChunk.substr(start,stop+1);
-          console.log(textChunk);
-          redirectTests(req,res,textChunk);
-        }
-        else {
-          var process = spawn('python',["-u","./backend/testing.py"]);
 
+
+
+          var process = spawn('pythone',["-u","./backend/testing.py"]);
           process.stdout.on('data',function(chunk){
 
               textChunk = chunk.toString('utf8');// buffer to string
               });
-          runTests(req,res);
-        }
-      },1000);
+
+		process.on("close", function(code) {
+         let start = textChunk.indexOf("["),
+              stop  = textChunk.indexOf("]");
+          textChunk = textChunk.substr(start,stop+1);
+          console.log(textChunk);
+          redirectTests(req,res,textChunk);
+		});
+
+
+
+
 }
 
 function redirectTests(req,res,textChunk)

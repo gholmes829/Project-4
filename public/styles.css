@@ -82,6 +82,14 @@
   border-radius: 20px;
 }
 
+.logo{
+  position: absolute;
+  top: 57%;
+  left: 2%;
+  height: 38%;
+  color: #7D204C;
+}
+
 button{
   display: block;
   width: 100%;
