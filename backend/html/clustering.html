@@ -1,0 +1,1889 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.1" />
+<title>clustering API documentation</title>
+<meta name="description" content="File: clustering.py …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>clustering</code></h1>
+</header>
+<section id="section-intro">
+<p>File: clustering.py</p>
+<p>Author: Grant Holmes</p>
+<p>Date: 11/04/20</p>
+<p>Description: Uses extension of kmeans clustering alongside silhouette coefficient scoring to organize nth dimensional data into k clusters. Can also auto solve for k.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+File: clustering.py\n
+Author: Grant Holmes\n
+Date: 11/04/20\n
+Description: Uses extension of kmeans clustering alongside silhouette coefficient scoring to organize nth dimensional data into k clusters. Can also auto solve for k.\n
+&#34;&#34;&#34;
+import numpy as np
+
+class Clusters(dict):
+
+        &#34;&#34;&#34;
+        Uses kmeans clustering and silhoutte coefficient scoring to find clusters amongst data.
+        &#34;&#34;&#34;
+        def __init__(self, data: np.ndarray, k: int=None, maxK: int=10, maxIterations: int=50, samples: int=10, alpha: float=0.85, accuracy: int=4) -&gt; None:
+                &#34;&#34;&#34;
+                data: nth dimensional data to be clustered.\n
+                k: target number of clusters. If k=None, k will be automatically selected.\n
+                maxK: the maximum value of k that can be automatically selected.\n
+                maxIterations: the maximum number of iterations kmeans will use to try to reach convergence.\n
+                samples: the number of configurations that will be generated to select.\n
+                alpha: learning rate.\n
+                accuracy: tolerance for kmeans convergence.
+                &#34;&#34;&#34;
+                if not (k is None or k&gt;=0):
+                        raise ValueError(&#34;K must be greater than or equal to zero&#34;)
+                if not (data.shape[0] &gt; 1):
+                        raise ValueError(&#34;Data must have greater that one point&#34;)
+
+                super().__init__(self)
+
+                # public attributes
+                self.data = data
+                self.k, self.maxK = k, maxK
+                self.alpha = alpha
+                self.accuracy = accuracy
+                self.partitionQuality = 0
+
+                self.orderedData = None
+                self.orderedScores = None
+                
+                self.rawScoreMin, self.rawScoreMax = None, None
+                self.rawScoreAvg = None
+                self.scoreAvg = None
+
+                self.maxIterations = maxIterations
+                self.samples = samples
+                self.autoSolve = k is None
+
+                self.center = self.data.mean(axis=0)
+
+                # data attributes
+                self.bounds = np.zeros((self.data.shape[1], 2))
+                
+                for dimension in range(len(self.bounds)):
+                        self.bounds[dimension][0] = self.data[:,dimension].min()
+                        self.bounds[dimension][1] = self.data[:,dimension].max()
+
+                self.ranges = np.diff(self.bounds).flatten()
+
+                space = np.zeros((2, self.data.shape[1]))
+                for dimension in range(len(self.bounds)):
+                        space[1][dimension] = self.ranges[dimension]
+                        
+                self.range = self.dist(space[0], space[1])
+                
+                self.convergenceLimit = 1*(10**(-1*self.accuracy))
+                self.silhouetteThreshold = 0.0375
+                
+                # state attributes
+                self.dp = 0
+                self.prevIteration = {}
+                self.isAssigned = False
+                self.solved = False
+
+                # evaluation attributes
+                self.silhouettes = {}
+                
+                # solving and generating scores
+                self.solve()
+                self.generateScores()
+                        
+        def printInfo(self) -&gt; None:
+                &#34;&#34;&#34;
+                Prints important info relating to clusters.
+                &#34;&#34;&#34;
+                print(&#34;CLUSTERS INFO:&#34;)
+                print(&#34; &#34;*4 + &#34;Number of clusters: &#34; + str(self.k))
+                print(&#34; &#34;*4 + &#34;Size of each cluster:&#34;)
+                for count, centroid in enumerate(self):
+                        print(&#34; &#34;*8 + &#34;Cluster &#34; + str(count) + &#34;: &#34; + str(len(self[centroid])))
+                print(&#34; &#34;*4 + &#34;Quality of partition: &#34; + str(round(self.partitionQuality, 3))+&#34;%&#34;)
+                print(&#34; &#34;*4 + &#34;Average \&#34;matchness\&#34; score: &#34; + str(round(self.scoreAvg, 3)) + &#34;/100&#34;)
+
+        def keys(self) -&gt; np.ndarray:  # return centroid positions
+                &#34;&#34;&#34;
+                Returns np.array of centroid positions 
+                &#34;&#34;&#34;
+                return np.array([np.frombuffer(centroid) for centroid in super().keys()])
+
+        def items(self) -&gt; list:
+                &#34;&#34;&#34;
+                Returns key, value where key is centroid position and value is array of points assigned to centroid.
+                &#34;&#34;&#34;
+                return [(np.frombuffer(centroid), self.getPoints(centroid)) for centroid, points in super().items()]
+
+        @staticmethod
+        def dist(pt1: np.ndarray, pt2: np.ndarray) -&gt; np.float64:
+                &#34;&#34;&#34;
+                Returns euclidean distance of pt1 and pt2.
+                &#34;&#34;&#34;
+                return np.sqrt(np.sum((pt2-pt1)**2))
+
+        @staticmethod
+        def optimizedDist(pt1: np.ndarray, pt2: np.ndarray) -&gt; np.float64:
+                &#34;&#34;&#34;
+                Returns (euclidean distance)^2 of pt1 and pt2.
+                &#34;&#34;&#34;
+                return np.sum((pt2-pt1)**2)
+
+        @staticmethod
+        def rand(low: float, high: float) -&gt; np.float64:
+                &#34;&#34;&#34;
+                Returns random float between low and high from uniform distribution.
+                &#34;&#34;&#34;
+                return np.random.uniform(low, high)
+
+        def solve(self) -&gt; None:
+                &#34;&#34;&#34;
+                Pre: not already solved.\n
+                Post: becomes solved.\n
+                Solves to produce clusters from data.\n
+                &#34;&#34;&#34;
+                if self.k is not None:
+                        self.singleSolve()
+                else:
+                        self.autoSolve()
+
+                self.solved = True
+
+        def singleSolve(self) -&gt; None:
+                &#34;&#34;&#34;
+                Pre: k!=None.\n
+                Solves to produce clusters from data if k selected. 
+                &#34;&#34;&#34;
+                optimal = self.optimalPartition(self.k)
+                self.revert(optimal)
+
+        def autoSolve(self) -&gt; None:
+                &#34;&#34;&#34;
+                Pre: k==None.\n
+                Solves to produce clusters from data if k not selected by computing silhouette coefficients.
+                &#34;&#34;&#34;
+                pivot = None
+                optimal = None
+
+                for k in range(2, self.maxK+1):  # testing configurations for values of k
+                        if k &gt; 2:  # store current configuration as previous
+                                self.prevIteration = optimal
+                                
+                        optimal = self.optimalPartition(k)
+                        self.silhouettes[k] = self.silhouette(optimal)
+
+                        if k &gt; 2:
+                                dScore = (self.silhouettes[k-1] - self.silhouettes[k])
+                                if dScore &lt;= 0:  # if new score is better than prev score
+                                        if pivot is not None and (pivot-self.silhouettes[k]) &lt;= 0:  # if pivot is set and new score is better than or euqal to pivot score
+                                                pivot = None
+                                        if k==self.maxK:
+                                                self.simplify()
+                                                self.k = k
+                                                self.partitionQuality = self.silhouettes[k]*100
+                                elif dScore &lt;= self.silhouetteThreshold and (pivot is None or (pivot-self.silhouettes[k]) &lt;= self.silhouetteThreshold):  # new score is worse but within tolerance
+                                        if pivot is None:
+                                                pivot = self.silhouettes[k-1]
+                                        if k==self.maxK:
+                                                self.simplify()
+                                                self.k = k-1
+                                                self.partitionQuality = self.silhouettes[k-1]*100
+                                else:  # new score is worse and exceeds tolerance
+                                        self.revert(self.prevIteration)
+                                        self.k = k-1
+                                        self.partitionQuality = self.silhouettes[k-1]*100
+                                        break
+
+        def optimalPartition(self, k: int) -&gt; dict:
+                &#34;&#34;&#34;
+                k: number of clusters.\n
+                Gets self.sample number of kmeans configurations and returns the optimal configuration.
+                &#34;&#34;&#34;
+                samples = []
+                for i in range(self.samples):
+                        self.clear()
+                        self.kmeans(k)
+                        samples.append(self.simpleCopy())
+                
+                initialized = False
+                optimal, bestCost = None, 0
+                
+                for i in range(len(samples)):
+                        cost = self.cost(samples[i])
+                        if cost == -1:
+                                continue
+                        elif not initialized:
+                                optimal, bestCost = samples[i], cost
+                                initialized = True
+                        elif cost &lt;= bestCost:
+                                optimal, bestCost = samples[i], cost            
+
+                return optimal
+
+        def cost(self, partition: dict) -&gt; float:
+                &#34;&#34;&#34;
+                partition: dictionary of centroids and assigned points.\n
+                Computes cost of kmeans partition using average dist bt cluster and pts and max dist bt cluster and points.
+                &#34;&#34;&#34;
+                totalDist = 0
+                maxDist = 0
+                ptCount = 0
+                
+                for bufferCentroid, points in partition.items():
+                        size = len(points)
+                        if size == 0:
+                                return -1
+                        ptCount += size
+                        centroid = np.frombuffer(bufferCentroid)
+
+                        ptsDist = [Clusters.optimizedDist(pt, centroid) for pt in points]
+                        totalDist += sum(ptsDist)
+                        localMax = max(ptsDist)
+                        if localMax &gt; maxDist:
+                                maxDist = localMax
+
+                return (totalDist/ptCount)*(maxDist**2)  # average distance * max distance^2
+
+        def silhouette(self, partition: dict) -&gt; float:
+                &#34;&#34;&#34;
+                partition: dictionary of centroids and assigned points.\n
+                Returns average silhouette score for all points in partition.
+                &#34;&#34;&#34;
+                if partition is None:
+                        return -1.1
+                partitionScore = 0
+                centroids = [np.frombuffer(bufferCentroid) for bufferCentroid in partition.keys()]
+                for bufferCentroid, points in partition.items():  # for each centroid
+                        if len(points) &gt; 0: 
+                                centroidScore = 0
+                                parent = np.frombuffer(bufferCentroid)
+                                for pt in points:  # for each point in centroid
+                                        second = self.findSecondCentroid(pt, parent, centroids)  # find closest centroid
+                                        a = self.computeA(pt, partition[bufferCentroid])  # average dist of pt to other points in cluster
+                                        b = self.computeB(pt, partition[second.tobytes()])  # average dist of pt to points in closest non parent cluster
+                                        centroidScore += self.silhouetteCoeffient(a, b)  # (b-a)/max(a, b)      
+                                partitionScore += centroidScore/len(points)
+                        else:  # has undesirable empty clusters
+                                partitionScore-=1
+                return partitionScore/len(centroids)
+
+        def silhouetteCoeffient(self, a: float, b: float) -&gt; float:
+                &#34;&#34;&#34;
+                a: average dist of pt to other points in cluster.\n
+                b: average dist of pt to points in closest non parent cluster.\n
+                Returns silhouette coeffient for point given its a and b values.
+                &#34;&#34;&#34;
+                return (b-a)/max(a, b)
+
+        def computeA(self, pt: np.ndarray, points: np.ndarray) -&gt; float:
+                &#34;&#34;&#34;
+                pt: point to compute &#34;a&#34; for.\n
+                points: all points in cluster of pt.\n
+                Returns avg dist from pt to all points.
+                &#34;&#34;&#34;
+                size = len(points) - 1
+                return (size!=0)*np.sqrt(sum([Clusters.optimizedDist(pt, otherPt) for otherPt in points])/size)
+
+        def computeB(self, pt: np.ndarray, points: np.ndarray) -&gt; float:
+                &#34;&#34;&#34;
+                pt: point to compute &#34;b&#34; for.\n
+                points: all points in closest non parent cluster of pt.\n
+                Returns avg dist from pt to all points.
+                &#34;&#34;&#34;
+                return np.sqrt(sum([Clusters.optimizedDist(pt, otherPt) for otherPt in points])/len(points))
+
+        def generateScores(self) -&gt; None:
+                &#34;&#34;&#34;
+                Computes &#34;matchness&#34; scores for all points after clusters have been determined.\n
+                Determines scores based on:\n
+                        1) Distance from pt to center of dataset (far away pts are penalized).\n
+                        2) Closeness of pt to center of its cluster relative to farthest pt from cluster (far pts are penalized).\n
+                        3) Avg dist of points from cluster (larger avg distances are penalized).\n
+                        4) Size of clusters (pts from smaller clusters are penalized).
+                &#34;&#34;&#34;
+                maxDataRadius = np.sqrt(max([Clusters.optimizedDist(pt, self.center) for pt in self.data]))
+                maxAvgClusterRadius = max([sum([Clusters.dist(centroid, pt) for pt in points])/len(points) for centroid, points in self.items()])
+
+                i = 0
+                scores = np.zeros(self.data.shape[0])
+                data = np.zeros(self.data.shape)
+                for centroid, points in self.items():
+                        clusterSize = len(points)
+                        localDists = [Clusters.dist(centroid, pt) for pt in points]
+                        avgClusterRadius = sum(localDists)/clusterSize
+                        maxClusterRadius = max(localDists)
+
+                        # compute scores for each pt
+                        for j, distPtCentroid in enumerate(localDists):
+                                distPtCenter = Clusters.dist(points[j], self.center)
+
+                                relativeDist = distPtCentroid/maxClusterRadius
+                                relativeAvgDist = avgClusterRadius/maxAvgClusterRadius
+                                relativeDistToCenter = distPtCenter/maxDataRadius
+                                relativeClusterSize = 1/(clusterSize/(self.data.shape[0]/self.k))
+
+                                score = self.score(points[j], relativeDist, relativeAvgDist, relativeDistToCenter, relativeClusterSize)
+                                scores[i] = score
+                                data[i] = points[j]
+                                i += 1
+
+                # scale scores of pts from 0-100
+                minScore, maxScore = scores.min(), scores.max()
+                avgScore = scores.mean()
+                scale = lambda pt: ((pt-minScore)/(maxScore-minScore))*100
+                normalized = np.array(list(map(scale, scores)))
+                
+                # sorting
+                order = normalized.argsort()
+                self.orderedScores = normalized[order]
+                self.orderedData = (data.T[:,order]).T
+
+                # update public attributes
+                self.rawScoreMin = minScore
+                self.rawScoreMax = maxScore
+                self.rawScoreAvg = avgScore
+                self.scoreAvg = np.mean(normalized)
+
+        def score(self, pt: np.ndarray, relativeDist: float, relativeAvgDist: float, relativeDistToCenter: float, relativeClusterSize: float) -&gt; float:
+                &#34;&#34;&#34;
+                pt: pt to compute score for.\n
+                relativeDist: dist between pt and center of cluster its in relative to radius of cluster.\n
+                relativeAvgDist: avg dist of points in cluster to center of cluster relative to that of cluster with max avg dist.\n
+                relativeClusterSize: num of pts in cluster relative to size of data set divided by number of clusters.\n
+                relativeDistToCenter: dist of pt to center of dataset relative to dist of most outlying pt to center.\n
+                
+                Computes score as described in &#34;generateScores&#34;. Uses exponents to weight terms.
+                &#34;&#34;&#34;
+                return (relativeDist**2)*(np.sqrt(relativeAvgDist))*(relativeDistToCenter**2)*(np.sqrt(relativeClusterSize**3))
+
+        def simplify(self) -&gt; None:
+                &#34;&#34;&#34;
+                Post: self values are simplified.\n
+                Simplifies self by reducing values to their correct size.
+                &#34;&#34;&#34;
+                simplified = self.simpleCopy()
+                self.revert(simplified)
+
+        def revert(self, copy: dict) -&gt; None:
+                &#34;&#34;&#34;
+                Post: self values are simplified.\n
+                Transforms values of self to values of copy.
+                &#34;&#34;&#34;
+                self.clear()
+                for centroid, points in copy.items():
+                        self[centroid] = points
+
+        def kmeans(self, k: int) -&gt; None:
+                &#34;&#34;&#34;
+                k: number of clusters.\n
+                Computes k means clustering for values in self.data.
+                &#34;&#34;&#34;
+                if not k&gt;0:
+                        raise ValueError(&#34;k must be greater than 0&#34;)
+
+                self.clear()
+
+                for _ in range(k):  # initialize centroids
+                        centroid = self.getRandomCentroid()
+                        self.add(centroid)
+
+                for _ in range(self.maxIterations):  # train clusters until near convergence
+                        self.assign()
+                        self.update()
+                        if self.dp &lt;= self.convergenceLimit*self.range:  # if centroids don&#39;t move very much
+                                self.assign()
+                                break
+
+        def getRandomCentroid(self) -&gt; None:
+                &#34;&#34;&#34;
+                Returns coordinates with range of self.bounds (window of data)
+                &#34;&#34;&#34;
+                return np.array([Clusters.rand(self.bounds[dimension].min(), self.bounds[dimension].max()) for dimension in range(self.data.shape[1])])
+
+        def findSecondCentroid(self, pt: np.ndarray, parent: np.ndarray, centroids: np.ndarray) -&gt; np.ndarray:
+                &#34;&#34;&#34;
+                Returns centroid closest to pt other than centroid of cluster pt is in.
+                &#34;&#34;&#34;
+                centroids, dists = list(zip(*[[centroid, Clusters.optimizedDist(pt, centroid)] for centroid in centroids if not np.all(centroid == parent)]))
+                return centroids[dists.index(min(dists))]
+
+        def add(self, centroid: np.ndarray) -&gt; None:
+                &#34;&#34;&#34;
+                Post: coords of centroid added to self.\n
+                Adds a centroid to self.
+                &#34;&#34;&#34;
+                self[centroid] = {&#34;data&#34;: np.zeros((self.data.shape[0], self.data.shape[1])), &#34;size&#34;: 0}
+
+        def assign(self) -&gt; None:
+                &#34;&#34;&#34;
+                Post: values of centroid keys in self are filled.\n
+                Assigns all points to centroid closest to them.
+                &#34;&#34;&#34;
+                if self.isAssigned:
+                        self.clearAssignments()
+                else:
+                        self.isAssigned = True
+                centroids = list(self.keys())
+                for pt in self.data:
+                        dists = [Clusters.optimizedDist(centroid, pt) for centroid in centroids]
+                        closest = centroids[dists.index(min(dists))]
+                        self[closest][&#34;data&#34;][self[closest][&#34;size&#34;]] = pt
+                        self[closest][&#34;size&#34;] += 1
+
+        def update(self) -&gt; None:
+                &#34;&#34;&#34;
+                Post: keys and their values are deleted and then updated keys are readded.\n
+                Moves centroid closer to center of points assigned to it.
+                &#34;&#34;&#34;
+                maxDP = 0
+                bufferCentroids = list(self.bufferKeys())
+        
+                for bufferCentroid in bufferCentroids:
+                        if self[bufferCentroid][&#34;size&#34;] &gt; 0:
+                                centroid = np.frombuffer(bufferCentroid)
+
+                                data = self.getPoints(bufferCentroid)
+                                center = data.mean(axis=0)
+                                
+                                dp = self.alpha*(center-centroid)
+                                ds = self.dist(np.zeros(self.data.shape[1]), dp)
+
+                                if ds &gt; maxDP:
+                                        maxDP = ds
+
+                                del self[bufferCentroid]
+                                self.add(centroid+dp)
+                                
+                self.dp = maxDP
+
+        def getPoints(self, centroid: np.ndarray or bytes) -&gt; np.ndarray:
+                &#34;&#34;&#34;
+                centroid: centroid to get assigned pts from. Can be in np.ndarray or byte form.\n
+                Returns points assigned to centroid.
+                &#34;&#34;&#34;
+                if not self.solved:
+                        return self[centroid][&#34;data&#34;][:self[centroid][&#34;size&#34;]]
+                else:
+                        return self[centroid]
+
+        def simpleCopy(self) -&gt; dict:
+                &#34;&#34;&#34;
+                Returns dict of centroid positions and points assigned to each centroid.
+                &#34;&#34;&#34;
+                copy = {}
+                for centroid in self.bufferKeys():
+                        copy[centroid] = self.getPoints(centroid)
+                return copy     
+
+        def clearAssignments(self) -&gt; None:
+                &#34;&#34;&#34;
+                Post: values of self are cleared.\n
+                Clears points assigned to each centroid.
+                &#34;&#34;&#34;
+                for centroid in self:
+                        self[centroid][&#34;data&#34;] = np.zeros((self.data.shape[0], self.data.shape[1]))
+                        self[centroid][&#34;size&#34;] = 0
+
+        def bufferKeys(self) -&gt; type(dict().keys()):
+                &#34;&#34;&#34;
+                Returns dictkeys object of keys in form of bytes.
+                &#34;&#34;&#34;
+                return super().keys()
+
+        def __setitem__(self, centroid: np.ndarray or bytes, points: np.ndarray) -&gt; None:
+                &#34;&#34;&#34;
+                centroid: centroid to be used as key. Can be in np.ndarray or byte form.\n
+                points: points to assign to centroid.\n
+                Post: key&#39;s values are set.\n
+                Sets value of key in self.
+                &#34;&#34;&#34;
+                if type(centroid) == np.ndarray:
+                        super().__setitem__(centroid.tobytes(), points)
+                elif type(centroid) == bytes:
+                        super().__setitem__(centroid, points)
+                else:
+                        raise TypeError(&#34;Invalid type: &#34; + str(type(centroid)))
+
+        def __getitem__(self, centroid: np.ndarray or bytes) -&gt; np.ndarray:
+                &#34;&#34;&#34;
+                centroid: centroid to be used as key. Can be in np.ndarray or byte form.\n
+                Returns item from key in self.
+                &#34;&#34;&#34;
+                if type(centroid) == np.ndarray:
+                        return super().__getitem__(centroid.tobytes())
+                elif type(centroid) == bytes:
+                        return super().__getitem__(centroid)
+                else:
+                        raise TypeError(&#34;Invalid type: &#34; + str(type(centroid)))
+
+        def __delitem__(self, centroid: np.ndarray or bytes) -&gt; None:
+                &#34;&#34;&#34;
+                Post: Item is deleted from self.\n
+                Deletes item from self.
+                &#34;&#34;&#34;
+                if type(centroid) == np.ndarray:
+                        return super().delitem(centroid.tobytes())
+                elif type(centroid) == bytes:
+                        return super().__delitem__(centroid)
+                else:
+                        raise TypeError(&#34;Invalid type: &#34; + str(type(centroid)))
+
+        def __iter__(self) -&gt; iter(list()):
+                &#34;&#34;&#34;
+                Allows iteration through self.
+                &#34;&#34;&#34;
+                return [np.frombuffer(centroid) for centroid in self.keys()].__iter__()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="clustering.Clusters"><code class="flex name class">
+<span>class <span class="ident">Clusters</span></span>
+<span>(</span><span>data: numpy.ndarray, k: int = None, maxK: int = 10, maxIterations: int = 50, samples: int = 10, alpha: float = 0.85, accuracy: int = 4)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Uses kmeans clustering and silhoutte coefficient scoring to find clusters amongst data.</p>
+<p>data: nth dimensional data to be clustered.</p>
+<p>k: target number of clusters. If k=None, k will be automatically selected.</p>
+<p>maxK: the maximum value of k that can be automatically selected.</p>
+<p>maxIterations: the maximum number of iterations kmeans will use to try to reach convergence.</p>
+<p>samples: the number of configurations that will be generated to select.</p>
+<p>alpha: learning rate.</p>
+<p>accuracy: tolerance for kmeans convergence.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Clusters(dict):
+
+        &#34;&#34;&#34;
+        Uses kmeans clustering and silhoutte coefficient scoring to find clusters amongst data.
+        &#34;&#34;&#34;
+        def __init__(self, data: np.ndarray, k: int=None, maxK: int=10, maxIterations: int=50, samples: int=10, alpha: float=0.85, accuracy: int=4) -&gt; None:
+                &#34;&#34;&#34;
+                data: nth dimensional data to be clustered.\n
+                k: target number of clusters. If k=None, k will be automatically selected.\n
+                maxK: the maximum value of k that can be automatically selected.\n
+                maxIterations: the maximum number of iterations kmeans will use to try to reach convergence.\n
+                samples: the number of configurations that will be generated to select.\n
+                alpha: learning rate.\n
+                accuracy: tolerance for kmeans convergence.
+                &#34;&#34;&#34;
+                if not (k is None or k&gt;=0):
+                        raise ValueError(&#34;K must be greater than or equal to zero&#34;)
+                if not (data.shape[0] &gt; 1):
+                        raise ValueError(&#34;Data must have greater that one point&#34;)
+
+                super().__init__(self)
+
+                # public attributes
+                self.data = data
+                self.k, self.maxK = k, maxK
+                self.alpha = alpha
+                self.accuracy = accuracy
+                self.partitionQuality = 0
+
+                self.orderedData = None
+                self.orderedScores = None
+                
+                self.rawScoreMin, self.rawScoreMax = None, None
+                self.rawScoreAvg = None
+                self.scoreAvg = None
+
+                self.maxIterations = maxIterations
+                self.samples = samples
+                self.autoSolve = k is None
+
+                self.center = self.data.mean(axis=0)
+
+                # data attributes
+                self.bounds = np.zeros((self.data.shape[1], 2))
+                
+                for dimension in range(len(self.bounds)):
+                        self.bounds[dimension][0] = self.data[:,dimension].min()
+                        self.bounds[dimension][1] = self.data[:,dimension].max()
+
+                self.ranges = np.diff(self.bounds).flatten()
+
+                space = np.zeros((2, self.data.shape[1]))
+                for dimension in range(len(self.bounds)):
+                        space[1][dimension] = self.ranges[dimension]
+                        
+                self.range = self.dist(space[0], space[1])
+                
+                self.convergenceLimit = 1*(10**(-1*self.accuracy))
+                self.silhouetteThreshold = 0.0375
+                
+                # state attributes
+                self.dp = 0
+                self.prevIteration = {}
+                self.isAssigned = False
+                self.solved = False
+
+                # evaluation attributes
+                self.silhouettes = {}
+                
+                # solving and generating scores
+                self.solve()
+                self.generateScores()
+                        
+        def printInfo(self) -&gt; None:
+                &#34;&#34;&#34;
+                Prints important info relating to clusters.
+                &#34;&#34;&#34;
+                print(&#34;CLUSTERS INFO:&#34;)
+                print(&#34; &#34;*4 + &#34;Number of clusters: &#34; + str(self.k))
+                print(&#34; &#34;*4 + &#34;Size of each cluster:&#34;)
+                for count, centroid in enumerate(self):
+                        print(&#34; &#34;*8 + &#34;Cluster &#34; + str(count) + &#34;: &#34; + str(len(self[centroid])))
+                print(&#34; &#34;*4 + &#34;Quality of partition: &#34; + str(round(self.partitionQuality, 3))+&#34;%&#34;)
+                print(&#34; &#34;*4 + &#34;Average \&#34;matchness\&#34; score: &#34; + str(round(self.scoreAvg, 3)) + &#34;/100&#34;)
+
+        def keys(self) -&gt; np.ndarray:  # return centroid positions
+                &#34;&#34;&#34;
+                Returns np.array of centroid positions 
+                &#34;&#34;&#34;
+                return np.array([np.frombuffer(centroid) for centroid in super().keys()])
+
+        def items(self) -&gt; list:
+                &#34;&#34;&#34;
+                Returns key, value where key is centroid position and value is array of points assigned to centroid.
+                &#34;&#34;&#34;
+                return [(np.frombuffer(centroid), self.getPoints(centroid)) for centroid, points in super().items()]
+
+        @staticmethod
+        def dist(pt1: np.ndarray, pt2: np.ndarray) -&gt; np.float64:
+                &#34;&#34;&#34;
+                Returns euclidean distance of pt1 and pt2.
+                &#34;&#34;&#34;
+                return np.sqrt(np.sum((pt2-pt1)**2))
+
+        @staticmethod
+        def optimizedDist(pt1: np.ndarray, pt2: np.ndarray) -&gt; np.float64:
+                &#34;&#34;&#34;
+                Returns (euclidean distance)^2 of pt1 and pt2.
+                &#34;&#34;&#34;
+                return np.sum((pt2-pt1)**2)
+
+        @staticmethod
+        def rand(low: float, high: float) -&gt; np.float64:
+                &#34;&#34;&#34;
+                Returns random float between low and high from uniform distribution.
+                &#34;&#34;&#34;
+                return np.random.uniform(low, high)
+
+        def solve(self) -&gt; None:
+                &#34;&#34;&#34;
+                Pre: not already solved.\n
+                Post: becomes solved.\n
+                Solves to produce clusters from data.\n
+                &#34;&#34;&#34;
+                if self.k is not None:
+                        self.singleSolve()
+                else:
+                        self.autoSolve()
+
+                self.solved = True
+
+        def singleSolve(self) -&gt; None:
+                &#34;&#34;&#34;
+                Pre: k!=None.\n
+                Solves to produce clusters from data if k selected. 
+                &#34;&#34;&#34;
+                optimal = self.optimalPartition(self.k)
+                self.revert(optimal)
+
+        def autoSolve(self) -&gt; None:
+                &#34;&#34;&#34;
+                Pre: k==None.\n
+                Solves to produce clusters from data if k not selected by computing silhouette coefficients.
+                &#34;&#34;&#34;
+                pivot = None
+                optimal = None
+
+                for k in range(2, self.maxK+1):  # testing configurations for values of k
+                        if k &gt; 2:  # store current configuration as previous
+                                self.prevIteration = optimal
+                                
+                        optimal = self.optimalPartition(k)
+                        self.silhouettes[k] = self.silhouette(optimal)
+
+                        if k &gt; 2:
+                                dScore = (self.silhouettes[k-1] - self.silhouettes[k])
+                                if dScore &lt;= 0:  # if new score is better than prev score
+                                        if pivot is not None and (pivot-self.silhouettes[k]) &lt;= 0:  # if pivot is set and new score is better than or euqal to pivot score
+                                                pivot = None
+                                        if k==self.maxK:
+                                                self.simplify()
+                                                self.k = k
+                                                self.partitionQuality = self.silhouettes[k]*100
+                                elif dScore &lt;= self.silhouetteThreshold and (pivot is None or (pivot-self.silhouettes[k]) &lt;= self.silhouetteThreshold):  # new score is worse but within tolerance
+                                        if pivot is None:
+                                                pivot = self.silhouettes[k-1]
+                                        if k==self.maxK:
+                                                self.simplify()
+                                                self.k = k-1
+                                                self.partitionQuality = self.silhouettes[k-1]*100
+                                else:  # new score is worse and exceeds tolerance
+                                        self.revert(self.prevIteration)
+                                        self.k = k-1
+                                        self.partitionQuality = self.silhouettes[k-1]*100
+                                        break
+
+        def optimalPartition(self, k: int) -&gt; dict:
+                &#34;&#34;&#34;
+                k: number of clusters.\n
+                Gets self.sample number of kmeans configurations and returns the optimal configuration.
+                &#34;&#34;&#34;
+                samples = []
+                for i in range(self.samples):
+                        self.clear()
+                        self.kmeans(k)
+                        samples.append(self.simpleCopy())
+                
+                initialized = False
+                optimal, bestCost = None, 0
+                
+                for i in range(len(samples)):
+                        cost = self.cost(samples[i])
+                        if cost == -1:
+                                continue
+                        elif not initialized:
+                                optimal, bestCost = samples[i], cost
+                                initialized = True
+                        elif cost &lt;= bestCost:
+                                optimal, bestCost = samples[i], cost            
+
+                return optimal
+
+        def cost(self, partition: dict) -&gt; float:
+                &#34;&#34;&#34;
+                partition: dictionary of centroids and assigned points.\n
+                Computes cost of kmeans partition using average dist bt cluster and pts and max dist bt cluster and points.
+                &#34;&#34;&#34;
+                totalDist = 0
+                maxDist = 0
+                ptCount = 0
+                
+                for bufferCentroid, points in partition.items():
+                        size = len(points)
+                        if size == 0:
+                                return -1
+                        ptCount += size
+                        centroid = np.frombuffer(bufferCentroid)
+
+                        ptsDist = [Clusters.optimizedDist(pt, centroid) for pt in points]
+                        totalDist += sum(ptsDist)
+                        localMax = max(ptsDist)
+                        if localMax &gt; maxDist:
+                                maxDist = localMax
+
+                return (totalDist/ptCount)*(maxDist**2)  # average distance * max distance^2
+
+        def silhouette(self, partition: dict) -&gt; float:
+                &#34;&#34;&#34;
+                partition: dictionary of centroids and assigned points.\n
+                Returns average silhouette score for all points in partition.
+                &#34;&#34;&#34;
+                if partition is None:
+                        return -1.1
+                partitionScore = 0
+                centroids = [np.frombuffer(bufferCentroid) for bufferCentroid in partition.keys()]
+                for bufferCentroid, points in partition.items():  # for each centroid
+                        if len(points) &gt; 0: 
+                                centroidScore = 0
+                                parent = np.frombuffer(bufferCentroid)
+                                for pt in points:  # for each point in centroid
+                                        second = self.findSecondCentroid(pt, parent, centroids)  # find closest centroid
+                                        a = self.computeA(pt, partition[bufferCentroid])  # average dist of pt to other points in cluster
+                                        b = self.computeB(pt, partition[second.tobytes()])  # average dist of pt to points in closest non parent cluster
+                                        centroidScore += self.silhouetteCoeffient(a, b)  # (b-a)/max(a, b)      
+                                partitionScore += centroidScore/len(points)
+                        else:  # has undesirable empty clusters
+                                partitionScore-=1
+                return partitionScore/len(centroids)
+
+        def silhouetteCoeffient(self, a: float, b: float) -&gt; float:
+                &#34;&#34;&#34;
+                a: average dist of pt to other points in cluster.\n
+                b: average dist of pt to points in closest non parent cluster.\n
+                Returns silhouette coeffient for point given its a and b values.
+                &#34;&#34;&#34;
+                return (b-a)/max(a, b)
+
+        def computeA(self, pt: np.ndarray, points: np.ndarray) -&gt; float:
+                &#34;&#34;&#34;
+                pt: point to compute &#34;a&#34; for.\n
+                points: all points in cluster of pt.\n
+                Returns avg dist from pt to all points.
+                &#34;&#34;&#34;
+                size = len(points) - 1
+                return (size!=0)*np.sqrt(sum([Clusters.optimizedDist(pt, otherPt) for otherPt in points])/size)
+
+        def computeB(self, pt: np.ndarray, points: np.ndarray) -&gt; float:
+                &#34;&#34;&#34;
+                pt: point to compute &#34;b&#34; for.\n
+                points: all points in closest non parent cluster of pt.\n
+                Returns avg dist from pt to all points.
+                &#34;&#34;&#34;
+                return np.sqrt(sum([Clusters.optimizedDist(pt, otherPt) for otherPt in points])/len(points))
+
+        def generateScores(self) -&gt; None:
+                &#34;&#34;&#34;
+                Computes &#34;matchness&#34; scores for all points after clusters have been determined.\n
+                Determines scores based on:\n
+                        1) Distance from pt to center of dataset (far away pts are penalized).\n
+                        2) Closeness of pt to center of its cluster relative to farthest pt from cluster (far pts are penalized).\n
+                        3) Avg dist of points from cluster (larger avg distances are penalized).\n
+                        4) Size of clusters (pts from smaller clusters are penalized).
+                &#34;&#34;&#34;
+                maxDataRadius = np.sqrt(max([Clusters.optimizedDist(pt, self.center) for pt in self.data]))
+                maxAvgClusterRadius = max([sum([Clusters.dist(centroid, pt) for pt in points])/len(points) for centroid, points in self.items()])
+
+                i = 0
+                scores = np.zeros(self.data.shape[0])
+                data = np.zeros(self.data.shape)
+                for centroid, points in self.items():
+                        clusterSize = len(points)
+                        localDists = [Clusters.dist(centroid, pt) for pt in points]
+                        avgClusterRadius = sum(localDists)/clusterSize
+                        maxClusterRadius = max(localDists)
+
+                        # compute scores for each pt
+                        for j, distPtCentroid in enumerate(localDists):
+                                distPtCenter = Clusters.dist(points[j], self.center)
+
+                                relativeDist = distPtCentroid/maxClusterRadius
+                                relativeAvgDist = avgClusterRadius/maxAvgClusterRadius
+                                relativeDistToCenter = distPtCenter/maxDataRadius
+                                relativeClusterSize = 1/(clusterSize/(self.data.shape[0]/self.k))
+
+                                score = self.score(points[j], relativeDist, relativeAvgDist, relativeDistToCenter, relativeClusterSize)
+                                scores[i] = score
+                                data[i] = points[j]
+                                i += 1
+
+                # scale scores of pts from 0-100
+                minScore, maxScore = scores.min(), scores.max()
+                avgScore = scores.mean()
+                scale = lambda pt: ((pt-minScore)/(maxScore-minScore))*100
+                normalized = np.array(list(map(scale, scores)))
+                
+                # sorting
+                order = normalized.argsort()
+                self.orderedScores = normalized[order]
+                self.orderedData = (data.T[:,order]).T
+
+                # update public attributes
+                self.rawScoreMin = minScore
+                self.rawScoreMax = maxScore
+                self.rawScoreAvg = avgScore
+                self.scoreAvg = np.mean(normalized)
+
+        def score(self, pt: np.ndarray, relativeDist: float, relativeAvgDist: float, relativeDistToCenter: float, relativeClusterSize: float) -&gt; float:
+                &#34;&#34;&#34;
+                pt: pt to compute score for.\n
+                relativeDist: dist between pt and center of cluster its in relative to radius of cluster.\n
+                relativeAvgDist: avg dist of points in cluster to center of cluster relative to that of cluster with max avg dist.\n
+                relativeClusterSize: num of pts in cluster relative to size of data set divided by number of clusters.\n
+                relativeDistToCenter: dist of pt to center of dataset relative to dist of most outlying pt to center.\n
+                
+                Computes score as described in &#34;generateScores&#34;. Uses exponents to weight terms.
+                &#34;&#34;&#34;
+                return (relativeDist**2)*(np.sqrt(relativeAvgDist))*(relativeDistToCenter**2)*(np.sqrt(relativeClusterSize**3))
+
+        def simplify(self) -&gt; None:
+                &#34;&#34;&#34;
+                Post: self values are simplified.\n
+                Simplifies self by reducing values to their correct size.
+                &#34;&#34;&#34;
+                simplified = self.simpleCopy()
+                self.revert(simplified)
+
+        def revert(self, copy: dict) -&gt; None:
+                &#34;&#34;&#34;
+                Post: self values are simplified.\n
+                Transforms values of self to values of copy.
+                &#34;&#34;&#34;
+                self.clear()
+                for centroid, points in copy.items():
+                        self[centroid] = points
+
+        def kmeans(self, k: int) -&gt; None:
+                &#34;&#34;&#34;
+                k: number of clusters.\n
+                Computes k means clustering for values in self.data.
+                &#34;&#34;&#34;
+                if not k&gt;0:
+                        raise ValueError(&#34;k must be greater than 0&#34;)
+
+                self.clear()
+
+                for _ in range(k):  # initialize centroids
+                        centroid = self.getRandomCentroid()
+                        self.add(centroid)
+
+                for _ in range(self.maxIterations):  # train clusters until near convergence
+                        self.assign()
+                        self.update()
+                        if self.dp &lt;= self.convergenceLimit*self.range:  # if centroids don&#39;t move very much
+                                self.assign()
+                                break
+
+        def getRandomCentroid(self) -&gt; None:
+                &#34;&#34;&#34;
+                Returns coordinates with range of self.bounds (window of data)
+                &#34;&#34;&#34;
+                return np.array([Clusters.rand(self.bounds[dimension].min(), self.bounds[dimension].max()) for dimension in range(self.data.shape[1])])
+
+        def findSecondCentroid(self, pt: np.ndarray, parent: np.ndarray, centroids: np.ndarray) -&gt; np.ndarray:
+                &#34;&#34;&#34;
+                Returns centroid closest to pt other than centroid of cluster pt is in.
+                &#34;&#34;&#34;
+                centroids, dists = list(zip(*[[centroid, Clusters.optimizedDist(pt, centroid)] for centroid in centroids if not np.all(centroid == parent)]))
+                return centroids[dists.index(min(dists))]
+
+        def add(self, centroid: np.ndarray) -&gt; None:
+                &#34;&#34;&#34;
+                Post: coords of centroid added to self.\n
+                Adds a centroid to self.
+                &#34;&#34;&#34;
+                self[centroid] = {&#34;data&#34;: np.zeros((self.data.shape[0], self.data.shape[1])), &#34;size&#34;: 0}
+
+        def assign(self) -&gt; None:
+                &#34;&#34;&#34;
+                Post: values of centroid keys in self are filled.\n
+                Assigns all points to centroid closest to them.
+                &#34;&#34;&#34;
+                if self.isAssigned:
+                        self.clearAssignments()
+                else:
+                        self.isAssigned = True
+                centroids = list(self.keys())
+                for pt in self.data:
+                        dists = [Clusters.optimizedDist(centroid, pt) for centroid in centroids]
+                        closest = centroids[dists.index(min(dists))]
+                        self[closest][&#34;data&#34;][self[closest][&#34;size&#34;]] = pt
+                        self[closest][&#34;size&#34;] += 1
+
+        def update(self) -&gt; None:
+                &#34;&#34;&#34;
+                Post: keys and their values are deleted and then updated keys are readded.\n
+                Moves centroid closer to center of points assigned to it.
+                &#34;&#34;&#34;
+                maxDP = 0
+                bufferCentroids = list(self.bufferKeys())
+        
+                for bufferCentroid in bufferCentroids:
+                        if self[bufferCentroid][&#34;size&#34;] &gt; 0:
+                                centroid = np.frombuffer(bufferCentroid)
+
+                                data = self.getPoints(bufferCentroid)
+                                center = data.mean(axis=0)
+                                
+                                dp = self.alpha*(center-centroid)
+                                ds = self.dist(np.zeros(self.data.shape[1]), dp)
+
+                                if ds &gt; maxDP:
+                                        maxDP = ds
+
+                                del self[bufferCentroid]
+                                self.add(centroid+dp)
+                                
+                self.dp = maxDP
+
+        def getPoints(self, centroid: np.ndarray or bytes) -&gt; np.ndarray:
+                &#34;&#34;&#34;
+                centroid: centroid to get assigned pts from. Can be in np.ndarray or byte form.\n
+                Returns points assigned to centroid.
+                &#34;&#34;&#34;
+                if not self.solved:
+                        return self[centroid][&#34;data&#34;][:self[centroid][&#34;size&#34;]]
+                else:
+                        return self[centroid]
+
+        def simpleCopy(self) -&gt; dict:
+                &#34;&#34;&#34;
+                Returns dict of centroid positions and points assigned to each centroid.
+                &#34;&#34;&#34;
+                copy = {}
+                for centroid in self.bufferKeys():
+                        copy[centroid] = self.getPoints(centroid)
+                return copy     
+
+        def clearAssignments(self) -&gt; None:
+                &#34;&#34;&#34;
+                Post: values of self are cleared.\n
+                Clears points assigned to each centroid.
+                &#34;&#34;&#34;
+                for centroid in self:
+                        self[centroid][&#34;data&#34;] = np.zeros((self.data.shape[0], self.data.shape[1]))
+                        self[centroid][&#34;size&#34;] = 0
+
+        def bufferKeys(self) -&gt; type(dict().keys()):
+                &#34;&#34;&#34;
+                Returns dictkeys object of keys in form of bytes.
+                &#34;&#34;&#34;
+                return super().keys()
+
+        def __setitem__(self, centroid: np.ndarray or bytes, points: np.ndarray) -&gt; None:
+                &#34;&#34;&#34;
+                centroid: centroid to be used as key. Can be in np.ndarray or byte form.\n
+                points: points to assign to centroid.\n
+                Post: key&#39;s values are set.\n
+                Sets value of key in self.
+                &#34;&#34;&#34;
+                if type(centroid) == np.ndarray:
+                        super().__setitem__(centroid.tobytes(), points)
+                elif type(centroid) == bytes:
+                        super().__setitem__(centroid, points)
+                else:
+                        raise TypeError(&#34;Invalid type: &#34; + str(type(centroid)))
+
+        def __getitem__(self, centroid: np.ndarray or bytes) -&gt; np.ndarray:
+                &#34;&#34;&#34;
+                centroid: centroid to be used as key. Can be in np.ndarray or byte form.\n
+                Returns item from key in self.
+                &#34;&#34;&#34;
+                if type(centroid) == np.ndarray:
+                        return super().__getitem__(centroid.tobytes())
+                elif type(centroid) == bytes:
+                        return super().__getitem__(centroid)
+                else:
+                        raise TypeError(&#34;Invalid type: &#34; + str(type(centroid)))
+
+        def __delitem__(self, centroid: np.ndarray or bytes) -&gt; None:
+                &#34;&#34;&#34;
+                Post: Item is deleted from self.\n
+                Deletes item from self.
+                &#34;&#34;&#34;
+                if type(centroid) == np.ndarray:
+                        return super().delitem(centroid.tobytes())
+                elif type(centroid) == bytes:
+                        return super().__delitem__(centroid)
+                else:
+                        raise TypeError(&#34;Invalid type: &#34; + str(type(centroid)))
+
+        def __iter__(self) -&gt; iter(list()):
+                &#34;&#34;&#34;
+                Allows iteration through self.
+                &#34;&#34;&#34;
+                return [np.frombuffer(centroid) for centroid in self.keys()].__iter__()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.dict</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="clustering.Clusters.dist"><code class="name flex">
+<span>def <span class="ident">dist</span></span>(<span>pt1: numpy.ndarray, pt2: numpy.ndarray) ‑> numpy.float64</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns euclidean distance of pt1 and pt2.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def dist(pt1: np.ndarray, pt2: np.ndarray) -&gt; np.float64:
+        &#34;&#34;&#34;
+        Returns euclidean distance of pt1 and pt2.
+        &#34;&#34;&#34;
+        return np.sqrt(np.sum((pt2-pt1)**2))</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.optimizedDist"><code class="name flex">
+<span>def <span class="ident">optimizedDist</span></span>(<span>pt1: numpy.ndarray, pt2: numpy.ndarray) ‑> numpy.float64</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns (euclidean distance)^2 of pt1 and pt2.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def optimizedDist(pt1: np.ndarray, pt2: np.ndarray) -&gt; np.float64:
+        &#34;&#34;&#34;
+        Returns (euclidean distance)^2 of pt1 and pt2.
+        &#34;&#34;&#34;
+        return np.sum((pt2-pt1)**2)</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.rand"><code class="name flex">
+<span>def <span class="ident">rand</span></span>(<span>low: float, high: float) ‑> numpy.float64</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns random float between low and high from uniform distribution.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def rand(low: float, high: float) -&gt; np.float64:
+        &#34;&#34;&#34;
+        Returns random float between low and high from uniform distribution.
+        &#34;&#34;&#34;
+        return np.random.uniform(low, high)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="clustering.Clusters.add"><code class="name flex">
+<span>def <span class="ident">add</span></span>(<span>self, centroid: numpy.ndarray) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: coords of centroid added to self.</p>
+<p>Adds a centroid to self.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add(self, centroid: np.ndarray) -&gt; None:
+        &#34;&#34;&#34;
+        Post: coords of centroid added to self.\n
+        Adds a centroid to self.
+        &#34;&#34;&#34;
+        self[centroid] = {&#34;data&#34;: np.zeros((self.data.shape[0], self.data.shape[1])), &#34;size&#34;: 0}</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.assign"><code class="name flex">
+<span>def <span class="ident">assign</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: values of centroid keys in self are filled.</p>
+<p>Assigns all points to centroid closest to them.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def assign(self) -&gt; None:
+        &#34;&#34;&#34;
+        Post: values of centroid keys in self are filled.\n
+        Assigns all points to centroid closest to them.
+        &#34;&#34;&#34;
+        if self.isAssigned:
+                self.clearAssignments()
+        else:
+                self.isAssigned = True
+        centroids = list(self.keys())
+        for pt in self.data:
+                dists = [Clusters.optimizedDist(centroid, pt) for centroid in centroids]
+                closest = centroids[dists.index(min(dists))]
+                self[closest][&#34;data&#34;][self[closest][&#34;size&#34;]] = pt
+                self[closest][&#34;size&#34;] += 1</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.autoSolve"><code class="name flex">
+<span>def <span class="ident">autoSolve</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Pre: k==None.</p>
+<p>Solves to produce clusters from data if k not selected by computing silhouette coefficients.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def autoSolve(self) -&gt; None:
+        &#34;&#34;&#34;
+        Pre: k==None.\n
+        Solves to produce clusters from data if k not selected by computing silhouette coefficients.
+        &#34;&#34;&#34;
+        pivot = None
+        optimal = None
+
+        for k in range(2, self.maxK+1):  # testing configurations for values of k
+                if k &gt; 2:  # store current configuration as previous
+                        self.prevIteration = optimal
+                        
+                optimal = self.optimalPartition(k)
+                self.silhouettes[k] = self.silhouette(optimal)
+
+                if k &gt; 2:
+                        dScore = (self.silhouettes[k-1] - self.silhouettes[k])
+                        if dScore &lt;= 0:  # if new score is better than prev score
+                                if pivot is not None and (pivot-self.silhouettes[k]) &lt;= 0:  # if pivot is set and new score is better than or euqal to pivot score
+                                        pivot = None
+                                if k==self.maxK:
+                                        self.simplify()
+                                        self.k = k
+                                        self.partitionQuality = self.silhouettes[k]*100
+                        elif dScore &lt;= self.silhouetteThreshold and (pivot is None or (pivot-self.silhouettes[k]) &lt;= self.silhouetteThreshold):  # new score is worse but within tolerance
+                                if pivot is None:
+                                        pivot = self.silhouettes[k-1]
+                                if k==self.maxK:
+                                        self.simplify()
+                                        self.k = k-1
+                                        self.partitionQuality = self.silhouettes[k-1]*100
+                        else:  # new score is worse and exceeds tolerance
+                                self.revert(self.prevIteration)
+                                self.k = k-1
+                                self.partitionQuality = self.silhouettes[k-1]*100
+                                break</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.bufferKeys"><code class="name flex">
+<span>def <span class="ident">bufferKeys</span></span>(<span>self) ‑> dict_keys</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns dictkeys object of keys in form of bytes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bufferKeys(self) -&gt; type(dict().keys()):
+        &#34;&#34;&#34;
+        Returns dictkeys object of keys in form of bytes.
+        &#34;&#34;&#34;
+        return super().keys()</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.clearAssignments"><code class="name flex">
+<span>def <span class="ident">clearAssignments</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: values of self are cleared.</p>
+<p>Clears points assigned to each centroid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def clearAssignments(self) -&gt; None:
+        &#34;&#34;&#34;
+        Post: values of self are cleared.\n
+        Clears points assigned to each centroid.
+        &#34;&#34;&#34;
+        for centroid in self:
+                self[centroid][&#34;data&#34;] = np.zeros((self.data.shape[0], self.data.shape[1]))
+                self[centroid][&#34;size&#34;] = 0</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.computeA"><code class="name flex">
+<span>def <span class="ident">computeA</span></span>(<span>self, pt: numpy.ndarray, points: numpy.ndarray) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>pt: point to compute "a" for.</p>
+<p>points: all points in cluster of pt.</p>
+<p>Returns avg dist from pt to all points.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def computeA(self, pt: np.ndarray, points: np.ndarray) -&gt; float:
+        &#34;&#34;&#34;
+        pt: point to compute &#34;a&#34; for.\n
+        points: all points in cluster of pt.\n
+        Returns avg dist from pt to all points.
+        &#34;&#34;&#34;
+        size = len(points) - 1
+        return (size!=0)*np.sqrt(sum([Clusters.optimizedDist(pt, otherPt) for otherPt in points])/size)</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.computeB"><code class="name flex">
+<span>def <span class="ident">computeB</span></span>(<span>self, pt: numpy.ndarray, points: numpy.ndarray) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>pt: point to compute "b" for.</p>
+<p>points: all points in closest non parent cluster of pt.</p>
+<p>Returns avg dist from pt to all points.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def computeB(self, pt: np.ndarray, points: np.ndarray) -&gt; float:
+        &#34;&#34;&#34;
+        pt: point to compute &#34;b&#34; for.\n
+        points: all points in closest non parent cluster of pt.\n
+        Returns avg dist from pt to all points.
+        &#34;&#34;&#34;
+        return np.sqrt(sum([Clusters.optimizedDist(pt, otherPt) for otherPt in points])/len(points))</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.cost"><code class="name flex">
+<span>def <span class="ident">cost</span></span>(<span>self, partition: dict) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>partition: dictionary of centroids and assigned points.</p>
+<p>Computes cost of kmeans partition using average dist bt cluster and pts and max dist bt cluster and points.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cost(self, partition: dict) -&gt; float:
+        &#34;&#34;&#34;
+        partition: dictionary of centroids and assigned points.\n
+        Computes cost of kmeans partition using average dist bt cluster and pts and max dist bt cluster and points.
+        &#34;&#34;&#34;
+        totalDist = 0
+        maxDist = 0
+        ptCount = 0
+        
+        for bufferCentroid, points in partition.items():
+                size = len(points)
+                if size == 0:
+                        return -1
+                ptCount += size
+                centroid = np.frombuffer(bufferCentroid)
+
+                ptsDist = [Clusters.optimizedDist(pt, centroid) for pt in points]
+                totalDist += sum(ptsDist)
+                localMax = max(ptsDist)
+                if localMax &gt; maxDist:
+                        maxDist = localMax
+
+        return (totalDist/ptCount)*(maxDist**2)  # average distance * max distance^2</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.findSecondCentroid"><code class="name flex">
+<span>def <span class="ident">findSecondCentroid</span></span>(<span>self, pt: numpy.ndarray, parent: numpy.ndarray, centroids: numpy.ndarray) ‑> numpy.ndarray</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns centroid closest to pt other than centroid of cluster pt is in.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def findSecondCentroid(self, pt: np.ndarray, parent: np.ndarray, centroids: np.ndarray) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Returns centroid closest to pt other than centroid of cluster pt is in.
+        &#34;&#34;&#34;
+        centroids, dists = list(zip(*[[centroid, Clusters.optimizedDist(pt, centroid)] for centroid in centroids if not np.all(centroid == parent)]))
+        return centroids[dists.index(min(dists))]</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.generateScores"><code class="name flex">
+<span>def <span class="ident">generateScores</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Computes "matchness" scores for all points after clusters have been determined.</p>
+<p>Determines scores based on:</p>
+<pre><code>    1) Distance from pt to center of dataset (far away pts are penalized).
+
+    2) Closeness of pt to center of its cluster relative to farthest pt from cluster (far pts are penalized).
+
+    3) Avg dist of points from cluster (larger avg distances are penalized).
+
+    4) Size of clusters (pts from smaller clusters are penalized).
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generateScores(self) -&gt; None:
+        &#34;&#34;&#34;
+        Computes &#34;matchness&#34; scores for all points after clusters have been determined.\n
+        Determines scores based on:\n
+                1) Distance from pt to center of dataset (far away pts are penalized).\n
+                2) Closeness of pt to center of its cluster relative to farthest pt from cluster (far pts are penalized).\n
+                3) Avg dist of points from cluster (larger avg distances are penalized).\n
+                4) Size of clusters (pts from smaller clusters are penalized).
+        &#34;&#34;&#34;
+        maxDataRadius = np.sqrt(max([Clusters.optimizedDist(pt, self.center) for pt in self.data]))
+        maxAvgClusterRadius = max([sum([Clusters.dist(centroid, pt) for pt in points])/len(points) for centroid, points in self.items()])
+
+        i = 0
+        scores = np.zeros(self.data.shape[0])
+        data = np.zeros(self.data.shape)
+        for centroid, points in self.items():
+                clusterSize = len(points)
+                localDists = [Clusters.dist(centroid, pt) for pt in points]
+                avgClusterRadius = sum(localDists)/clusterSize
+                maxClusterRadius = max(localDists)
+
+                # compute scores for each pt
+                for j, distPtCentroid in enumerate(localDists):
+                        distPtCenter = Clusters.dist(points[j], self.center)
+
+                        relativeDist = distPtCentroid/maxClusterRadius
+                        relativeAvgDist = avgClusterRadius/maxAvgClusterRadius
+                        relativeDistToCenter = distPtCenter/maxDataRadius
+                        relativeClusterSize = 1/(clusterSize/(self.data.shape[0]/self.k))
+
+                        score = self.score(points[j], relativeDist, relativeAvgDist, relativeDistToCenter, relativeClusterSize)
+                        scores[i] = score
+                        data[i] = points[j]
+                        i += 1
+
+        # scale scores of pts from 0-100
+        minScore, maxScore = scores.min(), scores.max()
+        avgScore = scores.mean()
+        scale = lambda pt: ((pt-minScore)/(maxScore-minScore))*100
+        normalized = np.array(list(map(scale, scores)))
+        
+        # sorting
+        order = normalized.argsort()
+        self.orderedScores = normalized[order]
+        self.orderedData = (data.T[:,order]).T
+
+        # update public attributes
+        self.rawScoreMin = minScore
+        self.rawScoreMax = maxScore
+        self.rawScoreAvg = avgScore
+        self.scoreAvg = np.mean(normalized)</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.getPoints"><code class="name flex">
+<span>def <span class="ident">getPoints</span></span>(<span>self, centroid: numpy.ndarray) ‑> numpy.ndarray</span>
+</code></dt>
+<dd>
+<div class="desc"><p>centroid: centroid to get assigned pts from. Can be in np.ndarray or byte form.</p>
+<p>Returns points assigned to centroid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getPoints(self, centroid: np.ndarray or bytes) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        centroid: centroid to get assigned pts from. Can be in np.ndarray or byte form.\n
+        Returns points assigned to centroid.
+        &#34;&#34;&#34;
+        if not self.solved:
+                return self[centroid][&#34;data&#34;][:self[centroid][&#34;size&#34;]]
+        else:
+                return self[centroid]</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.getRandomCentroid"><code class="name flex">
+<span>def <span class="ident">getRandomCentroid</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns coordinates with range of self.bounds (window of data)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getRandomCentroid(self) -&gt; None:
+        &#34;&#34;&#34;
+        Returns coordinates with range of self.bounds (window of data)
+        &#34;&#34;&#34;
+        return np.array([Clusters.rand(self.bounds[dimension].min(), self.bounds[dimension].max()) for dimension in range(self.data.shape[1])])</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.items"><code class="name flex">
+<span>def <span class="ident">items</span></span>(<span>self) ‑> list</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns key, value where key is centroid position and value is array of points assigned to centroid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def items(self) -&gt; list:
+        &#34;&#34;&#34;
+        Returns key, value where key is centroid position and value is array of points assigned to centroid.
+        &#34;&#34;&#34;
+        return [(np.frombuffer(centroid), self.getPoints(centroid)) for centroid, points in super().items()]</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.keys"><code class="name flex">
+<span>def <span class="ident">keys</span></span>(<span>self) ‑> numpy.ndarray</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns np.array of centroid positions</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def keys(self) -&gt; np.ndarray:  # return centroid positions
+        &#34;&#34;&#34;
+        Returns np.array of centroid positions 
+        &#34;&#34;&#34;
+        return np.array([np.frombuffer(centroid) for centroid in super().keys()])</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.kmeans"><code class="name flex">
+<span>def <span class="ident">kmeans</span></span>(<span>self, k: int) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>k: number of clusters.</p>
+<p>Computes k means clustering for values in self.data.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def kmeans(self, k: int) -&gt; None:
+        &#34;&#34;&#34;
+        k: number of clusters.\n
+        Computes k means clustering for values in self.data.
+        &#34;&#34;&#34;
+        if not k&gt;0:
+                raise ValueError(&#34;k must be greater than 0&#34;)
+
+        self.clear()
+
+        for _ in range(k):  # initialize centroids
+                centroid = self.getRandomCentroid()
+                self.add(centroid)
+
+        for _ in range(self.maxIterations):  # train clusters until near convergence
+                self.assign()
+                self.update()
+                if self.dp &lt;= self.convergenceLimit*self.range:  # if centroids don&#39;t move very much
+                        self.assign()
+                        break</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.optimalPartition"><code class="name flex">
+<span>def <span class="ident">optimalPartition</span></span>(<span>self, k: int) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>k: number of clusters.</p>
+<p>Gets self.sample number of kmeans configurations and returns the optimal configuration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def optimalPartition(self, k: int) -&gt; dict:
+        &#34;&#34;&#34;
+        k: number of clusters.\n
+        Gets self.sample number of kmeans configurations and returns the optimal configuration.
+        &#34;&#34;&#34;
+        samples = []
+        for i in range(self.samples):
+                self.clear()
+                self.kmeans(k)
+                samples.append(self.simpleCopy())
+        
+        initialized = False
+        optimal, bestCost = None, 0
+        
+        for i in range(len(samples)):
+                cost = self.cost(samples[i])
+                if cost == -1:
+                        continue
+                elif not initialized:
+                        optimal, bestCost = samples[i], cost
+                        initialized = True
+                elif cost &lt;= bestCost:
+                        optimal, bestCost = samples[i], cost            
+
+        return optimal</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.printInfo"><code class="name flex">
+<span>def <span class="ident">printInfo</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Prints important info relating to clusters.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def printInfo(self) -&gt; None:
+        &#34;&#34;&#34;
+        Prints important info relating to clusters.
+        &#34;&#34;&#34;
+        print(&#34;CLUSTERS INFO:&#34;)
+        print(&#34; &#34;*4 + &#34;Number of clusters: &#34; + str(self.k))
+        print(&#34; &#34;*4 + &#34;Size of each cluster:&#34;)
+        for count, centroid in enumerate(self):
+                print(&#34; &#34;*8 + &#34;Cluster &#34; + str(count) + &#34;: &#34; + str(len(self[centroid])))
+        print(&#34; &#34;*4 + &#34;Quality of partition: &#34; + str(round(self.partitionQuality, 3))+&#34;%&#34;)
+        print(&#34; &#34;*4 + &#34;Average \&#34;matchness\&#34; score: &#34; + str(round(self.scoreAvg, 3)) + &#34;/100&#34;)</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.revert"><code class="name flex">
+<span>def <span class="ident">revert</span></span>(<span>self, copy: dict) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: self values are simplified.</p>
+<p>Transforms values of self to values of copy.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def revert(self, copy: dict) -&gt; None:
+        &#34;&#34;&#34;
+        Post: self values are simplified.\n
+        Transforms values of self to values of copy.
+        &#34;&#34;&#34;
+        self.clear()
+        for centroid, points in copy.items():
+                self[centroid] = points</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.score"><code class="name flex">
+<span>def <span class="ident">score</span></span>(<span>self, pt: numpy.ndarray, relativeDist: float, relativeAvgDist: float, relativeDistToCenter: float, relativeClusterSize: float) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>pt: pt to compute score for.</p>
+<p>relativeDist: dist between pt and center of cluster its in relative to radius of cluster.</p>
+<p>relativeAvgDist: avg dist of points in cluster to center of cluster relative to that of cluster with max avg dist.</p>
+<p>relativeClusterSize: num of pts in cluster relative to size of data set divided by number of clusters.</p>
+<p>relativeDistToCenter: dist of pt to center of dataset relative to dist of most outlying pt to center.</p>
+<p>Computes score as described in "generateScores". Uses exponents to weight terms.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def score(self, pt: np.ndarray, relativeDist: float, relativeAvgDist: float, relativeDistToCenter: float, relativeClusterSize: float) -&gt; float:
+        &#34;&#34;&#34;
+        pt: pt to compute score for.\n
+        relativeDist: dist between pt and center of cluster its in relative to radius of cluster.\n
+        relativeAvgDist: avg dist of points in cluster to center of cluster relative to that of cluster with max avg dist.\n
+        relativeClusterSize: num of pts in cluster relative to size of data set divided by number of clusters.\n
+        relativeDistToCenter: dist of pt to center of dataset relative to dist of most outlying pt to center.\n
+        
+        Computes score as described in &#34;generateScores&#34;. Uses exponents to weight terms.
+        &#34;&#34;&#34;
+        return (relativeDist**2)*(np.sqrt(relativeAvgDist))*(relativeDistToCenter**2)*(np.sqrt(relativeClusterSize**3))</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.silhouette"><code class="name flex">
+<span>def <span class="ident">silhouette</span></span>(<span>self, partition: dict) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>partition: dictionary of centroids and assigned points.</p>
+<p>Returns average silhouette score for all points in partition.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def silhouette(self, partition: dict) -&gt; float:
+        &#34;&#34;&#34;
+        partition: dictionary of centroids and assigned points.\n
+        Returns average silhouette score for all points in partition.
+        &#34;&#34;&#34;
+        if partition is None:
+                return -1.1
+        partitionScore = 0
+        centroids = [np.frombuffer(bufferCentroid) for bufferCentroid in partition.keys()]
+        for bufferCentroid, points in partition.items():  # for each centroid
+                if len(points) &gt; 0: 
+                        centroidScore = 0
+                        parent = np.frombuffer(bufferCentroid)
+                        for pt in points:  # for each point in centroid
+                                second = self.findSecondCentroid(pt, parent, centroids)  # find closest centroid
+                                a = self.computeA(pt, partition[bufferCentroid])  # average dist of pt to other points in cluster
+                                b = self.computeB(pt, partition[second.tobytes()])  # average dist of pt to points in closest non parent cluster
+                                centroidScore += self.silhouetteCoeffient(a, b)  # (b-a)/max(a, b)      
+                        partitionScore += centroidScore/len(points)
+                else:  # has undesirable empty clusters
+                        partitionScore-=1
+        return partitionScore/len(centroids)</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.silhouetteCoeffient"><code class="name flex">
+<span>def <span class="ident">silhouetteCoeffient</span></span>(<span>self, a: float, b: float) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>a: average dist of pt to other points in cluster.</p>
+<p>b: average dist of pt to points in closest non parent cluster.</p>
+<p>Returns silhouette coeffient for point given its a and b values.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def silhouetteCoeffient(self, a: float, b: float) -&gt; float:
+        &#34;&#34;&#34;
+        a: average dist of pt to other points in cluster.\n
+        b: average dist of pt to points in closest non parent cluster.\n
+        Returns silhouette coeffient for point given its a and b values.
+        &#34;&#34;&#34;
+        return (b-a)/max(a, b)</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.simpleCopy"><code class="name flex">
+<span>def <span class="ident">simpleCopy</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns dict of centroid positions and points assigned to each centroid.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def simpleCopy(self) -&gt; dict:
+        &#34;&#34;&#34;
+        Returns dict of centroid positions and points assigned to each centroid.
+        &#34;&#34;&#34;
+        copy = {}
+        for centroid in self.bufferKeys():
+                copy[centroid] = self.getPoints(centroid)
+        return copy     </code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.simplify"><code class="name flex">
+<span>def <span class="ident">simplify</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: self values are simplified.</p>
+<p>Simplifies self by reducing values to their correct size.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def simplify(self) -&gt; None:
+        &#34;&#34;&#34;
+        Post: self values are simplified.\n
+        Simplifies self by reducing values to their correct size.
+        &#34;&#34;&#34;
+        simplified = self.simpleCopy()
+        self.revert(simplified)</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.singleSolve"><code class="name flex">
+<span>def <span class="ident">singleSolve</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Pre: k!=None.</p>
+<p>Solves to produce clusters from data if k selected.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def singleSolve(self) -&gt; None:
+        &#34;&#34;&#34;
+        Pre: k!=None.\n
+        Solves to produce clusters from data if k selected. 
+        &#34;&#34;&#34;
+        optimal = self.optimalPartition(self.k)
+        self.revert(optimal)</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.solve"><code class="name flex">
+<span>def <span class="ident">solve</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Pre: not already solved.</p>
+<p>Post: becomes solved.</p>
+<p>Solves to produce clusters from data.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve(self) -&gt; None:
+        &#34;&#34;&#34;
+        Pre: not already solved.\n
+        Post: becomes solved.\n
+        Solves to produce clusters from data.\n
+        &#34;&#34;&#34;
+        if self.k is not None:
+                self.singleSolve()
+        else:
+                self.autoSolve()
+
+        self.solved = True</code></pre>
+</details>
+</dd>
+<dt id="clustering.Clusters.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: keys and their values are deleted and then updated keys are readded.</p>
+<p>Moves centroid closer to center of points assigned to it.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update(self) -&gt; None:
+        &#34;&#34;&#34;
+        Post: keys and their values are deleted and then updated keys are readded.\n
+        Moves centroid closer to center of points assigned to it.
+        &#34;&#34;&#34;
+        maxDP = 0
+        bufferCentroids = list(self.bufferKeys())
+
+        for bufferCentroid in bufferCentroids:
+                if self[bufferCentroid][&#34;size&#34;] &gt; 0:
+                        centroid = np.frombuffer(bufferCentroid)
+
+                        data = self.getPoints(bufferCentroid)
+                        center = data.mean(axis=0)
+                        
+                        dp = self.alpha*(center-centroid)
+                        ds = self.dist(np.zeros(self.data.shape[1]), dp)
+
+                        if ds &gt; maxDP:
+                                maxDP = ds
+
+                        del self[bufferCentroid]
+                        self.add(centroid+dp)
+                        
+        self.dp = maxDP</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="clustering.Clusters" href="#clustering.Clusters">Clusters</a></code></h4>
+<ul class="two-column">
+<li><code><a title="clustering.Clusters.add" href="#clustering.Clusters.add">add</a></code></li>
+<li><code><a title="clustering.Clusters.assign" href="#clustering.Clusters.assign">assign</a></code></li>
+<li><code><a title="clustering.Clusters.autoSolve" href="#clustering.Clusters.autoSolve">autoSolve</a></code></li>
+<li><code><a title="clustering.Clusters.bufferKeys" href="#clustering.Clusters.bufferKeys">bufferKeys</a></code></li>
+<li><code><a title="clustering.Clusters.clearAssignments" href="#clustering.Clusters.clearAssignments">clearAssignments</a></code></li>
+<li><code><a title="clustering.Clusters.computeA" href="#clustering.Clusters.computeA">computeA</a></code></li>
+<li><code><a title="clustering.Clusters.computeB" href="#clustering.Clusters.computeB">computeB</a></code></li>
+<li><code><a title="clustering.Clusters.cost" href="#clustering.Clusters.cost">cost</a></code></li>
+<li><code><a title="clustering.Clusters.dist" href="#clustering.Clusters.dist">dist</a></code></li>
+<li><code><a title="clustering.Clusters.findSecondCentroid" href="#clustering.Clusters.findSecondCentroid">findSecondCentroid</a></code></li>
+<li><code><a title="clustering.Clusters.generateScores" href="#clustering.Clusters.generateScores">generateScores</a></code></li>
+<li><code><a title="clustering.Clusters.getPoints" href="#clustering.Clusters.getPoints">getPoints</a></code></li>
+<li><code><a title="clustering.Clusters.getRandomCentroid" href="#clustering.Clusters.getRandomCentroid">getRandomCentroid</a></code></li>
+<li><code><a title="clustering.Clusters.items" href="#clustering.Clusters.items">items</a></code></li>
+<li><code><a title="clustering.Clusters.keys" href="#clustering.Clusters.keys">keys</a></code></li>
+<li><code><a title="clustering.Clusters.kmeans" href="#clustering.Clusters.kmeans">kmeans</a></code></li>
+<li><code><a title="clustering.Clusters.optimalPartition" href="#clustering.Clusters.optimalPartition">optimalPartition</a></code></li>
+<li><code><a title="clustering.Clusters.optimizedDist" href="#clustering.Clusters.optimizedDist">optimizedDist</a></code></li>
+<li><code><a title="clustering.Clusters.printInfo" href="#clustering.Clusters.printInfo">printInfo</a></code></li>
+<li><code><a title="clustering.Clusters.rand" href="#clustering.Clusters.rand">rand</a></code></li>
+<li><code><a title="clustering.Clusters.revert" href="#clustering.Clusters.revert">revert</a></code></li>
+<li><code><a title="clustering.Clusters.score" href="#clustering.Clusters.score">score</a></code></li>
+<li><code><a title="clustering.Clusters.silhouette" href="#clustering.Clusters.silhouette">silhouette</a></code></li>
+<li><code><a title="clustering.Clusters.silhouetteCoeffient" href="#clustering.Clusters.silhouetteCoeffient">silhouetteCoeffient</a></code></li>
+<li><code><a title="clustering.Clusters.simpleCopy" href="#clustering.Clusters.simpleCopy">simpleCopy</a></code></li>
+<li><code><a title="clustering.Clusters.simplify" href="#clustering.Clusters.simplify">simplify</a></code></li>
+<li><code><a title="clustering.Clusters.singleSolve" href="#clustering.Clusters.singleSolve">singleSolve</a></code></li>
+<li><code><a title="clustering.Clusters.solve" href="#clustering.Clusters.solve">solve</a></code></li>
+<li><code><a title="clustering.Clusters.update" href="#clustering.Clusters.update">update</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+</footer>
+</body>
+</html>
