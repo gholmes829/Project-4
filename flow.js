@@ -125,6 +125,7 @@ function check(playList,access_token,id,res)
         }
         else {
           var process = spawn('python',["-u","./backend/__main__.py",playList]);
+
           process.stdout.on('data',function(chunk){
 
               textChunk = chunk.toString('utf8');// buffer to string
@@ -160,6 +161,7 @@ function runTests(req,res)
         }
         else {
           var process = spawn('python',["-u","./backend/testing.py"]);
+
           process.stdout.on('data',function(chunk){
 
               textChunk = chunk.toString('utf8');// buffer to string

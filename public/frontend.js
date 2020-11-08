@@ -52,6 +52,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
         ratedPlaylist.push(tempObj);
       }
+      setTimeout( removeMisMatched(selectedPlaylist,ratedPlaylist),2000);
 
       var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
@@ -203,6 +204,7 @@ class Tree {
         removeMisMatched();
   },1000);
 
+
 }
 });
 
@@ -313,7 +315,9 @@ function createPlaylistDictionary(data)
       function (err) {
         console.error(err);
       });
+    return true;
   }
+
 
 }
 
@@ -405,6 +409,7 @@ function removeSpecific(specificSong)
 {
   let temp = 0;
   let offset = false;
+  let removed = "";
   for(let i=0;i<selectedPlaylist.items.length;i++)
   {
     if (i != specificSong && !offset)
@@ -421,6 +426,7 @@ function removeSpecific(specificSong)
     else if (i==specificSong){
       console.log("Splice");
       temp = i;
+      removed = i;
       offset = true;
     }
     else if(offset)
@@ -441,8 +447,8 @@ function removeSpecific(specificSong)
   {
     var element = document.getElementById("trackList");
     element.removeChild(element.childNodes[0]);
-
   }
+  return removed;
 }
 
 function updateSlider()
@@ -454,10 +460,16 @@ function updateSlider()
 /**
 * This runs through the playlist and removes songs that are outside a certain range
 */
-function removeMisMatched()
+function removeMisMatched(currentPlaylist,removePlaylist)
 {
-  //removeSpecific(1);
+  /**
+  songsToRemove = [];
+  for(i = 0 ; i<removePlaylist.length; i++)
+  {
+    //if removePlaylist.items
+  }
   console.log("Testing Mismatched");
+  */
 }
 
 /**

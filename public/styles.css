@@ -92,6 +92,16 @@ button{
   font-size: 2vh;
 }
 
+testCase{
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: .5rem;
+  background-color: #BFBFBF;
+  font-family: Verdana, sans-serif;
+  font-size: 2vh;
+}
+
 .add-song-button{
   position:absolute;
   left: 32%;
@@ -182,4 +192,8 @@ button{
   overflow: scroll;
   position:absolute;
   border-radius: 1vh;
+}
+
+.test-container{
+  visibility: hidden;
 }

@@ -10,7 +10,6 @@ import json
 import matplotlib.pyplot as plt
 import sys
 
-print("entered file")
 def standardized(arr):
 	"""
 	Pre: This function takes in an array to be standardized
