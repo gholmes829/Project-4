@@ -332,7 +332,7 @@ class Clusters(dict):
         self.rawScoreAvg = avgScore
         self.scoreAvg = np.mean(normalized)
 
-    def _score(self, pt: np.ndarray, relativeDist: float, relativeAvgDist: float, relativeDistToCenter: float, relativeClusterSize: float):
+    def _score(self, pt: np.ndarray, relativeDist: float, relativeAvgDist: float, relativeDistToCenter: float, relativeClusterSize: float) -> float:
         """
         pt: pt to compute score for.
         relativeDist: dist between pt and center of cluster its in relative to radius of cluster.
