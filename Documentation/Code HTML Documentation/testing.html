@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.1" />
+<title>testing API documentation</title>
+<meta name="description" content="File: __main__.py …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>testing</code></h1>
+</header>
+<section id="section-intro">
+<p>File: <strong>main</strong>.py</p>
+<p>Author: Grant Holmes and Peyton Doherty</p>
+<p>Date: 11/08/20</p>
+<p>Description: Unit tests and graphing for clustering.py.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">#!/usr/bin/env python3
+&#34;&#34;&#34;
+File: __main__.py\n
+Author: Grant Holmes and Peyton Doherty\n
+Date: 11/08/20\n
+Description: Unit tests and graphing for clustering.py.
+&#34;&#34;&#34;
+import numpy as np
+from clustering import Clusters
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+         
+def main():
+        &#34;&#34;&#34;
+        Post: Runs the main function that prints out the results of the test
+        &#34;&#34;&#34; 
+        #k=None
+
+        print(&#34;Testing...&#34;)
+
+        if checkRange() == 1:
+                print(&#34;Check if scores range from 0 to 100: PASSED&#34;)
+        else:
+                print(&#34;Check if scores range from 0 to 100: FAILED&#34;)
+        if checkZero() == 1:
+                print(&#34;Check for k = 0: PASSED&#34;)
+        else:
+                print(&#34;Check for k = 0: NEGATIVE&#34;)
+        if checkNegative() == 1:
+                print(&#34;Check for k &lt; 0: PASSED&#34;)
+        else:
+                print(&#34;Check for k &lt; 0: NEGATIVE&#34;)
+        if checkEmpty() == 1:
+                print(&#34;Check for empty clusters : PASSED&#34;)
+        else:
+                print(&#34;Check for empty clusters: NEGATIVE&#34;)
+                
+        #exampleCluster(data, k)
+        # generating test data
+
+def checkZero():
+        &#34;&#34;&#34;
+        Post: Function tests when k = 0
+        &#34;&#34;&#34;
+        data = generateClusters(50, 3, 1, 3)
+        try:
+                Clusters(data, 0)
+        except ValueError:
+                return True
+        return False
+
+
+def checkNegative():
+        &#34;&#34;&#34;
+        Post: Function tests when k &lt; 0
+        &#34;&#34;&#34;
+        data = generateClusters(50, 3, 1, 3)
+        try:
+                Clusters(data, -5)
+        except ValueError:
+                return True
+        return False
+
+
+def checkRange():
+        &#34;&#34;&#34;
+        Post: Function tests the scores to see if they are between 0-100
+        &#34;&#34;&#34;
+        data = generateClusters(50, 3, 1, 3)
+        myClusters = Clusters(data, 2)
+        scores = myClusters.orderedScores
+        l = len(scores)
+
+        count = 0
+        try:
+                for i in range(l):
+                        if(scores[i] &lt;= 100 and scores[i] &gt;= 0):
+                                count += 1
+                Clusters(data, 2)
+        except count == 150:
+                return False
+        return True
+ 
+  
+def checkEmpty():
+        &#34;&#34;&#34;
+        Post: Function tests if generateClusters function is given 0 clusters
+        &#34;&#34;&#34; 
+        try:
+                data = generateClusters(50, 3, 1, 0)
+                Clusters(data, 1)
+        except ValueError:
+                return True
+        return False
+         
+def generateClusters(density, dimension, scale, numClust):
+        &#34;&#34;&#34;
+        Parameters: numClust is the number of clusters. Density in the tightness of the clusters. 
+        Dimension is if its 2d, 3d, etc. Scale determines how much will deviate
+        
+        Post: The function will create clusters with the information and the data that is given. These clusters
+        will help determine what songs fit best with the playlist and what dont
+        &#34;&#34;&#34;
+        d0, d1 = (density, dimension) 
+        if d1 == 2:
+                clusters= [
+                np.full((d0, d1), [1.5, 3.5]) + unitNoise(d0, d1)*scale,  # modify values to adjust center
+                np.full((d0, d1), [-0.25, -0.65]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-3.5, 2.15]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-1.1, 5.65]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-0.5, 2.5]) + unitNoise(d0, d1)*scale,
+                ]
+        elif d1 == 3:
+                clusters = [
+                np.full((d0, d1), [1.5, 3.5, 4]) + unitNoise(d0, d1)*scale, # modify values to adjust center
+                np.full((d0, d1), [-0.25, -0.65, 3]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-3.5, 2.15, 3]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-1.1, 5.65, 4]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-0.5, 2.5, 2]) + unitNoise(d0, d1)*scale,
+                ]
+        elif d1 == 4:
+                clusters = [
+                np.full((d0, d1), [1.5, 3.5, 4, -5.2]) + unitNoise(d0, d1)*scale,  # modify values to adjust center
+                np.full((d0, d1), [-0.25, -0.65, 3, -5.15]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-3.5, 2.15, 3, -5.3]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-1.1, 5.65, 0, -5.15]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-0.5, 2.5, 2, -5.2]) + unitNoise(d0, d1)*scale,
+                ] 
+                
+        finalClusters = []
+        for i in range(numClust):
+                finalClusters.append(clusters[i])
+        
+        data = np.concatenate(finalClusters, axis=0)
+        standardized = (data-data.mean(axis=0))/data.std(axis=0)
+        return standardized
+
+def exampleCluster(data, k):  # testing kmeans
+        &#34;&#34;&#34;
+        Makes example of cluster and graphs it with its respective dimension.
+        &#34;&#34;&#34;
+        plt.style.use([&#34;dark_background&#34;])
+        plt.rc(&#34;grid&#34;, linestyle=&#34;--&#34;, color=&#34;white&#34;, alpha=0.5)
+        plt.rc(&#34;axes&#34;, axisbelow=True)
+
+        clusters = Clusters(data, k)
+        print(&#34;Completed!\n&#34;)
+        clusters.printInfo()
+        print()
+
+        centroids = clusters.keys()
+
+        d = clusters.orderedData
+        threshold = 0.7  # change this value to change 
+        a, b = d[:int(threshold*len(d))], d[int(threshold*len(d)):]
+        
+        colors = {
+                0: &#34;green&#34;,
+                1: &#34;red&#34;,
+                2: &#34;orange&#34;,
+                3: &#34;purple&#34;,
+                4: &#34;cyan&#34;,
+                5: &#34;magenta&#34;,
+                6: &#34;pink&#34;,
+                7: &#34;yellow&#34;,
+        }
+        
+        if(data.shape[1] &lt; 4):
+                 print(&#34;Plotting...&#34;)
+        if data.shape[1] == 2:
+                plt.figure()
+                plt.grid()
+                plt.plot(centroids[:,0], centroids[:,1], &#39;*&#39;, c=&#34;blue&#34;, mec=&#34;white&#34;, ms=20, zorder=3, label=&#34;final&#34;)
+                plt.legend(loc=&#34;upper right&#34;)
+
+                c=0
+                for centroid in clusters:
+                        data = clusters[centroid]
+                        plt.plot(data[:,0], data[:,1], &#39;o&#39;, c=colors[c], mec=&#34;white&#34;, ms=7.5, zorder=1)
+                        c+=1
+
+                plt.xlabel(&#34;x&#34;)
+                plt.ylabel(&#34;y&#34;)
+
+                plt.figure()
+                plt.grid()
+                plt.xlabel(&#34;x&#34;)
+                plt.ylabel(&#34;y&#34;)
+                plt.plot(centroids[:,0], centroids[:,1], &#39;*&#39;, c=&#34;green&#34;, mec=&#34;white&#34;, ms=15, zorder=3, label=&#34;final&#34;)
+                plt.plot(clusters.center[0], clusters.center[1], &#39;s&#39;, c=&#34;purple&#34;, mec=&#34;white&#34;, ms=15, zorder=1)
+                plt.plot(a[:,0], a[:,1], &#39;o&#39;, c=&#34;blue&#34;, mec=&#34;white&#34;, ms=7.5, zorder=1)
+                plt.plot(b[:,0], b[:,1], &#39;o&#39;, c=&#34;red&#34;, mec=&#34;white&#34;, ms=7.5, zorder=1)
+        
+        elif data.shape[1] == 3:
+                plt.figure()
+                ax = plt.axes(projection=&#34;3d&#34;)
+                ax.scatter3D(centroids[:,0], centroids[:,1], centroids[:,2], &#39;*&#39;, c=&#34;blue&#34;, zorder=3, label=&#34;final&#34;)
+
+                c=0
+                for centroid in clusters:
+                        data = clusters[centroid]
+                        ax.scatter3D(data[:,0], data[:,1], data[:,2], c=colors[c], zorder=1)
+                        c+=1
+                
+                plt.figure()
+                ax = plt.axes(projection=&#34;3d&#34;)
+                ax.scatter3D(0, 0, 0, &#39;*&#39;, c=&#34;green&#34;, zorder=1)
+                ax.scatter3D(a[:,0], a[:,1], a[:,2], &#39;o&#39;, c=&#34;blue&#34;, zorder=1)
+                ax.scatter3D(b[:,0], b[:,1], b[:,2], &#39;o&#39;, c=&#34;red&#34;, zorder=1)
+                
+        if data.shape[1] &gt; 3:
+                for i, centroid in enumerate(clusters):
+                        data = clusters[centroid]
+                        print(&#34;Cluster &#34;+str(i)+&#34;: &#34;+str(len(data)))
+        
+        if data.shape[1] &lt;= 3:
+                plt.show()
+
+        print(&#34;Done!&#34;)
+
+def unitNoise(d0, d1):
+        &#34;&#34;&#34;
+        Generates normal noise from 0-1 of dimensions d0 and d1.
+        &#34;&#34;&#34;
+        noise =  np.random.randn(d0, d1)
+        minimum = noise.min()
+        noise-=minimum
+        maximum = noise.max()
+        return (noise/maximum)*2-1      
+
+if __name__ == &#34;__main__&#34;:
+        main()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="testing.checkEmpty"><code class="name flex">
+<span>def <span class="ident">checkEmpty</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: Function tests if generateClusters function is given 0 clusters</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def checkEmpty():
+        &#34;&#34;&#34;
+        Post: Function tests if generateClusters function is given 0 clusters
+        &#34;&#34;&#34; 
+        try:
+                data = generateClusters(50, 3, 1, 0)
+                Clusters(data, 1)
+        except ValueError:
+                return True
+        return False</code></pre>
+</details>
+</dd>
+<dt id="testing.checkNegative"><code class="name flex">
+<span>def <span class="ident">checkNegative</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: Function tests when k &lt; 0</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def checkNegative():
+        &#34;&#34;&#34;
+        Post: Function tests when k &lt; 0
+        &#34;&#34;&#34;
+        data = generateClusters(50, 3, 1, 3)
+        try:
+                Clusters(data, -5)
+        except ValueError:
+                return True
+        return False</code></pre>
+</details>
+</dd>
+<dt id="testing.checkRange"><code class="name flex">
+<span>def <span class="ident">checkRange</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: Function tests the scores to see if they are between 0-100</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def checkRange():
+        &#34;&#34;&#34;
+        Post: Function tests the scores to see if they are between 0-100
+        &#34;&#34;&#34;
+        data = generateClusters(50, 3, 1, 3)
+        myClusters = Clusters(data, 2)
+        scores = myClusters.orderedScores
+        l = len(scores)
+
+        count = 0
+        try:
+                for i in range(l):
+                        if(scores[i] &lt;= 100 and scores[i] &gt;= 0):
+                                count += 1
+                Clusters(data, 2)
+        except count == 150:
+                return False
+        return True</code></pre>
+</details>
+</dd>
+<dt id="testing.checkZero"><code class="name flex">
+<span>def <span class="ident">checkZero</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: Function tests when k = 0</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def checkZero():
+        &#34;&#34;&#34;
+        Post: Function tests when k = 0
+        &#34;&#34;&#34;
+        data = generateClusters(50, 3, 1, 3)
+        try:
+                Clusters(data, 0)
+        except ValueError:
+                return True
+        return False</code></pre>
+</details>
+</dd>
+<dt id="testing.exampleCluster"><code class="name flex">
+<span>def <span class="ident">exampleCluster</span></span>(<span>data, k)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Makes example of cluster and graphs it with its respective dimension.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def exampleCluster(data, k):  # testing kmeans
+        &#34;&#34;&#34;
+        Makes example of cluster and graphs it with its respective dimension.
+        &#34;&#34;&#34;
+        plt.style.use([&#34;dark_background&#34;])
+        plt.rc(&#34;grid&#34;, linestyle=&#34;--&#34;, color=&#34;white&#34;, alpha=0.5)
+        plt.rc(&#34;axes&#34;, axisbelow=True)
+
+        clusters = Clusters(data, k)
+        print(&#34;Completed!\n&#34;)
+        clusters.printInfo()
+        print()
+
+        centroids = clusters.keys()
+
+        d = clusters.orderedData
+        threshold = 0.7  # change this value to change 
+        a, b = d[:int(threshold*len(d))], d[int(threshold*len(d)):]
+        
+        colors = {
+                0: &#34;green&#34;,
+                1: &#34;red&#34;,
+                2: &#34;orange&#34;,
+                3: &#34;purple&#34;,
+                4: &#34;cyan&#34;,
+                5: &#34;magenta&#34;,
+                6: &#34;pink&#34;,
+                7: &#34;yellow&#34;,
+        }
+        
+        if(data.shape[1] &lt; 4):
+                 print(&#34;Plotting...&#34;)
+        if data.shape[1] == 2:
+                plt.figure()
+                plt.grid()
+                plt.plot(centroids[:,0], centroids[:,1], &#39;*&#39;, c=&#34;blue&#34;, mec=&#34;white&#34;, ms=20, zorder=3, label=&#34;final&#34;)
+                plt.legend(loc=&#34;upper right&#34;)
+
+                c=0
+                for centroid in clusters:
+                        data = clusters[centroid]
+                        plt.plot(data[:,0], data[:,1], &#39;o&#39;, c=colors[c], mec=&#34;white&#34;, ms=7.5, zorder=1)
+                        c+=1
+
+                plt.xlabel(&#34;x&#34;)
+                plt.ylabel(&#34;y&#34;)
+
+                plt.figure()
+                plt.grid()
+                plt.xlabel(&#34;x&#34;)
+                plt.ylabel(&#34;y&#34;)
+                plt.plot(centroids[:,0], centroids[:,1], &#39;*&#39;, c=&#34;green&#34;, mec=&#34;white&#34;, ms=15, zorder=3, label=&#34;final&#34;)
+                plt.plot(clusters.center[0], clusters.center[1], &#39;s&#39;, c=&#34;purple&#34;, mec=&#34;white&#34;, ms=15, zorder=1)
+                plt.plot(a[:,0], a[:,1], &#39;o&#39;, c=&#34;blue&#34;, mec=&#34;white&#34;, ms=7.5, zorder=1)
+                plt.plot(b[:,0], b[:,1], &#39;o&#39;, c=&#34;red&#34;, mec=&#34;white&#34;, ms=7.5, zorder=1)
+        
+        elif data.shape[1] == 3:
+                plt.figure()
+                ax = plt.axes(projection=&#34;3d&#34;)
+                ax.scatter3D(centroids[:,0], centroids[:,1], centroids[:,2], &#39;*&#39;, c=&#34;blue&#34;, zorder=3, label=&#34;final&#34;)
+
+                c=0
+                for centroid in clusters:
+                        data = clusters[centroid]
+                        ax.scatter3D(data[:,0], data[:,1], data[:,2], c=colors[c], zorder=1)
+                        c+=1
+                
+                plt.figure()
+                ax = plt.axes(projection=&#34;3d&#34;)
+                ax.scatter3D(0, 0, 0, &#39;*&#39;, c=&#34;green&#34;, zorder=1)
+                ax.scatter3D(a[:,0], a[:,1], a[:,2], &#39;o&#39;, c=&#34;blue&#34;, zorder=1)
+                ax.scatter3D(b[:,0], b[:,1], b[:,2], &#39;o&#39;, c=&#34;red&#34;, zorder=1)
+                
+        if data.shape[1] &gt; 3:
+                for i, centroid in enumerate(clusters):
+                        data = clusters[centroid]
+                        print(&#34;Cluster &#34;+str(i)+&#34;: &#34;+str(len(data)))
+        
+        if data.shape[1] &lt;= 3:
+                plt.show()
+
+        print(&#34;Done!&#34;)</code></pre>
+</details>
+</dd>
+<dt id="testing.generateClusters"><code class="name flex">
+<span>def <span class="ident">generateClusters</span></span>(<span>density, dimension, scale, numClust)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parameters: numClust is the number of clusters. Density in the tightness of the clusters.
+Dimension is if its 2d, 3d, etc. Scale determines how much will deviate</p>
+<p>Post: The function will create clusters with the information and the data that is given. These clusters
+will help determine what songs fit best with the playlist and what dont</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generateClusters(density, dimension, scale, numClust):
+        &#34;&#34;&#34;
+        Parameters: numClust is the number of clusters. Density in the tightness of the clusters. 
+        Dimension is if its 2d, 3d, etc. Scale determines how much will deviate
+        
+        Post: The function will create clusters with the information and the data that is given. These clusters
+        will help determine what songs fit best with the playlist and what dont
+        &#34;&#34;&#34;
+        d0, d1 = (density, dimension) 
+        if d1 == 2:
+                clusters= [
+                np.full((d0, d1), [1.5, 3.5]) + unitNoise(d0, d1)*scale,  # modify values to adjust center
+                np.full((d0, d1), [-0.25, -0.65]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-3.5, 2.15]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-1.1, 5.65]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-0.5, 2.5]) + unitNoise(d0, d1)*scale,
+                ]
+        elif d1 == 3:
+                clusters = [
+                np.full((d0, d1), [1.5, 3.5, 4]) + unitNoise(d0, d1)*scale, # modify values to adjust center
+                np.full((d0, d1), [-0.25, -0.65, 3]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-3.5, 2.15, 3]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-1.1, 5.65, 4]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-0.5, 2.5, 2]) + unitNoise(d0, d1)*scale,
+                ]
+        elif d1 == 4:
+                clusters = [
+                np.full((d0, d1), [1.5, 3.5, 4, -5.2]) + unitNoise(d0, d1)*scale,  # modify values to adjust center
+                np.full((d0, d1), [-0.25, -0.65, 3, -5.15]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-3.5, 2.15, 3, -5.3]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-1.1, 5.65, 0, -5.15]) + unitNoise(d0, d1)*scale,
+                np.full((d0, d1), [-0.5, 2.5, 2, -5.2]) + unitNoise(d0, d1)*scale,
+                ] 
+                
+        finalClusters = []
+        for i in range(numClust):
+                finalClusters.append(clusters[i])
+        
+        data = np.concatenate(finalClusters, axis=0)
+        standardized = (data-data.mean(axis=0))/data.std(axis=0)
+        return standardized</code></pre>
+</details>
+</dd>
+<dt id="testing.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Post: Runs the main function that prints out the results of the test</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main():
+        &#34;&#34;&#34;
+        Post: Runs the main function that prints out the results of the test
+        &#34;&#34;&#34; 
+        #k=None
+
+        print(&#34;Testing...&#34;)
+
+        if checkRange() == 1:
+                print(&#34;Check if scores range from 0 to 100: PASSED&#34;)
+        else:
+                print(&#34;Check if scores range from 0 to 100: FAILED&#34;)
+        if checkZero() == 1:
+                print(&#34;Check for k = 0: PASSED&#34;)
+        else:
+                print(&#34;Check for k = 0: NEGATIVE&#34;)
+        if checkNegative() == 1:
+                print(&#34;Check for k &lt; 0: PASSED&#34;)
+        else:
+                print(&#34;Check for k &lt; 0: NEGATIVE&#34;)
+        if checkEmpty() == 1:
+                print(&#34;Check for empty clusters : PASSED&#34;)
+        else:
+                print(&#34;Check for empty clusters: NEGATIVE&#34;)</code></pre>
+</details>
+</dd>
+<dt id="testing.unitNoise"><code class="name flex">
+<span>def <span class="ident">unitNoise</span></span>(<span>d0, d1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates normal noise from 0-1 of dimensions d0 and d1.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def unitNoise(d0, d1):
+        &#34;&#34;&#34;
+        Generates normal noise from 0-1 of dimensions d0 and d1.
+        &#34;&#34;&#34;
+        noise =  np.random.randn(d0, d1)
+        minimum = noise.min()
+        noise-=minimum
+        maximum = noise.max()
+        return (noise/maximum)*2-1      </code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="testing.checkEmpty" href="#testing.checkEmpty">checkEmpty</a></code></li>
+<li><code><a title="testing.checkNegative" href="#testing.checkNegative">checkNegative</a></code></li>
+<li><code><a title="testing.checkRange" href="#testing.checkRange">checkRange</a></code></li>
+<li><code><a title="testing.checkZero" href="#testing.checkZero">checkZero</a></code></li>
+<li><code><a title="testing.exampleCluster" href="#testing.exampleCluster">exampleCluster</a></code></li>
+<li><code><a title="testing.generateClusters" href="#testing.generateClusters">generateClusters</a></code></li>
+<li><code><a title="testing.main" href="#testing.main">main</a></code></li>
+<li><code><a title="testing.unitNoise" href="#testing.unitNoise">unitNoise</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+</footer>
+</body>
+</html>
