@@ -17,8 +17,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
   if(html_access_token.innerHTML.length > 0)
   {
     spotifyApi.setAccessToken(html_access_token.innerHTML);
-    console.log("cashe loaded");
-
     getUser();
 
   }
@@ -53,8 +51,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
           songRating : newRating
         }
         ratedPlaylist.push(tempObj);
-        console.log(ratedPlaylist);
-
       }
 
       var c = document.getElementById("canvas");

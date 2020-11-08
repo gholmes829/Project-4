@@ -147,4 +147,38 @@ app.get('/misMatch', function(req, res) {
     check(req.query.somevalue,req.query.access_token,req.query.playlistID,res);
     });
 
+function runTests(req,res)
+{
+  setTimeout(() => {
+        if(textChunk.includes("Done!"))
+        {
+          let start = textChunk.indexOf("["),
+              stop  = textChunk.indexOf("]");
+          textChunk = textChunk.substr(start,stop+1);
+          console.log(textChunk);
+          redirectTests(req,res,textChunk);
+        }
+        else {
+          var process = spawn('python',["-u","./backend/testing.py"]);
+          process.stdout.on('data',function(chunk){
+
+              textChunk = chunk.toString('utf8');// buffer to string
+              });
+          runTests(req,res);
+        }
+      },1000);
+}
+
+function redirectTests(req,res,textChunk)
+{
+  res.redirect('/#' +
+      querystring.stringify({
+            access_token: access_token,
+            tests    : textChunk
+      }));
+}
+app.get('/runTests', function(req,res) {
+  console.log("run tests");
+  runTests(req,res);
+  });
 app.listen(8888);

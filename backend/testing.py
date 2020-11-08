@@ -10,32 +10,34 @@ from clustering import Clusters
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-	 
+
 def main():
 	"""
 	Post: Runs the main function that prints out the results of the test
-	""" 
+	"""
 	#k=None
 
 	print("Testing...")
-
+	completed = []
+	print("completed")
 	if checkRange() == 1:
-		print("Check if scores range from 0 to 100: PASSED")
+		completed.append("Check if scores range from 0 to 100: PASSED")
 	else:
-		print("Check if scores range from 0 to 100: FAILED")
+		completed.append("Check if scores range from 0 to 100: FAILED")
 	if checkZero() == 1:
-		print("Check for k = 0: PASSED")
+		completed.append("Check for k = 0: PASSED")
 	else:
-		print("Check for k = 0: NEGATIVE")
+		completed.append("Check for k = 0: NEGATIVE")
 	if checkNegative() == 1:
-		print("Check for k < 0: PASSED")
+		completed.append("Check for k < 0: PASSED")
 	else:
-		print("Check for k < 0: NEGATIVE")
+		completed.append("Check for k < 0: NEGATIVE")
 	if checkEmpty() == 1:
-		print("Check for empty clusters : PASSED")
+		completed.append("Check for empty clusters : PASSED")
 	else:
-		print("Check for empty clusters: NEGATIVE")
-		
+		completed.append("Check for empty clusters: NEGATIVE")
+	print (completed)
+	print("Done!")
 	#exampleCluster(data, k)
 	# generating test data
 
@@ -81,28 +83,28 @@ def checkRange():
 	except count == 150:
 		return False
 	return True
- 
-  
+
+
 def checkEmpty():
 	"""
 	Post: Function tests if generateClusters function is given 0 clusters
-	""" 
+	"""
 	try:
 		data = generateClusters(50, 3, 1, 0)
 		Clusters(data, 1)
 	except ValueError:
 		return True
 	return False
-	 
+
 def generateClusters(density, dimension, scale, numClust):
 	"""
-	Parameters: numClust is the number of clusters. Density in the tightness of the clusters. 
+	Parameters: numClust is the number of clusters. Density in the tightness of the clusters.
 	Dimension is if its 2d, 3d, etc. Scale determines how much will deviate
-	
+
 	Post: The function will create clusters with the information and the data that is given. These clusters
 	will help determine what songs fit best with the playlist and what dont
 	"""
-	d0, d1 = (density, dimension) 
+	d0, d1 = (density, dimension)
 	if d1 == 2:
 		clusters= [
 		np.full((d0, d1), [1.5, 3.5]) + unitNoise(d0, d1)*scale,  # modify values to adjust center
@@ -126,12 +128,12 @@ def generateClusters(density, dimension, scale, numClust):
 		np.full((d0, d1), [-3.5, 2.15, 3, -5.3]) + unitNoise(d0, d1)*scale,
 		np.full((d0, d1), [-1.1, 5.65, 0, -5.15]) + unitNoise(d0, d1)*scale,
 		np.full((d0, d1), [-0.5, 2.5, 2, -5.2]) + unitNoise(d0, d1)*scale,
-		] 
-		
+		]
+
 	finalClusters = []
 	for i in range(numClust):
 		finalClusters.append(clusters[i])
-	
+
 	data = np.concatenate(finalClusters, axis=0)
 	standardized = (data-data.mean(axis=0))/data.std(axis=0)
 	return standardized
@@ -152,9 +154,9 @@ def exampleCluster(data, k):  # testing kmeans
 	centroids = clusters.keys()
 
 	d = clusters.orderedData
-	threshold = 0.7  # change this value to change 
+	threshold = 0.7  # change this value to change
 	a, b = d[:int(threshold*len(d))], d[int(threshold*len(d)):]
-	
+
 	colors = {
 		0: "green",
 		1: "red",
@@ -165,7 +167,7 @@ def exampleCluster(data, k):  # testing kmeans
 		6: "pink",
 		7: "yellow",
 	}
-	
+
 	if(data.shape[1] < 4):
 		 print("Plotting...")
 	if data.shape[1] == 2:
@@ -191,7 +193,7 @@ def exampleCluster(data, k):  # testing kmeans
 		plt.plot(clusters.center[0], clusters.center[1], 's', c="purple", mec="white", ms=15, zorder=1)
 		plt.plot(a[:,0], a[:,1], 'o', c="blue", mec="white", ms=7.5, zorder=1)
 		plt.plot(b[:,0], b[:,1], 'o', c="red", mec="white", ms=7.5, zorder=1)
-	
+
 	elif data.shape[1] == 3:
 		plt.figure()
 		ax = plt.axes(projection="3d")
@@ -202,18 +204,18 @@ def exampleCluster(data, k):  # testing kmeans
 			data = clusters[centroid]
 			ax.scatter3D(data[:,0], data[:,1], data[:,2], c=colors[c], zorder=1)
 			c+=1
-		
+
 		plt.figure()
 		ax = plt.axes(projection="3d")
 		ax.scatter3D(0, 0, 0, '*', c="green", zorder=1)
 		ax.scatter3D(a[:,0], a[:,1], a[:,2], 'o', c="blue", zorder=1)
 		ax.scatter3D(b[:,0], b[:,1], b[:,2], 'o', c="red", zorder=1)
-		
+
 	if data.shape[1] > 3:
 		for i, centroid in enumerate(clusters):
 			data = clusters[centroid]
 			print("Cluster "+str(i)+": "+str(len(data)))
-	
+
 	if data.shape[1] <= 3:
 		plt.show()
 
@@ -227,8 +229,7 @@ def unitNoise(d0, d1):
 	minimum = noise.min()
 	noise-=minimum
 	maximum = noise.max()
-	return (noise/maximum)*2-1	
+	return (noise/maximum)*2-1
 
 if __name__ == "__main__":
 	main()
-

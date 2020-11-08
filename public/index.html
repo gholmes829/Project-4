@@ -15,7 +15,7 @@
   <body class = "background">
     <script src ="spotify-web-api-js/src/spotify-web-api.js"> </script>
 
-    <div class = "profile-container">
+    <div id = "profile-container" class = "profile-container">
         <img id = "profile-pic"  class = "profile-picture"> </img>
         <h3 id = "profile-userName" class = "profile-displayText">Username: </h3>
         <h3 id = "profile-userID" class = "profile-displayText">userId: </h3>
@@ -81,7 +81,7 @@
     <script src = "frontend.js"> </script>
     <script src = "unitTesting.js"></script>
     <!--<script src ="graph.js"></script>-->
-    <div class = "playList-container">
+    <div id = "playlist-container" class = "playList-container">
       <div id = "container">
         <div id = "header" style = "color: #FFFFFF;"></div>
         <div id = "playList"></div>
@@ -99,7 +99,7 @@
       <a href="/misMatch" id = "generate-remove" class = "generate-remove-button" onclick = "removeMisMatched()">Detect mismatched songs</a>
 
     </div>
-      <div class="graph-container">
+    <div id = "graph-container" class="graph-container">
       <canvas id="canvas"width="2000" height="900" style="border:1px solid #000000;"></canvas>
     </div>
 
