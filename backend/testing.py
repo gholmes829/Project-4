@@ -5,7 +5,7 @@ from clustering import Clusters
 import matplotlib.pyplot as plt
 
 """
-Runs the main function that prints out the results of the test
+Post: Runs the main function that prints out the results of the test
 """      
 def main():
     #k=None
@@ -33,7 +33,7 @@ def main():
     # generating test data
 
 """
-Function tests when k = 0
+Post: Function tests when k = 0
 """
 def checkZero():
     data = generateClusters(50, 3, 1, 3)
@@ -44,7 +44,7 @@ def checkZero():
     return False
 
 """
-Function tests when k < 0
+Post: Function tests when k < 0
 """
 def checkNegative():
     data = generateClusters(50, 3, 1, 3)
@@ -55,7 +55,7 @@ def checkNegative():
     return False
 
 """
-Function tests the scores to see if they are between 0-100
+Post: Function tests the scores to see if they are between 0-100
 """
 def checkRange():
     data = generateClusters(50, 3, 1, 3)
@@ -74,7 +74,7 @@ def checkRange():
     return True
  
 """
-Function tests if generateClusters function is given 0 clusters
+Post: Function tests if generateClusters function is given 0 clusters
 """   
 def checkEmpty():
     try:
