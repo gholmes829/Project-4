@@ -194,9 +194,7 @@ class Clusters(dict):
             samples.append(self._simpleCopy())
         
         initialized = False
-        backupInitialized = False
         optimal, bestCost = None, 0
-        emptyCluster = True
         
         for i in range(len(samples)):
             cost = self._cost(samples[i])
@@ -206,7 +204,6 @@ class Clusters(dict):
             elif not initialized:
                 optimal, bestCost = samples[i], cost
                 initialized = True
-                emptyCluster = False
             elif cost <= bestCost:
                 optimal, bestCost = samples[i], cost        
 
