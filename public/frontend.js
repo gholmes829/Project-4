@@ -9,6 +9,8 @@ var selected_playlist_name;
 var playListID;
 var ratedPlaylist;
 
+var sliderValue;
+
 window.addEventListener('DOMContentLoaded', (event) => {
   spotifyApi = new SpotifyWebApi();
   let html_access_token = document.getElementById("access");
@@ -448,6 +450,12 @@ function removeSpecific(specificSong)
   }
 }
 
+function updateSlider()
+{
+  sliderValue = document.getElementById("range").value;
+  document.getElementById("UpdateSlider").innerHTML = sliderValue;
+  console.log(sliderValue)
+}
 /**
 * This runs through the playlist and removes songs that are outside a certain range
 */

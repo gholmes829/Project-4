@@ -144,11 +144,16 @@ button{
 .slider{
   position:absolute;
   top: 67%;
-  left: 52%;
-  width: 47%;
-  overflow:hidden;
+  left: 2%;
+  width: 96%;
 }
 
+.slider-text{
+  position:absolute;
+  top: -50%;
+  left: 80%;
+  color: #BFBFBF;
+}
 #header
 {
   font-family: Verdana, sans-serif;
