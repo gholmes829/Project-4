@@ -55,7 +55,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
   }
 });
 
-
+/**
+* This function updates the users information on screen while also setting the initial state to pick a playlist
+*/
 function getUser()
 {
   spotifyApi.getMe(null).then(
@@ -132,6 +134,11 @@ function getUser()
     }
 
 var data_str;
+
+/**
+* This creates a JSON dictionary of songs and their respective features.
+* @param {JSON} data This takes a JSON object representing a playlist
+*/
 function createPlaylistDictionary(data)
 {
   let length = data.items.length;
@@ -151,18 +158,6 @@ function createPlaylistDictionary(data)
               key        : features.key,
               tempo      : features.tempo,
               valence    : features.valence};
-        /**
-        tempFeatures = {ID : i,
-              acousticness : features.acousticness,
-              danceability: features.danceability,
-              energy       : features.energy,
-              instrumentalness: features.instrumentalness,
-              key        : features.key,
-              liveness   : features.liveness,
-              loudness   : features.loudness,
-              speechiness: features.speechiness,
-              tempo      : features.tempo,
-              valence    : features.valence}; */
         playListDictionary.Playlist.push(tempFeatures);
         data_str = encodeURIComponent(JSON.stringify(playListDictionary));
         misMatchURL.href = '/misMatch/?somevalue=' + data_str + "&access_token=" + spotifyApi.getAccessToken() + "&playlistID=" + playListID;
@@ -203,6 +198,10 @@ function finishPlaylist()
       console.error(err);
     });
   }
+
+/**
+* This function is a reaction function when the user clicks the remove song button
+*/
 function removeSong()
   {
     let temp = 0;
@@ -251,6 +250,10 @@ function removeSong()
     }
 }
 
+/**
+* This function takes a specific song to remove from the playlist
+* @param {int} specificSong A integer representing a song to remove
+*/
 function removeSpecific(specificSong)
 {
   let temp = 0;
@@ -295,12 +298,18 @@ function removeSpecific(specificSong)
   }
 }
 
-
+/**
+* This runs through the playlist and removes songs that are outside a certain range
+*/
 function removeMisMatched()
 {
   removeSpecific(1);
   console.log("Testing Mismatched");
 }
+
+/**
+* This function updates the iframe that lets a user play a specific song
+*/
 function updateIframe(id)
 {
   var url = "https://open.spotify.com/embed/track/" + id
