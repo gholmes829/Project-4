@@ -117,7 +117,7 @@ function getUser()
               var element = document.getElementById("trackList");
               newButton.onclick = function(){
               selectedSong =i;
-              selectedSongid = data.items[i].track.id
+              selectedSongid = data.items[i].track.id;
               updateIframe(selectedSongid);
               console.log(data);};
               element.appendChild(newButton);
@@ -217,6 +217,7 @@ function removeSong()
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
         newButton.onclick = function(){selectedSong = i;
+        selectedSongid = selectedPlaylist.items[i].track.id;
         updateIframe(selectedSongid)};
         element.appendChild(newButton);
       }
@@ -233,6 +234,8 @@ function removeSong()
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
         newButton.onclick = function(){selectedSong = i-1;
+        selectedSongid = selectedPlaylist.items[i-1].track.id;
+        updateIframe(selectedSongid);
         };
         element.appendChild(newButton);
         console.log("Incorrect");
@@ -261,6 +264,7 @@ function removeSpecific(specificSong)
       newButton.appendChild(node);
       var element = document.getElementById("trackList");
       newButton.onclick = function(){selectedSong = i;
+      selectedSongid = selectedPlaylist.items[i].track.id;
       updateIframe(selectedSongid)};
       element.appendChild(newButton);
     }
@@ -276,6 +280,8 @@ function removeSpecific(specificSong)
       newButton.appendChild(node);
       var element = document.getElementById("trackList");
       newButton.onclick = function(){selectedSong = i-1;
+      selectedSongid = selectedPlaylist.items[i-1].track.id;
+      updateIframe(selectedSongid);
       };
       element.appendChild(newButton);
     }
