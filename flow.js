@@ -113,7 +113,7 @@ var spawn = require("child_process").spawn;
 var fs = require('fs');
 
 var textChunk;
-function check(playList,access_token,res)
+function check(playList,access_token,id,res)
 {
   textChunk = "";
   setTimeout(() => {
@@ -121,8 +121,8 @@ function check(playList,access_token,res)
         {
           let start = textChunk.indexOf("{"),
               stop  = textChunk.indexOf("}");
-          textChunk = textChunk.substr(start,stop);
-          redirectBack(playList,access_token,res);
+          textChunk = textChunk.substr(start,stop+1);
+          redirectBack(playList,access_token,id,res);
         }
         else {
           var process = spawn('python',["-u","./backend/__main__.py",playList]);
@@ -130,22 +130,22 @@ function check(playList,access_token,res)
 
               textChunk = chunk.toString('utf8');// buffer to string
               });
-          check(playList,access_token,res);
+          check(playList,access_token,id,res);
         }
       },1000);
 }
-function redirectBack(playList,access_token,res)
+function redirectBack(playList,access_token,id,res)
 {
   res.redirect('/#' +
       querystring.stringify({
             access_token: access_token,
-            playList    : textChunk
+            playList    : textChunk,
+            playlistID  : id
       }));
 }
 
 app.get('/misMatch', function(req, res) {
-    console.log(req.query);
-    check(req.query.somevalue,req.query.access_token,res);
+    check(req.query.somevalue,req.query.access_token,req.query.playlistID,res);
     });
 
 app.listen(8888);
