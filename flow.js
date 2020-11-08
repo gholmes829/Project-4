@@ -119,20 +119,21 @@ function check(playList,access_token,id,res)
 	process.stdout.on('data',function(chunk){
 
 	  textChunk = chunk.toString('utf8');// buffer to string
+    console.log(textChunk);
 	  });
 
 	process.on("close", function(code) {
 	setTimeout(() => {
-	if (textChunk=="Done!\n") {
+	if (textChunk=="".substr()) {
 		console.log("Trying again...");
 		check(playList, access_token, id, res);
 	}
 	else {
 		let start = textChunk.indexOf("{"),
-		  stop  = textChunk.indexOf("}");
+		    stop  = textChunk.indexOf("}");
 
 		textChunk = textChunk.substr(start,stop+1);
-		console.log(textChunk);
+    console.log("Data \"" + textChunk  + "\"");
 		redirectBack(playList,access_token,id,res);
 	}
 	}, 100);
@@ -150,6 +151,7 @@ function redirectBack(playList,access_token,id,res)
 }
 
 app.get('/misMatch', function(req, res) {
+    console.log(req.query.somevalue);
     check(req.query.somevalue,req.query.access_token,req.query.playlistID,res);
     });
 

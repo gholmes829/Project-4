@@ -24,14 +24,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   {
     let location = window.location.href;
     location = decodeURIComponent(location);
-	console.log(location);
+	 // console.log(location);
     let start = (location.indexOf("&playList=")+10),
         stop = location.indexOf("&playlistID=") - start;
     playListID = location.substring(location.indexOf("&playlistID=")+12);
     showTracks(playListID);
     setTimeout(() => {
       let newPlaylist = location.substr(start,stop);
-      console.log(newPlaylist);
+      //console.log(newPlaylist);
       let colin = newPlaylist.indexOf(':');
       let comma = 0;
       let newId = newPlaylist.substr(1,colin-comma-1);
@@ -54,7 +54,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ratedPlaylist.push(tempObj);
       }
       setTimeout( removeMisMatched(selectedPlaylist,ratedPlaylist),2000);
-
       var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
 
@@ -202,7 +201,6 @@ class Tree {
         t.add(s1)
       }
         t.bfs()
-        removeMisMatched();
   },1000);
 
 
@@ -316,7 +314,6 @@ function createPlaylistDictionary(data)
       function (err) {
         console.error(err);
       });
-    return true;
   }
 
 
@@ -457,20 +454,25 @@ function updateSlider()
   sliderValue = document.getElementById("range").value;
   document.getElementById("UpdateSlider").innerHTML = sliderValue;
   console.log(sliderValue);
+  removeMisMatched(ratedPlaylist)
 }
 /**
 * This runs through the playlist and removes songs that are outside a certain range
 */
-function removeMisMatched(currentPlaylist,removePlaylist)
+function removeMisMatched(removePlaylist)
 {
-  /**
+  console.log(removePlaylist);
   songsToRemove = [];
   for(i = 0 ; i<removePlaylist.length; i++)
   {
-    //if removePlaylist.items
+    if(removePlaylist[i] > sliderValue)
+    {
+      songsToRemove.append(i);
+    }
   }
-  console.log("Testing Mismatched");
-  */
+  console.log(songsToRemove);
+
+
 }
 
 /**

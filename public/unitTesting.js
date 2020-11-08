@@ -32,16 +32,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     function (data) {
 
         console.log("Here");
-        if(createPlaylistDictionary(data))
-        {
-          var newTest = document.createElement("h1");
-          newTest.style.visibility = "visibile";
-          newTest.style.color = " #BFBFBF";
-          var node = document.createTextNode("Test " + count + ": Created playList Dictionary: PASSED");
-          newTest.append(node);
-          testDiv.append(newTest);
-          count++;
-        }
         showTracks('37i9dQZEVXbLRQDuF5jeBp');
         setTimeout(() => {
           if(selectedPlaylist.href == data.href)
