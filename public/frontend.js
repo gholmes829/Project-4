@@ -48,6 +48,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           songRating : newRating
         }
         ratedPlaylist.push(tempObj);
+        console.log(ratedPlaylist);
       }
       removeMisMatched();
     },1000);
@@ -73,65 +74,61 @@ function getUser()
       });
   }
 
-    /**
-     * makes playlists into button options and calls a function that gets tracks in playlist
-     * @param {object} oldData data of all the user playlists
-     */
-    function callGetUserPlayerList(oldData)
-    {
-      spotifyApi.getUserPlaylists(oldData.id).then(
-        function (data) {
-          document.getElementById("header").innerHTML = "Choose a Playlist to be Edited";
-          for (let i = 0; i<data.items.length;i++)
+/**
+* makes playlists into button options and calls a function that gets tracks in playlist
+* @param {object} oldData data of all the user playlists
+*/
+function callGetUserPlayerList(oldData)
+{
+  spotifyApi.getUserPlaylists(oldData.id).then(
+  function (data) {
+      document.getElementById("header").innerHTML = "Choose a Playlist to be Edited";
+      for (let i = 0; i<data.items.length;i++)
+      {
+          let newButton = document.createElement("button");
+          var node = document.createTextNode(data.items[i].name);
+          newButton.appendChild(node);
+          var element = document.getElementById("playList");
+          newButton.onclick = function(){showTracks(data.items[i].id);
+          selected_playlist_name = data.items[i].name;};
+          element.appendChild(newButton);
+      }
+    },
+    function (err) {
+      console.error(err);
+    });
+}
+
+/**
+* displays track names after being edited
+* @param {string} oldDataId id of the playlist selected
+*/
+function showTracks(oldDataId){
+  playListID = oldDataId;
+  document.getElementById("playList").style.display = "none";
+  spotifyApi.getPlaylistTracks(oldDataId).then(
+  function (data) {
+      createPlaylistDictionary(data);
+      selectedPlaylist = data;
+      document.getElementById("header").innerHTML = "Choose a Track to play";
+      for (let i = 0; i<data.items.length;i++)
+      {
+          var newButton = document.createElement("button");
+          var node = document.createTextNode(data.items[i].track.name);
+          newButton.appendChild(node);
+          var element = document.getElementById("trackList");
+          newButton.onclick = function()
           {
-              let newButton = document.createElement("button");
-              var node = document.createTextNode(data.items[i].name);
-              newButton.appendChild(node);
-              var element = document.getElementById("playList");
-              newButton.onclick = function(){showTracks(data.items[i].id);
-              selected_playlist_name = data.items[i].name;};
-              element.appendChild(newButton);
-          }
-        },
-        function (err) {
-          console.error(err);
-        }
-      );
-    }
-    /**
-     * displays track names after being edited
-     * @param {string} oldDataId id of the playlist selected
-     */
-    function showTracks(oldDataId){
-      playListID = oldDataId;
-      document.getElementById("playList").style.display = "none";
-      spotifyApi.getPlaylistTracks(oldDataId).then(
-        function (data) {
-          createPlaylistDictionary(data);
-          selectedPlaylist = data;
-          document.getElementById("header").innerHTML = "Choose a Track to play";
-          for (let i = 0; i<data.items.length;i++)
-          {
-              var newButton = document.createElement("button");
-              var node = document.createTextNode(data.items[i].track.name);
-
-              newButton.appendChild(node);
-              var element = document.getElementById("trackList");
-              newButton.onclick = function(){
-              selectedSong =i;
-              selectedSongid = data.items[i].track.id;
-              updateIframe(selectedSongid);
-              console.log(data);};
-              element.appendChild(newButton);
-
-          }
-
-        },
-        function (err) {
-          console.error(err);
-        }
-      );
-    }
+            selectedSong =i;
+            selectedSongid = data.items[i].track.id;
+            updateIframe(selectedSongid);
+            console.log(data);};
+          element.appendChild(newButton);
+      }},
+      function (err) {
+        console.error(err);
+        });
+}
 
 var data_str;
 

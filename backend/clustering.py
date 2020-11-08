@@ -37,7 +37,7 @@ class Clusters(dict):
 
         self.orderedData = None
         self.orderedScores = None
-        
+
         self.rawScoreMin, self.rawScoreMax = None, None
         self.rawScoreAvg = None
         self.scoreAvg = None
@@ -60,12 +60,12 @@ class Clusters(dict):
         space = np.zeros((2, self.data.shape[1]))
         for dimension in range(len(self._bounds)):
             space[1][dimension] = self._ranges[dimension]
-            
+
         self._range = self.dist(space[0], space[1])
-        
+
         self._convergenceLimit = 1*(10**(-1*self.accuracy))
         self._silhouetteThreshold = 0.0375
-        
+
         # state attributes
         self._dp = 0
         self._prevIteration = {}
@@ -74,11 +74,11 @@ class Clusters(dict):
 
         # evaluation attributes
         self._silhouettes = {}
-        
+
         # solving and generating scores
         self._solve()
         self._generateScores()
-            
+
     def printInfo(self) -> None:
         """
         Prints important info relating to clusters.
@@ -93,7 +93,7 @@ class Clusters(dict):
 
     def keys(self) -> np.ndarray:  # return centroid positions
         """
-        Returns np.array of centroid positions 
+        Returns np.array of centroid positions
         """
         return np.array([np.frombuffer(centroid) for centroid in super().keys()])
 
@@ -140,7 +140,7 @@ class Clusters(dict):
     def _singleSolve(self) -> None:
         """
         Pre: k!=None.
-        Solves to produce clusters from data if k selected. 
+        Solves to produce clusters from data if k selected.
         """
         optimal = self._optimalPartition(self.k)
         self._revert(optimal)
@@ -156,7 +156,7 @@ class Clusters(dict):
         for k in range(2, self.maxK+1):  # testing configurations for values of k
             if k > 2:  # store current configuration as previous
                 self._prevIteration = optimal
-                
+
             optimal = self._optimalPartition(k)
             self._silhouettes[k] = self._silhouette(optimal)
 
@@ -192,10 +192,10 @@ class Clusters(dict):
             self.clear()
             self._kmeans(k)
             samples.append(self._simpleCopy())
-        
+
         initialized = False
         optimal, bestCost = None, 0
-        
+
         for i in range(len(samples)):
             cost = self._cost(samples[i])
             if cost == -1:
@@ -204,7 +204,7 @@ class Clusters(dict):
                 optimal, bestCost = samples[i], cost
                 initialized = True
             elif cost <= bestCost:
-                optimal, bestCost = samples[i], cost        
+                optimal, bestCost = samples[i], cost
 
         return optimal
 
@@ -216,7 +216,7 @@ class Clusters(dict):
         totalDist = 0
         maxDist = 0
         ptCount = 0
-        
+
         for bufferCentroid, points in partition.items():
             size = len(points)
             ptCount += size
@@ -240,7 +240,7 @@ class Clusters(dict):
         partitionScore = 0
         centroids = [np.frombuffer(bufferCentroid) for bufferCentroid in partition.keys()]
         for bufferCentroid, points in partition.items():  # for each centroid
-            if len(points) > 0: 
+            if len(points) > 0:
                 centroidScore = 0
                 parent = np.frombuffer(bufferCentroid)
                 for pt in points:  # for each point in centroid
@@ -248,7 +248,7 @@ class Clusters(dict):
                     a = self._computeA(pt, partition[bufferCentroid])  # average dist of pt to other points in cluster
                     b = self._computeB(pt, partition[second.tobytes()])  # average dist of pt to points in closest non parent cluster
                     centroidScore += self._silhouetteCoeffient(a, b)  # (b-a)/max(a, b)
-                    
+
                 partitionScore += centroidScore/len(points)
             else:  # has undesirable empty clusters
                 partitionScore-=1
@@ -305,7 +305,7 @@ class Clusters(dict):
             clusterDistance = {
                 "avg": 0,
                 "total": 0,
-                "max": 0,    
+                "max": 0,
             }
             clusterSize = len(points)
             cache = {}
@@ -334,7 +334,7 @@ class Clusters(dict):
         avgScore = scores.mean()
         scale = lambda pt: ((pt-minScore)/(maxScore-minScore))*100
         normalized = np.array(list(map(scale, scores)))
-        
+
         # sorting
         order = normalized.argsort()
         self.orderedScores = normalized[order]
@@ -355,7 +355,7 @@ class Clusters(dict):
         distFromCenter: dist of pt from center of dataset.
         Computes score as described in "_generateScores". Uses exponents to weight terms.
         """
-        relativeClusterSize = (clusterSize/(self.data.shape[0]/self.k)) 
+        relativeClusterSize = (clusterSize/(self.data.shape[0]/self.k))
         relativeDist = (distCentroidPt/clusterMax)
         return (1/(relativeClusterSize**2))*(relativeDist**2)*(np.sqrt(avgClusterDist))*(np.sqrt(distFromCenter**3))
 
@@ -456,14 +456,14 @@ class Clusters(dict):
         """
         maxDP = 0
         bufferCentroids = list(self._bufferKeys())
-    
+
         for bufferCentroid in bufferCentroids:
             if self[bufferCentroid]["size"] > 0:
                 centroid = np.frombuffer(bufferCentroid)
 
                 data = self._getPoints(bufferCentroid)
                 center = data.mean(axis=0)
-                
+
                 dp = self.alpha*(center-centroid)
                 ds = self.dist(np.zeros(self.data.shape[1]), dp)
 
@@ -472,7 +472,7 @@ class Clusters(dict):
 
                 del self[bufferCentroid]
                 self._add(centroid+dp)
-                
+
         self._dp = maxDP
 
     def _getPoints(self, centroid: np.ndarray or bytes) -> np.ndarray:
@@ -492,7 +492,7 @@ class Clusters(dict):
         copy = {}
         for centroid in self._bufferKeys():
             copy[centroid] = self._getPoints(centroid)
-        return copy    
+        return copy
 
     def _clearAssignments(self) -> None:
         """
