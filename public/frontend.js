@@ -52,6 +52,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           songRating : newRating
         }
         ratedPlaylist.push(tempObj);
+<<<<<<< HEAD
       }
       setTimeout( removeMisMatched(selectedPlaylist,ratedPlaylist),2000);
       var c = document.getElementById("canvas");
@@ -201,6 +202,11 @@ class Tree {
         t.add(s1)
       }
         t.bfs()
+=======
+      }
+      showGraph();
+      removeMisMatched();
+>>>>>>> 8b97d69ff64afc9d795f83ac70a02396cd2b6d63
   },1000);
 
 
@@ -483,4 +489,39 @@ function updateIframe(id)
   var url = "https://open.spotify.com/embed/track/" + id
   document.getElementById("playButton").src = url;
 
+}
+
+function showGraph()
+{
+  var c = document.getElementById("canvas");
+      var ctx = c.getContext("2d");
+      const black = "#ffffff"
+      var j=0;
+      var other = 0;
+      for(i = 0; i < selectedPlaylist.items.length;i++)
+      {
+
+        if(i%4==0)
+        {
+          j= j+1;
+          other = 0;
+        }
+        ctx.beginPath();
+        ctx.arc(90+other*150, 150*j+30, 60, 0, 2 * Math.PI);
+        s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
+        if(sliderValue <=s1)
+        {
+          ctx.fillStyle = "red";
+        }
+        else
+        {
+          ctx.fillStyle = "blue";
+        }
+
+        ctx.fill();
+        ctx.stroke();
+        ctx.strokeStyle = black;
+        ctx.strokeText(selectedPlaylist.items[i].track.name, 40+other*150, 150*j+30)
+        other = other+1;
+      }
 }
