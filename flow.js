@@ -173,7 +173,7 @@ function redirectTests(req,res,textChunk)
 {
   res.redirect('/#' +
       querystring.stringify({
-            access_token: access_token,
+            access_token: req.query.access_token,
             tests    : textChunk
       }));
 }

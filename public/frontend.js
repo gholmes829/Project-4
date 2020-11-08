@@ -394,7 +394,6 @@ function removeSong()
       console.log("delete " + x);
       var element = document.getElementById("trackList");
       element.removeChild(element.childNodes[0]);
-
     }
 }
 
@@ -450,7 +449,7 @@ function updateSlider()
 {
   sliderValue = document.getElementById("range").value;
   document.getElementById("UpdateSlider").innerHTML = sliderValue;
-  console.log(sliderValue)
+  console.log(sliderValue);
 }
 /**
 * This runs through the playlist and removes songs that are outside a certain range
