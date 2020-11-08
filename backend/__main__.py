@@ -7,7 +7,6 @@ Description: This runs the main code for the backend. Takes in a dictionary from
 import numpy as np
 from clustering import Clusters
 import json
-import os
 import matplotlib.pyplot as plt
 import sys
 
@@ -43,7 +42,6 @@ def main(argv):
 
     #This for loop creates a new dictionary and will make the keys the ID of the songs and give
     #each key a list of the attributes that match that song
-
     for i in range(g):
         prop = []
         temp = spotify["Playlist"][i]

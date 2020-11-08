@@ -4,10 +4,11 @@ import numpy as np
 from clustering import Clusters
 import matplotlib.pyplot as plt
 
-"""
-Post: Runs the main function that prints out the results of the test
-"""      
+     
 def main():
+    """
+    Post: Runs the main function that prints out the results of the test
+    """ 
     #k=None
 
     print("Testing...")
@@ -32,10 +33,10 @@ def main():
     #exampleCluster(data, k)
     # generating test data
 
-"""
-Post: Function tests when k = 0
-"""
 def checkZero():
+    """
+    Post: Function tests when k = 0
+    """
     data = generateClusters(50, 3, 1, 3)
     try:
         Clusters(data, 0)
@@ -43,10 +44,11 @@ def checkZero():
         return True
     return False
 
-"""
-Post: Function tests when k < 0
-"""
+
 def checkNegative():
+    """
+    Post: Function tests when k < 0
+    """
     data = generateClusters(50, 3, 1, 3)
     try:
         Clusters(data, -5)
@@ -54,10 +56,11 @@ def checkNegative():
         return True
     return False
 
-"""
-Post: Function tests the scores to see if they are between 0-100
-"""
+
 def checkRange():
+    """
+    Post: Function tests the scores to see if they are between 0-100
+    """
     data = generateClusters(50, 3, 1, 3)
     myClusters = Clusters(data, 2)
     scores = myClusters.orderedScores
@@ -73,10 +76,11 @@ def checkRange():
         return False
     return True
  
-"""
-Post: Function tests if generateClusters function is given 0 clusters
-"""   
+  
 def checkEmpty():
+    """
+    Post: Function tests if generateClusters function is given 0 clusters
+    """ 
     try:
         data = generateClusters(50, 3, 1, 0)
         Clusters(data, 1)
@@ -85,6 +89,23 @@ def checkEmpty():
     return False
      
 def generateClusters(density, dimension, scale, numClust):
+    """
+    Parameters
+    ----------
+    density : TYPE
+        DESCRIPTION.
+    dimension : TYPE
+        DESCRIPTION.
+    scale : TYPE
+        DESCRIPTION.
+    numClust : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    standardized : TYPE
+        DESCRIPTION.
+    """
     d0, d1 = (density, dimension) 
     if d1 == 2:
         clusters= [
