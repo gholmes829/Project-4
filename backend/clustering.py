@@ -50,7 +50,7 @@ class Clusters(dict):
 
         # data attributes
         self._bounds = np.zeros((self.data.shape[1], 2))
-
+		
         for dimension in range(len(self._bounds)):
             self._bounds[dimension][0] = self.data[:,dimension].min()
             self._bounds[dimension][1] = self.data[:,dimension].max()
@@ -219,15 +219,17 @@ class Clusters(dict):
         
         for bufferCentroid, points in partition.items():
             size = len(points)
-            ptCount += size
             if size == 0:
                 return -1
+            ptCount += size
             centroid = np.frombuffer(bufferCentroid)
-            for pt in points:
-                dist = Clusters.optimizedDist(pt, centroid)
-                totalDist+=dist
-                if dist > maxDist:
-                    maxDist = dist
+
+            ptsDist = [Clusters.optimizedDist(pt, centroid) for pt in points]
+            totalDist += sum(ptsDist)
+            localMax = max(ptsDist)
+            if localMax > maxDist:
+                maxDist = localMax
+
         return (totalDist/ptCount)*(maxDist**2)  # average distance * max distance^2
 
     def _silhouette(self, partition: dict) -> float:
@@ -247,8 +249,7 @@ class Clusters(dict):
                     second = self._findSecondCentroid(pt, parent, centroids)  # find closest centroid
                     a = self._computeA(pt, partition[bufferCentroid])  # average dist of pt to other points in cluster
                     b = self._computeB(pt, partition[second.tobytes()])  # average dist of pt to points in closest non parent cluster
-                    centroidScore += self._silhouetteCoeffient(a, b)  # (b-a)/max(a, b)
-                    
+                    centroidScore += self._silhouetteCoeffient(a, b)  # (b-a)/max(a, b)    
                 partitionScore += centroidScore/len(points)
             else:  # has undesirable empty clusters
                 partitionScore-=1
@@ -268,13 +269,8 @@ class Clusters(dict):
         points: all points in cluster of pt.
         Returns avg dist from pt to all points.
         """
-        totalDist = 0
         size = len(points) - 1
-        if size == 0:
-            return 0
-        for otherPt in points:
-            totalDist += Clusters.optimizedDist(pt, otherPt)
-        return np.sqrt(totalDist)/size
+        return (size!=0)*np.sqrt(sum([Clusters.optimizedDist(pt, otherPt) for otherPt in points])/size)
 
     def _computeB(self, pt: np.ndarray, points: np.ndarray) -> float:
         """
@@ -282,11 +278,7 @@ class Clusters(dict):
         points: all points in closest non parent cluster of pt.
         Returns avg dist from pt to all points.
         """
-        totalDist = 0
-        size = len(points)
-        for otherPt in points:
-            totalDist += Clusters.optimizedDist(pt, otherPt)
-        return np.sqrt(totalDist)/size
+        return np.sqrt(sum([Clusters.optimizedDist(pt, otherPt) for otherPt in points])/len(points))
 
     def _generateScores(self) -> None:
         """
@@ -297,37 +289,31 @@ class Clusters(dict):
             3) Avg dist of points from cluster (larger avg distances are penalized).
             4) Size of clusters (pts from smaller clusters are penalized).
         """
-        size = 0
+        maxDataRadius = np.sqrt(max([Clusters.optimizedDist(pt, self.center) for pt in self.data]))
+        maxAvgClusterRadius = max([sum([Clusters.dist(centroid, pt) for pt in points])/len(points) for centroid, points in self.items()])
+
+        i = 0
         scores = np.zeros(self.data.shape[0])
-        data =  np.zeros(self.data.shape)
-
+        data = np.zeros(self.data.shape)
         for centroid, points in self.items():
-            clusterDistance = {
-                "avg": 0,
-                "total": 0,
-                "max": 0,    
-            }
             clusterSize = len(points)
-            cache = {}
-
-            # cache distance from pts to center of cluster
-            for pt in points:
-                distCentroidPt = Clusters.dist(centroid, pt)
-                clusterDistance["total"] += distCentroidPt
-                cache[pt.tobytes()] = distCentroidPt
-                if distCentroidPt > clusterDistance["max"]:
-                    clusterDistance["max"] = distCentroidPt
-
-            clusterDistance["avg"] = clusterDistance["total"]/clusterSize
+            localDists = [Clusters.dist(centroid, pt) for pt in points]
+            avgClusterRadius = sum(localDists)/clusterSize
+            maxClusterRadius = max(localDists)
 
             # compute scores for each pt
-            for bufferPt, distCentroidPt in cache.items():
-                pt = np.frombuffer(bufferPt)
-                distFromCenter = Clusters.optimizedDist(pt, self.center)
-                score = self._score(pt, distCentroidPt, clusterSize, clusterDistance["max"], clusterDistance["avg"], distFromCenter)
-                scores[size] = score
-                data[size] = pt
-                size += 1
+            for j, distPtCentroid in enumerate(localDists):
+                distPtCenter = Clusters.dist(points[j], self.center)
+
+                relativeDist = distPtCentroid/maxClusterRadius
+                relativeAvgDist = avgClusterRadius/maxAvgClusterRadius
+                relativeDistToCenter = distPtCenter/maxDataRadius
+                relativeClusterSize = 1/(clusterSize/(self.data.shape[0]/self.k))
+
+                score = self._score(points[j], relativeDist, relativeAvgDist, relativeDistToCenter, relativeClusterSize)
+                scores[i] = score
+                data[i] = points[j]
+                i += 1
 
         # scale scores of pts from 0-100
         minScore, maxScore = scores.min(), scores.max()
@@ -346,18 +332,17 @@ class Clusters(dict):
         self.rawScoreAvg = avgScore
         self.scoreAvg = np.mean(normalized)
 
-    def _score(self, pt: np.ndarray, distCentroidPt: float, clusterSize: int, clusterMax: float, avgClusterDist: float, distFromCenter: float) -> float:
+    def _score(self, pt: np.ndarray, relativeDist: float, relativeAvgDist: float, relativeDistToCenter: float, relativeClusterSize: float):
         """
         pt: pt to compute score for.
-        distCentroidPt: dist between pt and center of cluster its in.
-        clusterSize: num of pts in cluster of point.
-        avgClusterDist: avg dist of points to center of cluster pt is a part of.
-        distFromCenter: dist of pt from center of dataset.
+        relativeDist: dist between pt and center of cluster its in relative to radius of cluster.
+		relativeAvgDist: avg dist of points in cluster to center of cluster relative to that of cluster with max avg dist.
+        relativeClusterSize: num of pts in cluster relative to size of data set divided by number of clusters.
+        relativeDistToCenter: dist of pt to center of dataset relative to dist of most outlying pt to center.
+		
         Computes score as described in "_generateScores". Uses exponents to weight terms.
         """
-        relativeClusterSize = (clusterSize/(self.data.shape[0]/self.k)) 
-        relativeDist = (distCentroidPt/clusterMax)
-        return (1/(relativeClusterSize**2))*(relativeDist**2)*(np.sqrt(avgClusterDist))*(np.sqrt(distFromCenter**3))
+        return (relativeDist**2)*(np.sqrt(relativeAvgDist))*(relativeDistToCenter**2)*(np.sqrt(relativeClusterSize**3))
 
     def _simplify(self) -> None:
         """
@@ -401,27 +386,14 @@ class Clusters(dict):
         """
         Returns coordinates with range of self._bounds (window of data)
         """
-        coords = np.zeros(self.data.shape[1])
-        for dimension in range(self.data.shape[1]):
-            coords[dimension] = Clusters.rand(self._bounds[dimension].min(), self._bounds[dimension].max())
-        return coords
+        return np.array([Clusters.rand(self._bounds[dimension].min(), self._bounds[dimension].max()) for dimension in range(self.data.shape[1])])
 
     def _findSecondCentroid(self, pt: np.ndarray, parent: np.ndarray, centroids: np.ndarray) -> np.ndarray:
         """
         Returns centroid closest to pt other than centroid of cluster pt is in.
         """
-        closest, closestDist = None, 0
-        initialized = False
-        for centroid in centroids:
-            if not np.all(centroid == parent):
-                if not initialized:
-                    closest, closestDist = centroid, Clusters.optimizedDist(pt, centroid)
-                    initialized = True
-                elif initialized:
-                    dist = Clusters.optimizedDist(pt, centroid)
-                    if dist <= closestDist:
-                        closest, closestDist = centroid, dist
-        return closest
+        centroids, dists = list(zip(*[[centroid, Clusters.optimizedDist(pt, centroid)] for centroid in centroids if not np.all(centroid == parent)]))
+        return centroids[dists.index(min(dists))]
 
     def _add(self, centroid: np.ndarray) -> None:
         """
@@ -439,13 +411,10 @@ class Clusters(dict):
             self._clearAssignments()
         else:
             self._isAssigned = True
-        centroids = self.keys()
+        centroids = list(self.keys())
         for pt in self.data:
-            closest, closestDist = centroids[0], Clusters.optimizedDist(pt, centroids[0])
-            for centroid in centroids:
-                dist = Clusters.optimizedDist(centroid, pt)
-                if dist <= closestDist:
-                    closest, closestDist = centroid, dist
+            dists = [Clusters.optimizedDist(centroid, pt) for centroid in centroids]
+            closest = centroids[dists.index(min(dists))]
             self[closest]["data"][self[closest]["size"]] = pt
             self[closest]["size"] += 1
 
