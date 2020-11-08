@@ -7,10 +7,8 @@ Description: This runs the main code for the backend. Takes in a dictionary from
 import numpy as np
 from clustering import Clusters
 import json
-import matplotlib.pyplot as plt
 import sys
 
-print("entered file")
 def standardized(arr):
 	"""
 	Pre: This function takes in an array to be standardized
@@ -33,7 +31,7 @@ def main(argv):
 	Post: At the end, the backend will give the front a finalDict, that will contain the ID of each song as its keys
 	and each will have a value that is its corresponding score
 	"""
-	print("Running...")
+	print("Running...", flush=True)
 	spotify = json.loads(argv[0])
 	amount = spotify["Playlist"]
 	g=len(amount)
@@ -47,18 +45,13 @@ def main(argv):
 		temp = spotify["Playlist"][i]
 		x = temp["ID"]
 		newDict[x] = None
-		#prop.append(temp["acousticness"])
 		prop.append(temp["danceability"])
 		prop.append(temp["energy"])
-		#prop.append(temp["instrumentalness"])
 		prop.append(temp["key"])
-		#prop.append(temp["liveness"])
-		#prop.append(temp["loudness"])
-		#prop.append(temp["speechiness"])
 		prop.append(temp["tempo"])
 		prop.append(temp["valence"])
 		newDict[x] = prop
-	print("Appending")
+	
 	#Creates a 2d list of the of the lists of attributes that are connected to each song
 	newList = []
 	for key in newDict:
@@ -81,16 +74,6 @@ def main(argv):
 		7: "yellow",
 	}
 
-	plt.figure()
-	ax = plt.axes(projection="3d")
-	ax.scatter3D(centroids[:,0], centroids[:,1], centroids[:,2], '*', c="blue", zorder=3, label="final")
-
-	c=0
-	for centroid in clusters:
-		data = clusters[centroid]
-		ax.scatter3D(data[:,0], data[:,1], data[:,2], c=colors[c], zorder=1)
-		c+=1
-
 	d, s = clusters.orderedData, clusters.orderedScores
 
 	#Creates a new dictionary called finalDict that, when filled, will have the IDs of the songs as the keys
@@ -112,8 +95,8 @@ def main(argv):
 				x = temp["ID"]
 				finalDict[x] = s[j]
 				count+=1
-	print(finalDict)
-	print("Done!")
+	print(finalDict, flush=True)
+	print("Done!", flush=True)
 
 if __name__ == "__main__":
 	main(sys.argv[1:])
