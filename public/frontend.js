@@ -48,8 +48,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
           songRating : newRating
         }
         ratedPlaylist.push(tempObj);
-        console.log(ratedPlaylist);
       }
+      removeMisMatched();
     },1000);
 
   }
@@ -205,7 +205,6 @@ function finishPlaylist()
   }
 function removeSong()
   {
-    console.log(selectedSong);
     let temp = 0;
     let offset = false;
     for(let i=0;i<selectedPlaylist.items.length;i++)
@@ -225,8 +224,6 @@ function removeSong()
         console.log("Splice");
         temp = i;
         offset = true;
-        //delete selectedPlaylist.items[i];
-        //selectedPlaylist.items.length = selectedPlaylist.items.length-1;
       }
       else if(offset)
       {
@@ -249,20 +246,54 @@ function removeSong()
       element.removeChild(element.childNodes[0]);
 
     }
-    console.log(selectedSong);
-    console.log(selectedPlaylist.items.length);
+}
+
+function removeSpecific(specificSong)
+{
+  let temp = 0;
+  let offset = false;
+  for(let i=0;i<selectedPlaylist.items.length;i++)
+  {
+    if (i != specificSong && !offset)
+    {
+      var newButton = document.createElement("button");
+      var node = document.createTextNode(selectedPlaylist.items[i].track.name);
+      newButton.appendChild(node);
+      var element = document.getElementById("trackList");
+      newButton.onclick = function(){selectedSong = i;
+      updateIframe(selectedSongid)};
+      element.appendChild(newButton);
+    }
+    else if (i==specificSong){
+      console.log("Splice");
+      temp = i;
+      offset = true;
+    }
+    else if(offset)
+    {
+      var newButton = document.createElement("button");
+      var node = document.createTextNode(selectedPlaylist.items[i].track.name);
+      newButton.appendChild(node);
+      var element = document.getElementById("trackList");
+      newButton.onclick = function(){selectedSong = i-1;
+      };
+      element.appendChild(newButton);
+    }
+  }
+  selectedPlaylist.items.splice(temp,1);
+  for(let x=0;x<selectedPlaylist.items.length+1;x++)
+  {
+    var element = document.getElementById("trackList");
+    element.removeChild(element.childNodes[0]);
+
+  }
 }
 
 
 function removeMisMatched()
 {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    document.getElementById("demo").innerHTML = this.responseText;
-  }};
-  xhttp.open("POST","../flow.js",true);
-  xhttp.send();
+  removeSpecific(1);
+  console.log("Testing Mismatched");
 }
 function updateIframe(id)
 {
