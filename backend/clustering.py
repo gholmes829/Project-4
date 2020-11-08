@@ -194,19 +194,15 @@ class Clusters(dict):
             samples.append(self._simpleCopy())
         
         initialized = False
-        backupInitialized = False
         optimal, bestCost = None, 0
-        emptyCluster = True
         
         for i in range(len(samples)):
             cost = self._cost(samples[i])
-
             if cost == -1:
                 continue
             elif not initialized:
                 optimal, bestCost = samples[i], cost
                 initialized = True
-                emptyCluster = False
             elif cost <= bestCost:
                 optimal, bestCost = samples[i], cost        
 
@@ -361,7 +357,7 @@ class Clusters(dict):
         """
         relativeClusterSize = (clusterSize/(self.data.shape[0]/self.k)) 
         relativeDist = (distCentroidPt/clusterMax)
-        return (1/(relativeClusterSize**2))*(np.sqrt(relativeDist**3))*(np.sqrt(avgClusterDist))*(distFromCenter**2)
+        return (1/(relativeClusterSize**2))*(relativeDist**2)*(np.sqrt(avgClusterDist))*(np.sqrt(distFromCenter**3))
 
     def _simplify(self) -> None:
         """

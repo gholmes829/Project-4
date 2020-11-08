@@ -1,32 +1,59 @@
-var spotifyApi = new SpotifyWebApi();
 
-let html_access_token = document.getElementById("access");
-if(html_access_token.innerHTML.length > 0)
-{
-  spotifyApi.setAccessToken(html_access_token.innerHTML);
-  console.log("cashe loaded");
-  getUser();
-}
-else {
-  html_access_token.addEventListener('change', (event) => {
-    spotifyApi.setAccessToken(html_access_token.innerHTML);
-    console.log("event loaded");
-  });
-}
-
-if(window.location.href.includes("&playList="))
-{
-  let location = window.location.href;
-  let newPlaylist = location.substr((location.indexOf("&playList=")+10));
-  newPlaylist = decodeURIComponent(JSON.stringify(newPlaylist));
-  console.log(newPlaylist);
-}
+var spotifyApi;
 
 var userID;
 var selectedSong;
 var selectedSongid;
 var selectedPlaylist;
 var selected_playlist_name;
+var playListID;
+var ratedPlaylist;
+
+window.addEventListener('DOMContentLoaded', (event) => {
+  spotifyApi = new SpotifyWebApi();
+  let html_access_token = document.getElementById("access");
+  if(html_access_token.innerHTML.length > 0)
+  {
+    spotifyApi.setAccessToken(html_access_token.innerHTML);
+    console.log("cashe loaded");
+    getUser();
+  }
+  if(window.location.href.includes("&playList="))
+  {
+    let location = window.location.href;
+    location = decodeURIComponent(location);
+    let start = (location.indexOf("&playList=")+10),
+        stop = location.indexOf("&playlistID=") - start;
+    playListID = location.substring(location.indexOf("&playlistID=")+12);
+    showTracks(playListID);
+    setTimeout(() => {
+      let newPlaylist = location.substr(start,stop);
+      let colin = newPlaylist.indexOf(':');
+      let comma = 0;
+      let newId = newPlaylist.substr(1,colin-comma-1);
+      let newRating = newPlaylist.slice(colin, newPlaylist.indexOf(',',comma+1));
+      tempObj = {
+        ID : newId,
+        songRating : newRating
+      }
+      ratedPlaylist = [tempObj];
+      for(i = 1; i < selectedPlaylist.items.length;i++)
+      {
+        colin = newPlaylist.indexOf(':',colin+1);
+        comma = newPlaylist.indexOf(',',comma+1);
+        newId = newPlaylist.substr(comma+1,colin-comma-1);
+        newRating = newPlaylist.slice(colin, newPlaylist.indexOf(',',comma+1));
+        tempObj = {
+          ID : newId,
+          songRating : newRating
+        }
+        ratedPlaylist.push(tempObj);
+        console.log(ratedPlaylist);
+      }
+    },1000);
+
+  }
+});
 
 
 function getUser()
@@ -74,6 +101,7 @@ function getUser()
      * @param {string} oldDataId id of the playlist selected
      */
     function showTracks(oldDataId){
+      playListID = oldDataId;
       document.getElementById("playList").style.display = "none";
       spotifyApi.getPlaylistTracks(oldDataId).then(
         function (data) {
@@ -111,6 +139,7 @@ function createPlaylistDictionary(data)
   var tempFeatures = null;
   var tempID = "";
   misMatchURL = document.getElementById("generate-remove");
+  console.log(playListID);
   for(let i = 0;i<length;i++)
   {
     tempID = data.items[i].track.id;
@@ -136,7 +165,7 @@ function createPlaylistDictionary(data)
               valence    : features.valence}; */
         playListDictionary.Playlist.push(tempFeatures);
         data_str = encodeURIComponent(JSON.stringify(playListDictionary));
-        misMatchURL.href = '/misMatch/?somevalue=' + data_str + "&access_token=" + spotifyApi.getAccessToken();
+        misMatchURL.href = '/misMatch/?somevalue=' + data_str + "&access_token=" + spotifyApi.getAccessToken() + "&playlistID=" + playListID;
       },
       function (err) {
         console.error(err);
