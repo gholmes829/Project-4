@@ -1,54 +1,39 @@
-#!/usr/bin/env python3
+"""
+File: __main__.py
+Author: Grant Holmes and Peyton Doherty
+Date: 11/08/20
+Description: This runs the main code for the backend. Takes in a dictionary from the frontend and creates a new one with the scores connected to their IDs
+"""
 import numpy as np
 from clustering import Clusters
 import json
-import os
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import sys
 
-"""
-Post: This will return the current directory that I am in.
-This will be used to help read in the json file.
-"""
-def getCurrent() -> str:
-     return os.getcwd()
-"""
-Post: This function will return the parent directory of the directiry that I am in
-I will use this to retrieve the json file that is in the parent directory
-"""
-def getParent(path: str) -> str:
-    return os.path.dirname(path)
-"""
-Post: This function will return the child of the parent function
-From this function, we can load in the json file in the parent function
-"""
-def getChild(path: str, target: str) -> str:
-    return os.path.join(path, target)
-"""
-Pre: This function takes in an array to be standardized
-Post: This function will return the array that was passed in and have it standardized by taking the mean
-and dividing it by the standard deviation
-"""
 def standardized(arr):
+    """
+    Pre: This function takes in an array to be standardized
+    
+    Post: This function will return the array that was passed in and have it standardized by taking the mean
+    and dividing it by the standard deviation
+    """
     return (arr-arr.mean(axis=0))/arr.std(axis=0)
-"""
-Post: Runs the main code for the backend
-"""
-def main(argv):
-    print("Running...")
-    #print(argv[0])
-    """
-    This code is loading in the json file and creating a variable spotify to hold the dictionary in the file
-    """
-    current = getCurrent()
-    parent = getParent(current)
 
-    #filePath = getChild(parent, 'playlist.json')
-    #file = open(filePath)
+def main(argv):
+    """
+    Pre: Runs the main code for the backend. This will take in the data from the front end and 
+    put it into a new dicitonary called newDict. 
+    
+    Middle: newDict will take each ID as its keys, with each one having a valule of None. From there, the program
+    will create a list that contains each ID's attributes and then will assign that list to its corresponding key in newDict.
+    Each ID is then given a score based on its attributes attachted to it. The higher the score the more the song is determined
+    to not belong to the playlist
+    
+    Post: At the end, the backend will give the front a finalDict, that will contain the ID of each song as its keys
+    and each will have a value that is its corresponding score 
+    """
+    print("Running...")
     spotify = json.loads(argv[0])
-    #print(spotify)
-    #file.close()
     amount = spotify["Playlist"]
     g=len(amount)
     newDict = {}
@@ -57,20 +42,19 @@ def main(argv):
 
     #This for loop creates a new dictionary and will make the keys the ID of the songs and give
     #each key a list of the attributes that match that song
-
     for i in range(g):
         prop = []
         temp = spotify["Playlist"][i]
         x = temp["ID"]
         newDict[x] = None
-        #prop.append(temp["acousticness"])
+        prop.append(temp["acousticness"])
         prop.append(temp["danceability"])
         prop.append(temp["energy"])
-        #prop.append(temp["instrumentalness"])
+        prop.append(temp["instrumentalness"])
         prop.append(temp["key"])
-        #prop.append(temp["liveness"])
-        #prop.append(temp["loudness"])
-        #prop.append(temp["speechiness"])
+        prop.append(temp["liveness"])
+        prop.append(temp["loudness"])
+        prop.append(temp["speechiness"])
         prop.append(temp["tempo"])
         prop.append(temp["valence"])
         newDict[x] = prop
@@ -109,10 +93,6 @@ def main(argv):
         c+=1
 
     d, s = clusters.orderedData, clusters.orderedScores
-    threshold = 0.7  # change this value to change
-    a, b = d[:int(threshold*len(d))], d[int(threshold*len(d)):]
-
-
 
     #Creates a new dictionary called finalDict that, when filled, will have the IDs of the songs as the keys
     #and a score as the value to each key.
@@ -133,26 +113,6 @@ def main(argv):
                 x = temp["ID"]
                 finalDict[x] = s[j]
                 count+=1
-
-
-    #This will create a final graph of clusters with the blue points being songs we keep
-    #and the red points being songs that we get rid of
-    """
-    plt.figure()
-    ax = plt.axes(projection="3d")
-    ax.scatter3D(0, 0, 0, '*', c="green", zorder=1)
-    ax.scatter3D(a[:,0], a[:,1], a[:,2], 'o', c="blue", zorder=1)
-    ax.scatter3D(b[:,0], b[:,1], b[:,2], 'o', c="red", zorder=1)
-    plt.show()
-    """
-
-    #Opens a new json file and will write finalDict to the file. finalDict will be
-    #used by the front end to remove songs from the playlist. Also will erase anything on the
-    #file before writing to it
-    #f = open("newPlaylist.json", "w")
-    #f.truncate()
-    print(finalDict)
-    #f.close()
 
     print("Done!")
 

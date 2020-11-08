@@ -53,6 +53,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         console.log(ratedPlaylist);
         
       }
+      
       var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
 
@@ -190,22 +191,25 @@ class Tree {
                 queue.push(child)
             });
 
+          }
         }
-    }
-}
-const t = new Tree();
-for(i = 0; i < selectedPlaylist.items.length;i++)
-  {
-    s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
-    t.add(s1)
-  }
-t.bfs()
-    },1000);
+      }
+      const t = new Tree();
+      for(i = 0; i < selectedPlaylist.items.length;i++)
+      {
+        s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
+        t.add(s1)
+      }
+        t.bfs()
+        removeMisMatched();
+  },1000);
 
-  }
+}
 });
 
-
+/**
+* This function updates the users information on screen while also setting the initial state to pick a playlist
+*/
 function getUser()
 {
   spotifyApi.getMe(null).then(
@@ -268,7 +272,7 @@ function getUser()
               var element = document.getElementById("trackList");
               newButton.onclick = function(){
               selectedSong =i;
-              selectedSongid = data.items[i].track.id
+              selectedSongid = data.items[i].track.id;
               updateIframe(selectedSongid);
               console.log(data);};
               element.appendChild(newButton);
@@ -283,6 +287,11 @@ function getUser()
     }
 
 var data_str;
+
+/**
+* This creates a JSON dictionary of songs and their respective features.
+* @param {JSON} data This takes a JSON object representing a playlist
+*/
 function createPlaylistDictionary(data)
 {
   let length = data.items.length;
@@ -302,18 +311,6 @@ function createPlaylistDictionary(data)
               key        : features.key,
               tempo      : features.tempo,
               valence    : features.valence};
-        /**
-        tempFeatures = {ID : i,
-              acousticness : features.acousticness,
-              danceability: features.danceability,
-              energy       : features.energy,
-              instrumentalness: features.instrumentalness,
-              key        : features.key,
-              liveness   : features.liveness,
-              loudness   : features.loudness,
-              speechiness: features.speechiness,
-              tempo      : features.tempo,
-              valence    : features.valence}; */
         playListDictionary.Playlist.push(tempFeatures);
         data_str = encodeURIComponent(JSON.stringify(playListDictionary));
         misMatchURL.href = '/misMatch/?somevalue=' + data_str + "&access_token=" + spotifyApi.getAccessToken() + "&playlistID=" + playListID;
@@ -354,9 +351,12 @@ function finishPlaylist()
       console.error(err);
     });
   }
+
+/**
+* This function is a reaction function when the user clicks the remove song button
+*/
 function removeSong()
   {
-    console.log(selectedSong);
     let temp = 0;
     let offset = false;
     for(let i=0;i<selectedPlaylist.items.length;i++)
@@ -369,6 +369,7 @@ function removeSong()
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
         newButton.onclick = function(){selectedSong = i;
+        selectedSongid = selectedPlaylist.items[i].track.id;
         updateIframe(selectedSongid)};
         element.appendChild(newButton);
       }
@@ -376,8 +377,6 @@ function removeSong()
         console.log("Splice");
         temp = i;
         offset = true;
-        //delete selectedPlaylist.items[i];
-        //selectedPlaylist.items.length = selectedPlaylist.items.length-1;
       }
       else if(offset)
       {
@@ -387,6 +386,8 @@ function removeSong()
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
         newButton.onclick = function(){selectedSong = i-1;
+        selectedSongid = selectedPlaylist.items[i-1].track.id;
+        updateIframe(selectedSongid);
         };
         element.appendChild(newButton);
         console.log("Incorrect");
@@ -400,21 +401,68 @@ function removeSong()
       element.removeChild(element.childNodes[0]);
 
     }
-    console.log(selectedSong);
-    console.log(selectedPlaylist.items.length);
 }
 
+/**
+* This function takes a specific song to remove from the playlist
+* @param {int} specificSong A integer representing a song to remove
+*/
+function removeSpecific(specificSong)
+{
+  let temp = 0;
+  let offset = false;
+  for(let i=0;i<selectedPlaylist.items.length;i++)
+  {
+    if (i != specificSong && !offset)
+    {
+      var newButton = document.createElement("button");
+      var node = document.createTextNode(selectedPlaylist.items[i].track.name);
+      newButton.appendChild(node);
+      var element = document.getElementById("trackList");
+      newButton.onclick = function(){selectedSong = i;
+      selectedSongid = selectedPlaylist.items[i].track.id;
+      updateIframe(selectedSongid)};
+      element.appendChild(newButton);
+    }
+    else if (i==specificSong){
+      console.log("Splice");
+      temp = i;
+      offset = true;
+    }
+    else if(offset)
+    {
+      var newButton = document.createElement("button");
+      var node = document.createTextNode(selectedPlaylist.items[i].track.name);
+      newButton.appendChild(node);
+      var element = document.getElementById("trackList");
+      newButton.onclick = function(){selectedSong = i-1;
+      selectedSongid = selectedPlaylist.items[i-1].track.id;
+      updateIframe(selectedSongid);
+      };
+      element.appendChild(newButton);
+    }
+  }
+  selectedPlaylist.items.splice(temp,1);
+  for(let x=0;x<selectedPlaylist.items.length+1;x++)
+  {
+    var element = document.getElementById("trackList");
+    element.removeChild(element.childNodes[0]);
 
+  }
+}
+
+/**
+* This runs through the playlist and removes songs that are outside a certain range
+*/
 function removeMisMatched()
 {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    document.getElementById("demo").innerHTML = this.responseText;
-  }};
-  xhttp.open("POST","../flow.js",true);
-  xhttp.send();
+  removeSpecific(1);
+  console.log("Testing Mismatched");
 }
+
+/**
+* This function updates the iframe that lets a user play a specific song
+*/
 function updateIframe(id)
 {
   var url = "https://open.spotify.com/embed/track/" + id
