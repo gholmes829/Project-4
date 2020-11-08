@@ -151,14 +151,14 @@ button{
 
 .slider{
   position:absolute;
-  top: 67%;
-  left: 2%;
+  top: 100%;
+  left: 130%;
   width: 96%;
 }
 
 .slider-text{
   position:absolute;
-  top: -50%;
+  top: -150%;
   left: 80%;
   color: #BFBFBF;
 }
@@ -184,7 +184,7 @@ button{
   width: 43%;
   height: 20%;
   background-color: #1F1F1F;
-  height: 90%;
+  height: 85%;
   display: block;
   right: 2%;
   overflow: scroll;
