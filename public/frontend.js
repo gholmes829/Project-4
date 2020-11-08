@@ -52,162 +52,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
           songRating : newRating
         }
         ratedPlaylist.push(tempObj);
-<<<<<<< HEAD
       }
       setTimeout( removeMisMatched(selectedPlaylist,ratedPlaylist),2000);
-      var c = document.getElementById("canvas");
-var ctx = c.getContext("2d");
 
-const LEFT = 0
-const RIGHT = 1
+        showGraph();
+      },1000);
 
-class Node {
-    constructor(value) {
-        this.value = value
-        this.children = []
-        this.parent = null
-        this.pos = { x: 0, y: 0 }
-        this.r = 20
-    }
-
-    get left() {
-        return this.children[LEFT]
-    }
-
-    set left(value) {
-        value.parent = this
-        this.children[LEFT] = value
-    }
-
-    get right() {
-        return this.children[RIGHT]
-    }
-
-    set right(value) {
-        value.parent = this
-        this.children[RIGHT] = value
-    }
-
-    set position(position) {
-        this.pos = position
-    }
-
-    get position() {
-        return this.pos
-    }
-
-    get radius() {
-        return this.r
-    }
-
-}
-
-class Tree {
-    constructor() {
-        this.root = null;
-        this.startPosition = { x: 600, y: 44 }
-        this.axisX = 400
-        this.axisY = 50
-
-    }
-
-    getPosition({ x, y }, isLeft = false) {
-        return { x: isLeft ? x - this.axisX + y : x + this.axisX - y, y: y + this.axisY }
-    }
-
-    add(value) {
-        const newNode = new Node(value);
-        if (this.root == null) {
-            newNode.position = this.startPosition
-            this.root = newNode
-        }
-        else {
-            let node = this.root
-            while (node) {
-                if (node.value == value)
-                    break;
-                if (value > node.value) {
-                    if (node.right == null) {
-                        newNode.position = this.getPosition(node.position)
-                        node.right = newNode
-                        break;
-                    }
-                    node = node.right
-                }
-                else {
-                    if (node.left == null) {
-                        newNode.position = this.getPosition(node.position, true)
-                        node.left = newNode
-                        break;
-                    }
-                    node = node.left
-                }
-            }
-        }
-    }
-
-    all(node) {
-        if (node === undefined)
-            return
-        else {
-            console.log(node.value)
-            this.all(node.left)
-            this.all(node.right)
-        }
-    }
-
-    getAll() {
-        this.all(this.root)
-    }
-
-    bfs() {
-        console.log("ho")
-        const queue = [];
-        const black = "#000"
-
-        queue.push(this.root);
-
-        while (queue.length !== 0) {
-            const node = queue.shift();
-            const { x, y } = node.position
-
-            const color = "#BFBFBF"
-            ctx.beginPath();
-            ctx.arc(x, y, node.radius, 0, 2 * Math.PI)
-            ctx.strokeStyle = black
-            ctx.fillStyle = color
-            ctx.fill()
-            ctx.stroke()
-            ctx.strokeStyle = black
-            ctx.strokeText(node.value, x-10, y)
-
-
-            node.children.forEach(child => {
-
-                const { x: x1, y: y1 } = child.position;
-                ctx.beginPath();
-                ctx.moveTo(x, y + child.radius);
-                ctx.lineTo(x1, y1 - child.radius)
-                ctx.stroke();
-                queue.push(child)
-            });
-
-          }
-        }
-      }
-      const t = new Tree();
-      for(i = 0; i < selectedPlaylist.items.length;i++)
-      {
-        s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
-        t.add(s1)
-      }
-        t.bfs()
-=======
-      }
-      showGraph();
-      removeMisMatched();
->>>>>>> 8b97d69ff64afc9d795f83ac70a02396cd2b6d63
-  },1000);
 
 
 }
@@ -460,7 +310,9 @@ function updateSlider()
   sliderValue = document.getElementById("range").value;
   document.getElementById("UpdateSlider").innerHTML = sliderValue;
   console.log(sliderValue);
-  removeMisMatched(ratedPlaylist)
+  removeMisMatched(ratedPlaylist);
+  showGraph();
+
 }
 /**
 * This runs through the playlist and removes songs that are outside a certain range
