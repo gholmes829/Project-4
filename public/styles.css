@@ -165,8 +165,7 @@ button{
   height: 90%;
   display: block;
   right: 2%;
-
-
+  overflow: scroll;
   position:absolute;
   border-radius: 1vh;
 }
