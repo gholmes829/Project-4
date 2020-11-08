@@ -24,6 +24,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   {
     let location = window.location.href;
     location = decodeURIComponent(location);
+	console.log(location);
     let start = (location.indexOf("&playList=")+10),
         stop = location.indexOf("&playlistID=") - start;
     playListID = location.substring(location.indexOf("&playlistID=")+12);
