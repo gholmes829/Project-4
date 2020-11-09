@@ -22,6 +22,7 @@
         <div id="login">
           <a href="/login" class = "loginButton">Log in with Spotify</a>
         </div>
+        <button id = "go_back" class= "resetButton" onclick= "goBack()">Reset</button>
     </div>
     <img id= "logo" class = "logo" src = "Logo.png"></img>
 
@@ -67,6 +68,7 @@
                 success: function(response) {
                   $('#login').hide();
                   $('#loggedin').show();
+                  document.getElementById("go_back").style.visibility= "visible";
                 }
             });
           } else {

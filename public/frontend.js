@@ -140,6 +140,11 @@ function showTracks(oldDataId){
 
 var data_str;
 
+function goBack()
+{
+  window.location.href = "/#access_token=" + spotifyApi.getAccessToken();
+  location.reload()
+}
 /**
 * This creates a JSON dictionary of songs and their respective features.
 * @param {JSON} data This takes a JSON object representing a playlist

@@ -82,6 +82,25 @@
   border-radius: 20px;
 }
 
+.resetButton {
+  visibility: hidden;
+  background-color: #BFBFBF;
+  left: 5%;
+  border: none;
+  color: black;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position:absolute;
+  top: 75%;
+  border-radius: 20px;
+  width: 90%;
+}
+
 .logo{
   position: absolute;
   top: 57%;
