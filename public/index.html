@@ -22,6 +22,7 @@
         <div id="login">
           <a href="/login" class = "loginButton">Log in with Spotify</a>
         </div>
+        <button id = "go_back" class= "resetButton" onclick= "goBack()">Reset</button>
     </div>
     <img id= "logo" class = "logo" src = "Logo.png"></img>
 
@@ -67,6 +68,7 @@
                 success: function(response) {
                   $('#login').hide();
                   $('#loggedin').show();
+                  document.getElementById("go_back").style.visibility= "visible";
                 }
             });
           } else {
@@ -92,14 +94,16 @@
       <button id = "finish" class = "finish-button" onclick = "finishPlaylist()">Finish</button>
       <h4 style = "color: #BFBFBF; position:absolute; top:93%; left:160%">Change Variance</h4>
       <div class = "slider">
-        <input style = "width: 70%"type = "range" min="0" max = "100" value = "1" id = "range" onclick = "updateSlider()">
+        <input style = "width: 70%"type = "range" min="0" max = "100" value = "100" id = "range" onclick = "updateSlider()">
         <h5 class = "slider-text" id = "UpdateSlider">1</h5>
       </div>
       <a href="/misMatch" id = "generate-remove" class = "generate-remove-button">Detect mismatched songs</a>
 
     </div>
     <div id = "graph-container" class="graph-container">
-      <canvas id="canvas"width="750" height="2000" style="border:1px solid #000000;"></canvas>
+
+     <canvas id="canvas"width="1" height="1" style="border:1px solid #000000;"></canvas>
+
     </div>
 
     <div id = "Tests" class = "test-container">

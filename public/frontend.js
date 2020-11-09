@@ -8,7 +8,7 @@ var selected_playlist_name;
 var playListID;
 var ratedPlaylist;
 var misMatchedSongs;
-
+var misMatchFlag = false;
 var sliderValue;
 
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -30,6 +30,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let start = (location.indexOf("&playList=")+10),
         stop = location.indexOf("&playlistID=") - start;
     playListID = location.substring(location.indexOf("&playlistID=")+12);
+    document.getElementById("remove_song").style.visibility = "visible";
     showTracks(playListID);
     setTimeout(() => {
       let newPlaylist = location.substr(start,stop);
@@ -115,6 +116,7 @@ function showTracks(oldDataId){
   spotifyApi.getPlaylistTracks(oldDataId).then(
   function (data) {
       createPlaylistDictionary(data);
+	  updateIframe(data.items[0].track.id);
       selectedPlaylist = data;
       document.getElementById("header").innerHTML = "Choose a Track to play";
       for (let i = 0; i<data.items.length;i++)
@@ -360,6 +362,8 @@ function showGraph()
 {
   var c = document.getElementById("canvas");
       var ctx = c.getContext("2d");
+      ctx.canvas.width  = 575;
+      ctx.canvas.height = selectedPlaylist.items.length*35;
       const black = "#ffffff"
       
       var other = 0;
@@ -391,14 +395,15 @@ function showGraph()
       for(i = 0; i < selectedPlaylist.items.length;i++)
       {
 
-        if(i%4==0)
+        if(i%4==0 && i != 0)
         {
           j= j+1;
           other = 0;
         }
         ctx.beginPath();
-        ctx.arc(90+other*150, 150*j+30, 60, 0, 2 * Math.PI);
-        //s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
+
+        ctx.arc(75+other*125, (125*j+100), 50, 0, 2 * Math.PI);
+
         //console.log(ratedPlaylist);
         if(i<numToRemove)
         {
@@ -412,9 +417,11 @@ function showGraph()
 
         ctx.fill();
         ctx.stroke();
-        ctx.strokeStyle = black;
-		console.log()
-        ctx.strokeText(sortedSongs[i].track.name, 40+other*150, 150*j+30)
+
+
+        ctx.fillStyle = black;
+        ctx.fillText(selectedPlaylist.items[i].track.name, 35+other*125, 125*j+100,80)
+
         other = other+1;
       }
 }
