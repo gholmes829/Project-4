@@ -1,4 +1,3 @@
-
 var spotifyApi;
 
 var userID;
@@ -13,6 +12,8 @@ var misMatchedSongs;
 var sliderValue;
 
 window.addEventListener('DOMContentLoaded', (event) => {
+  var x = document.getElementById("remove_song");
+  x.style.display = "none";
   spotifyApi = new SpotifyWebApi();
   let html_access_token = document.getElementById("access");
   if(html_access_token.innerHTML.length > 0)
@@ -124,6 +125,8 @@ function showTracks(oldDataId){
           var element = document.getElementById("trackList");
           newButton.onclick = function()
           {
+            var x = document.getElementById("remove_song");
+            x.style.display = "block";
             selectedSong =i;
             selectedSongid = data.items[i].track.id;
             updateIframe(selectedSongid);
@@ -137,6 +140,11 @@ function showTracks(oldDataId){
 
 var data_str;
 
+function goBack()
+{
+  window.location.href = "/#access_token=" + spotifyApi.getAccessToken();
+  location.reload()
+}
 /**
 * This creates a JSON dictionary of songs and their respective features.
 * @param {JSON} data This takes a JSON object representing a playlist
@@ -148,7 +156,6 @@ function createPlaylistDictionary(data)
   var tempFeatures = null;
   var tempID = "";
   misMatchURL = document.getElementById("generate-remove");
-  //console.log(playListID);
   for(let i = 0;i<length;i++)
   {
     tempID = data.items[i].track.id;
@@ -200,8 +207,6 @@ function finishPlaylist()
 },250);
 
   setTimeout(() => {
-    console.log(finalPlaylist);
-    console.log(selected_playlist_name)
     spotifyApi.createPlaylist(userID,{name:"Flow Created Playlist"}).then(
       function (data) {
         spotifyApi.addTracksToPlaylist(data.id,finalPlaylist,null).then(
@@ -238,37 +243,47 @@ function removeSong()
         var node = document.createTextNode(selectedPlaylist.items[i].track.name);
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
-        newButton.onclick = function(){selectedSong = i;
+        newButton.onclick = function()
+        {
+          var x = document.getElementById("remove_song");
+          x.style.display = "block";
+          selectedSong = i;
         selectedSongid = selectedPlaylist.items[i].track.id;
         updateIframe(selectedSongid)};
         element.appendChild(newButton);
       }
       else if (i==selectedSong){
-        console.log("Splice");
         temp = i;
         offset = true;
       }
       else if(offset)
       {
-        console.log("Adding selected song " + i);
         var newButton = document.createElement("button");
         var node = document.createTextNode(selectedPlaylist.items[i].track.name);
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
-        newButton.onclick = function(){selectedSong = i-1;
+        newButton.onclick = function(){
+          var x = document.getElementById("remove_song");
+            x.style.display = "block";
+            selectedSong = i-1;
         selectedSongid = selectedPlaylist.items[i-1].track.id;
         updateIframe(selectedSongid);
         };
         element.appendChild(newButton);
-        console.log("Incorrect");
       }
     }
     selectedPlaylist.items.splice(temp,1);
     for(let x=0;x<selectedPlaylist.items.length+1;x++)
     {
-      console.log("delete " + x);
       var element = document.getElementById("trackList");
       element.removeChild(element.childNodes[0]);
+    }
+    var x = document.getElementById("remove_song");
+    x.style.display = "none";
+    if(ratedPlaylist.length > 0)
+    {
+      console.log("remove");
+      showGraph();
     }
 }
 
@@ -346,10 +361,33 @@ function showGraph()
   var c = document.getElementById("canvas");
       var ctx = c.getContext("2d");
       const black = "#ffffff"
-      var j=0;
+      
       var other = 0;
       misMatchedSongs = [];
       console.log(selectedPlaylist.items.length);
+	  
+	  var numToRemove = selectedPlaylist.items.length - (sliderValue/100)*selectedPlaylist.items.length;
+	  
+	  
+	  var scores = [];
+	  
+	  for (i=0; i<selectedPlaylist.items.length; i++) {
+	      scores.push(parseFloat(ratedPlaylist[i].songRating.substring(1)));
+	  }
+	  
+	  var sortedSongs = [];
+	  var sortedScores = scores.sort(function(a, b){return b - a});
+	  
+	  for (i=0; i<selectedPlaylist.items.length; i++) {
+		  
+	      for (j=0; j<selectedPlaylist.items.length; j++) {
+			  if (parseFloat(ratedPlaylist[j].songRating.substring(1)) == sortedScores[i]) {
+				  sortedSongs.push(selectedPlaylist.items[j]);
+			  }
+		  }
+	  }
+	  
+	  var j=0;
       for(i = 0; i < selectedPlaylist.items.length;i++)
       {
 
@@ -360,22 +398,23 @@ function showGraph()
         }
         ctx.beginPath();
         ctx.arc(90+other*150, 150*j+30, 60, 0, 2 * Math.PI);
-        s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
+        //s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
         //console.log(ratedPlaylist);
-        if(sliderValue <=s1)
+        if(i<numToRemove)
         {
-          ctx.fillStyle = "red";
-          misMatchedSongs.push(i);
+          ctx.fillStyle = "#7D204C";
+          misMatchedSongs.push(sortedSongs[i].id);
         }
         else
         {
-          ctx.fillStyle = "blue";
+          ctx.fillStyle = "#1A1648";
         }
 
         ctx.fill();
         ctx.stroke();
         ctx.strokeStyle = black;
-        ctx.strokeText(selectedPlaylist.items[i].track.name, 40+other*150, 150*j+30)
+		console.log()
+        ctx.strokeText(sortedSongs[i].track.name, 40+other*150, 150*j+30)
         other = other+1;
       }
 }
