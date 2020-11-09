@@ -363,7 +363,7 @@ function showGraph()
   var c = document.getElementById("canvas");
       var ctx = c.getContext("2d");
       ctx.canvas.width  = window.innerWidth;
-      ctx.canvas.height = selectedPlaylist.items.length*50;
+      ctx.canvas.height = selectedPlaylist.items.length*60;
       const black = "#ffffff"
       var j=0;
       var other = 0;
@@ -372,13 +372,13 @@ function showGraph()
       for(i = 0; i < selectedPlaylist.items.length;i++)
       {
 
-        if(i%4==0)
+        if(i%4==0 && i != 0)
         {
           j= j+1;
           other = 0;
         }
         ctx.beginPath();
-        ctx.arc(90+other*150, 150*j+30, 60, 0, 2 * Math.PI);
+        ctx.arc(90+other*210, (210*j+100), 80, 0, 2 * Math.PI);
         s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
         //console.log(ratedPlaylist);
         if(sliderValue <=s1)
@@ -393,8 +393,8 @@ function showGraph()
 
         ctx.fill();
         ctx.stroke();
-        ctx.strokeStyle = black;
-        ctx.strokeText(selectedPlaylist.items[i].track.name, 40+other*150, 150*j+30)
+        ctx.fillStyle = black;
+        ctx.fillText(selectedPlaylist.items[i].track.name, 20+other*210, 210*j+100,150)
         other = other+1;
       }
 }
