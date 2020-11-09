@@ -25,14 +25,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
   {
     let location = window.location.href;
     location = decodeURIComponent(location);
-	console.log(location);
+	 // console.log(location);
     let start = (location.indexOf("&playList=")+10),
         stop = location.indexOf("&playlistID=") - start;
     playListID = location.substring(location.indexOf("&playlistID=")+12);
     showTracks(playListID);
     setTimeout(() => {
       let newPlaylist = location.substr(start,stop);
-      console.log(newPlaylist);
+      //console.log(newPlaylist);
       let colin = newPlaylist.indexOf(':');
       let comma = 0;
       let newId = newPlaylist.substr(1,colin-comma-1);
@@ -53,10 +53,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
           songRating : newRating
         }
         ratedPlaylist.push(tempObj);
-      } 
-      showGraph();     
-      removeMisMatched();
-  },1000);
+      }
+      setTimeout( removeMisMatched(selectedPlaylist,ratedPlaylist),2000);
+
+        showGraph();
+      },1000);
+
+
 
 }
 });
@@ -172,6 +175,7 @@ function createPlaylistDictionary(data)
       });
   }
 
+
 }
 
 
@@ -270,6 +274,7 @@ function removeSpecific(specificSong)
 {
   let temp = 0;
   let offset = false;
+  let removed = "";
   for(let i=0;i<selectedPlaylist.items.length;i++)
   {
     if (i != specificSong && !offset)
@@ -286,6 +291,7 @@ function removeSpecific(specificSong)
     else if (i==specificSong){
       console.log("Splice");
       temp = i;
+      removed = i;
       offset = true;
     }
     else if(offset)
@@ -306,8 +312,8 @@ function removeSpecific(specificSong)
   {
     var element = document.getElementById("trackList");
     element.removeChild(element.childNodes[0]);
-
   }
+  return removed;
 }
 
 function updateSlider()
@@ -315,15 +321,27 @@ function updateSlider()
   sliderValue = document.getElementById("range").value;
   document.getElementById("UpdateSlider").innerHTML = sliderValue;
   console.log(sliderValue);
+  removeMisMatched(ratedPlaylist);
   showGraph();
+
 }
 /**
 * This runs through the playlist and removes songs that are outside a certain range
 */
-function removeMisMatched()
+function removeMisMatched(removePlaylist)
 {
-  //removeSpecific(1);
-  console.log("Testing Mismatched");
+  console.log(removePlaylist);
+  songsToRemove = [];
+  for(i = 0 ; i<removePlaylist.length; i++)
+  {
+    if(removePlaylist[i] > sliderValue)
+    {
+      songsToRemove.append(i);
+    }
+  }
+  console.log(songsToRemove);
+
+
 }
 
 /**
@@ -364,7 +382,7 @@ function showGraph()
         {
           ctx.fillStyle = "blue";
         }
-        
+
         ctx.fill();
         ctx.stroke();
         ctx.strokeStyle = black;
