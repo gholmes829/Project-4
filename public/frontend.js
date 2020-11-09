@@ -8,6 +8,7 @@ var selectedPlaylist;
 var selected_playlist_name;
 var playListID;
 var ratedPlaylist;
+var misMatchedSongs;
 
 var sliderValue;
 
@@ -172,7 +173,6 @@ function createPlaylistDictionary(data)
 }
 
 
-
 /**
 * This function takes the current selected playlist and creates a clone of it on spotify
 */
@@ -180,36 +180,47 @@ function finishPlaylist()
 {
   var finalPlaylist = [];
   console.log(selected_playlist_name);
+  console.log(misMatchedSongs);
+  setTimeout(() => {
   for(i = 0; i < selectedPlaylist.items.length;i++)
   {
-    for(j = 0;j <selectedPlaylist.items.length;j++)
+    finalPlaylist.push(selectedPlaylist.items[i].track.uri);
+  }
+  let j = 0;
+  while(j < misMatchedSongs.length)
+  {
+    finalPlaylist.splice(misMatchedSongs[j],1);
+    for(y =0; y<misMatchedSongs.length;y++)
     {
-      if(misMatchedSongs[j] == i)
-      {
-        console.log("This song is removed: " + i);
-      }
-      else {
-        finalPlaylist[i] = (selectedPlaylist.items[i].track.uri).toString();
-      }
+      misMatchedSongs[y] = misMatchedSongs[y] -1;
     }
+    j++;
   }
+  console.log(finalPlaylist);
+},250);
 
-  spotifyApi.createPlaylist(userID,{name:"clone of " + selected_playlist_name}).then(
-    function (data) {
-      spotifyApi.addTracksToPlaylist(data.id,finalPlaylist,null).then(
-        function(newPlaylist){
-          console.log(newPlaylist);
-          window.location.href = "/#access_token=" + spotifyApi.getAccessToken();
-          location.reload();
-        },
-        function(err){
-          console.log(err);
-        });
-    },
-    function (err) {
-      console.error(err);
-    });
-  }
+  setTimeout(() => {
+    console.log(finalPlaylist);
+    console.log(selected_playlist_name)
+    spotifyApi.createPlaylist(userID,{name:"Flow Created Playlist"}).then(
+      function (data) {
+        spotifyApi.addTracksToPlaylist(data.id,finalPlaylist,null).then(
+          function(newPlaylist){
+            console.log(newPlaylist);
+            window.location.href = "/#access_token=" + spotifyApi.getAccessToken();
+            location.reload();
+          },
+          function(err){
+            console.log(err);
+          });
+      },
+      function (err) {
+        console.error(err);
+      });
+  },2000);
+
+}
+
 
 /**
 * This function is a reaction function when the user clicks the remove song button
@@ -330,7 +341,6 @@ function updateIframe(id)
 
 }
 
-var misMatchedSongs;
 function showGraph()
 {
   var c = document.getElementById("canvas");
