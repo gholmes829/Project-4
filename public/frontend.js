@@ -8,10 +8,11 @@ var selectedPlaylist;
 var selected_playlist_name;
 var playListID;
 var ratedPlaylist;
-
 var sliderValue;
 
 window.addEventListener('DOMContentLoaded', (event) => {
+  var x = document.getElementById("remove_song");
+  x.style.display = "none";
   spotifyApi = new SpotifyWebApi();
   let html_access_token = document.getElementById("access");
   if(html_access_token.innerHTML.length > 0)
@@ -128,6 +129,8 @@ function showTracks(oldDataId){
           var element = document.getElementById("trackList");
           newButton.onclick = function()
           {
+            var x = document.getElementById("remove_song");
+            x.style.display = "block";
             selectedSong =i;
             selectedSongid = data.items[i].track.id;
             updateIframe(selectedSongid);
@@ -222,7 +225,10 @@ function removeSong()
         var node = document.createTextNode(selectedPlaylist.items[i].track.name);
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
-        newButton.onclick = function(){selectedSong = i;
+        newButton.onclick = function(){
+          var x = document.getElementById("remove_song");
+          x.style.display = "block";
+          selectedSong = i;
         selectedSongid = selectedPlaylist.items[i].track.id;
         updateIframe(selectedSongid)};
         element.appendChild(newButton);
@@ -239,7 +245,10 @@ function removeSong()
         var node = document.createTextNode(selectedPlaylist.items[i].track.name);
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
-        newButton.onclick = function(){selectedSong = i-1;
+        newButton.onclick = function(){
+          var x = document.getElementById("remove_song");
+          x.style.display = "block";
+        selectedSong = i-1;
         selectedSongid = selectedPlaylist.items[i-1].track.id;
         updateIframe(selectedSongid);
         };
@@ -254,6 +263,8 @@ function removeSong()
       var element = document.getElementById("trackList");
       element.removeChild(element.childNodes[0]);
     }
+    var x = document.getElementById("remove_song");
+    x.style.display = "none";
 }
 
 /**
@@ -333,7 +344,9 @@ function updateIframe(id)
   document.getElementById("playButton").src = url;
 
 }
-
+/**
+ * prints the graph
+ */
 function showGraph()
 {
   var c = document.getElementById("canvas");
