@@ -9,7 +9,7 @@ var selected_playlist_name;
 var playListID;
 var ratedPlaylist;
 var misMatchedSongs;
-
+var misMatchFlag = false;
 var sliderValue;
 
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -31,6 +31,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let start = (location.indexOf("&playList=")+10),
         stop = location.indexOf("&playlistID=") - start;
     playListID = location.substring(location.indexOf("&playlistID=")+12);
+    document.getElementById("remove_song").style.visibility = "visible";
     showTracks(playListID);
     setTimeout(() => {
       let newPlaylist = location.substr(start,stop);
