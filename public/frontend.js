@@ -41,6 +41,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         songRating : newRating
       }
       ratedPlaylist = [tempObj];
+
       for(i = 1; i < selectedPlaylist.items.length;i++)
       {
         colin = newPlaylist.indexOf(':',colin+1);
@@ -53,7 +54,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
         ratedPlaylist.push(tempObj);
       }
-      setTimeout( removeMisMatched(selectedPlaylist,ratedPlaylist),2000);
+      setTimeout( removeMisMatched(ratedPlaylist),2000);
 
         showGraph();
       },1000);
@@ -319,16 +320,6 @@ function updateSlider()
 */
 function removeMisMatched(removePlaylist)
 {
-  console.log(removePlaylist);
-  songsToRemove = [];
-  for(i = 0 ; i<removePlaylist.length; i++)
-  {
-    if(removePlaylist[i] > sliderValue)
-    {
-      songsToRemove.append(i);
-    }
-  }
-  console.log(songsToRemove);
 
 
 }
