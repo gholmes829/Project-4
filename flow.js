@@ -113,30 +113,29 @@ var spawn = require("child_process").spawn;
 var fs = require('fs');
 
 var textChunk = "";
+
 function check(playList,access_token,id,res)
 {
-	var process = spawn('python3',["-u","./backend/__main__.py",playList]);
-	process.stdout.on('data',function(chunk){
+	var process = spawn('python',["-u","./backend/__main__.py",playList]);
+	
+	console.log("spawned: " + process.pid);
 
-	  textChunk = chunk.toString('utf8');// buffer to string
-    console.log(textChunk);
+	process.on('error', function () {
+	  console.log("Failed to start child.");
+	});
+	
+	process.stdout.on('data',function(chunk){
+		textChunk = chunk.toString('utf8');// buffer to string
 	  });
 
 	process.on("close", function(code) {
-	setTimeout(() => {
-	if (textChunk=="".substr()) {
-		console.log("Trying again...");
-		check(playList, access_token, id, res);
-	}
-	else {
-		let start = textChunk.indexOf("{"),
-		    stop  = textChunk.indexOf("}");
+	
+	let start = textChunk.indexOf("{"),
+	stop  = textChunk.indexOf("}");
+	textChunk = textChunk.substr(start,stop+1);
+	redirectBack(playList,access_token,id,res);
+	
 
-		textChunk = textChunk.substr(start,stop+1);
-    console.log("Data \"" + textChunk  + "\"");
-		redirectBack(playList,access_token,id,res);
-	}
-	}, 100);
 	});
 }
 
@@ -151,7 +150,6 @@ function redirectBack(playList,access_token,id,res)
 }
 
 app.get('/misMatch', function(req, res) {
-    console.log(req.query.somevalue);
     check(req.query.somevalue,req.query.access_token,req.query.playlistID,res);
     });
 
@@ -160,7 +158,7 @@ function runTests(req,res)
 
 
 
-          var process = spawn('pythone',["-u","./backend/testing.py"]);
+          var process = spawn('python',["-u","./backend/testing.py"]);
           process.stdout.on('data',function(chunk){
 
               textChunk = chunk.toString('utf8');// buffer to string
@@ -170,7 +168,6 @@ function runTests(req,res)
          let start = textChunk.indexOf("["),
               stop  = textChunk.indexOf("]");
           textChunk = textChunk.substr(start,stop+1);
-          console.log(textChunk);
           redirectTests(req,res,textChunk);
 		});
 

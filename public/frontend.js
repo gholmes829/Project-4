@@ -8,10 +8,13 @@ var selectedPlaylist;
 var selected_playlist_name;
 var playListID;
 var ratedPlaylist;
+var misMatchedSongs;
 
 var sliderValue;
 
 window.addEventListener('DOMContentLoaded', (event) => {
+  var x = document.getElementById("remove_song");
+  x.style.display = "none";
   spotifyApi = new SpotifyWebApi();
   let html_access_token = document.getElementById("access");
   if(html_access_token.innerHTML.length > 0)
@@ -24,7 +27,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   {
     let location = window.location.href;
     location = decodeURIComponent(location);
-	 // console.log(location);
+	 //console.log(location);
     let start = (location.indexOf("&playList=")+10),
         stop = location.indexOf("&playlistID=") - start;
     playListID = location.substring(location.indexOf("&playlistID=")+12);
@@ -41,6 +44,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         songRating : newRating
       }
       ratedPlaylist = [tempObj];
+      //console.log(selectedPlaylist);
       for(i = 1; i < selectedPlaylist.items.length;i++)
       {
         colin = newPlaylist.indexOf(':',colin+1);
@@ -52,17 +56,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
           songRating : newRating
         }
         ratedPlaylist.push(tempObj);
+
       }
-      setTimeout( removeMisMatched(selectedPlaylist,ratedPlaylist),2000);
-
-        showGraph();
-      },1000);
-
-
-
-}
+      showGraph();
+    },1000);
+  }
 });
-
 /**
 * This function updates the users information on screen while also setting the initial state to pick a playlist
 */
@@ -127,6 +126,8 @@ function showTracks(oldDataId){
           var element = document.getElementById("trackList");
           newButton.onclick = function()
           {
+            var x = document.getElementById("remove_song");
+            x.style.display = "block";
             selectedSong =i;
             selectedSongid = data.items[i].track.id;
             updateIframe(selectedSongid);
@@ -181,7 +182,6 @@ function createPlaylistDictionary(data)
 }
 
 
-
 /**
 * This function takes the current selected playlist and creates a clone of it on spotify
 */
@@ -189,26 +189,47 @@ function finishPlaylist()
 {
   var finalPlaylist = [];
   console.log(selected_playlist_name);
+  console.log(misMatchedSongs);
+  setTimeout(() => {
   for(i = 0; i < selectedPlaylist.items.length;i++)
   {
-    finalPlaylist[i] = (selectedPlaylist.items[i].track.uri).toString();
+    finalPlaylist.push(selectedPlaylist.items[i].track.uri);
   }
+  let j = 0;
+  while(j < misMatchedSongs.length)
+  {
+    finalPlaylist.splice(misMatchedSongs[j],1);
+    for(y =0; y<misMatchedSongs.length;y++)
+    {
+      misMatchedSongs[y] = misMatchedSongs[y] -1;
+    }
+    j++;
+  }
+  console.log(finalPlaylist);
+},250);
 
-  spotifyApi.createPlaylist(userID,{name:"clone of " + selected_playlist_name}).then(
-    function (data) {
-      spotifyApi.addTracksToPlaylist(data.id,finalPlaylist,null).then(
-        function(newPlaylist){
-          console.log(newPlaylist);
-          location.reload();
-        },
-        function(err){
-          console.log(err);
-        });
-    },
-    function (err) {
-      console.error(err);
-    });
-  }
+  setTimeout(() => {
+    console.log(finalPlaylist);
+    console.log(selected_playlist_name)
+    spotifyApi.createPlaylist(userID,{name:"Flow Created Playlist"}).then(
+      function (data) {
+        spotifyApi.addTracksToPlaylist(data.id,finalPlaylist,null).then(
+          function(newPlaylist){
+            console.log(newPlaylist);
+            window.location.href = "/#access_token=" + spotifyApi.getAccessToken();
+            location.reload();
+          },
+          function(err){
+            console.log(err);
+          });
+      },
+      function (err) {
+        console.error(err);
+      });
+  },2000);
+
+}
+
 
 /**
 * This function is a reaction function when the user clicks the remove song button
@@ -226,7 +247,11 @@ function removeSong()
         var node = document.createTextNode(selectedPlaylist.items[i].track.name);
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
-        newButton.onclick = function(){selectedSong = i;
+        newButton.onclick = function()
+        {
+          var x = document.getElementById("remove_song");
+          x.style.display = "block";
+          selectedSong = i;
         selectedSongid = selectedPlaylist.items[i].track.id;
         updateIframe(selectedSongid)};
         element.appendChild(newButton);
@@ -243,7 +268,10 @@ function removeSong()
         var node = document.createTextNode(selectedPlaylist.items[i].track.name);
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
-        newButton.onclick = function(){selectedSong = i-1;
+        newButton.onclick = function(){
+          var x = document.getElementById("remove_song");
+            x.style.display = "block";
+            selectedSong = i-1;
         selectedSongid = selectedPlaylist.items[i-1].track.id;
         updateIframe(selectedSongid);
         };
@@ -258,6 +286,8 @@ function removeSong()
       var element = document.getElementById("trackList");
       element.removeChild(element.childNodes[0]);
     }
+    var x = document.getElementById("remove_song");
+    x.style.display = "none";
 }
 
 /**
@@ -315,26 +345,7 @@ function updateSlider()
   sliderValue = document.getElementById("range").value;
   document.getElementById("UpdateSlider").innerHTML = sliderValue;
   console.log(sliderValue);
-  removeMisMatched(ratedPlaylist);
   showGraph();
-
-}
-/**
-* This runs through the playlist and removes songs that are outside a certain range
-*/
-function removeMisMatched(removePlaylist)
-{
-  console.log(removePlaylist);
-  songsToRemove = [];
-  for(i = 0 ; i<removePlaylist.length; i++)
-  {
-    if(removePlaylist[i] > sliderValue)
-    {
-      songsToRemove.append(i);
-    }
-  }
-  console.log(songsToRemove);
-
 
 }
 
@@ -355,6 +366,8 @@ function showGraph()
       const black = "#ffffff"
       var j=0;
       var other = 0;
+      misMatchedSongs = [];
+      console.log(selectedPlaylist.items.length);
       for(i = 0; i < selectedPlaylist.items.length;i++)
       {
 
@@ -366,9 +379,11 @@ function showGraph()
         ctx.beginPath();
         ctx.arc(90+other*150, 150*j+30, 60, 0, 2 * Math.PI);
         s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
+        //console.log(ratedPlaylist);
         if(sliderValue <=s1)
         {
           ctx.fillStyle = "red";
+          misMatchedSongs.push(i);
         }
         else
         {
