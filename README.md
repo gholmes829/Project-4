@@ -1,5 +1,5 @@
 # Run the Program
-In order to run the demo you will need [node.js](https://node.js.org/en/) and a valid spotify account.
+In order to run the demo you will need [node.js](https://node.js.org/en/), python3, the numpy python library and a valid spotify account.
 1. To run the program you will need to type `node flow.js` to create a local server.
 2. Then to access the server open a web browser and go to the url `http://localhost:8888/'
 3. Once at `http://localhost:8888/` click the login button to begin
@@ -19,3 +19,6 @@ This project uses the following packages:
 - [JSDocs: An API documentation generator for JavaScript.](https://github.com/jsdoc/jsdoc)
 - [JMperez's spotify-web-api-js: A wrapper for the spotify web api](https://github.com/JMPerez/spotify-web-api-js)
 - [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
+
+# To Run tests
+You must click the login button and then once on the main page press the tilda key and all unit tests will be displayed on screen.
