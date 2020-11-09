@@ -66,6 +66,7 @@
 }
 
 .loginButton {
+  visibility: visible;
   background-color: #BFBFBF;
   left: 5%;
   border: none;
@@ -77,9 +78,10 @@
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-  position:relative;
-  top: 100px;
+  position:absolute;
+  top: 75%;
   border-radius: 20px;
+  width: 90%;
 }
 
 .resetButton {
