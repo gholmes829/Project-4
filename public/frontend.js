@@ -8,11 +8,10 @@ var selectedPlaylist;
 var selected_playlist_name;
 var playListID;
 var ratedPlaylist;
+
 var sliderValue;
 
 window.addEventListener('DOMContentLoaded', (event) => {
-  var x = document.getElementById("remove_song");
-  x.style.display = "none";
   spotifyApi = new SpotifyWebApi();
   let html_access_token = document.getElementById("access");
   if(html_access_token.innerHTML.length > 0)
@@ -25,7 +24,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   {
     let location = window.location.href;
     location = decodeURIComponent(location);
-	 // console.log(location);
+	 //console.log(location);
     let start = (location.indexOf("&playList=")+10),
         stop = location.indexOf("&playlistID=") - start;
     playListID = location.substring(location.indexOf("&playlistID=")+12);
@@ -42,7 +41,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         songRating : newRating
       }
       ratedPlaylist = [tempObj];
-
       for(i = 1; i < selectedPlaylist.items.length;i++)
       {
         colin = newPlaylist.indexOf(':',colin+1);
@@ -54,17 +52,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
           songRating : newRating
         }
         ratedPlaylist.push(tempObj);
-      }
-      setTimeout( removeMisMatched(ratedPlaylist),2000);
-
         showGraph();
-      },1000);
-
-
-
-}
+      }},1000);
+  }
 });
-
 /**
 * This function updates the users information on screen while also setting the initial state to pick a playlist
 */
@@ -129,8 +120,6 @@ function showTracks(oldDataId){
           var element = document.getElementById("trackList");
           newButton.onclick = function()
           {
-            var x = document.getElementById("remove_song");
-            x.style.display = "block";
             selectedSong =i;
             selectedSongid = data.items[i].track.id;
             updateIframe(selectedSongid);
@@ -190,7 +179,16 @@ function finishPlaylist()
   console.log(selected_playlist_name);
   for(i = 0; i < selectedPlaylist.items.length;i++)
   {
-    finalPlaylist[i] = (selectedPlaylist.items[i].track.uri).toString();
+    for(j = 0;j <selectedPlaylist.items.length;j++)
+    {
+      if(misMatchedSongs[j] == i)
+      {
+        console.log("This song is removed: " + i);
+      }
+      else {
+        finalPlaylist[i] = (selectedPlaylist.items[i].track.uri).toString();
+      }
+    }
   }
 
   spotifyApi.createPlaylist(userID,{name:"clone of " + selected_playlist_name}).then(
@@ -198,6 +196,7 @@ function finishPlaylist()
       spotifyApi.addTracksToPlaylist(data.id,finalPlaylist,null).then(
         function(newPlaylist){
           console.log(newPlaylist);
+          window.location.href = "/#access_token=" + spotifyApi.getAccessToken();
           location.reload();
         },
         function(err){
@@ -225,10 +224,7 @@ function removeSong()
         var node = document.createTextNode(selectedPlaylist.items[i].track.name);
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
-        newButton.onclick = function(){
-          var x = document.getElementById("remove_song");
-          x.style.display = "block";
-          selectedSong = i;
+        newButton.onclick = function(){selectedSong = i;
         selectedSongid = selectedPlaylist.items[i].track.id;
         updateIframe(selectedSongid)};
         element.appendChild(newButton);
@@ -245,10 +241,7 @@ function removeSong()
         var node = document.createTextNode(selectedPlaylist.items[i].track.name);
         newButton.appendChild(node);
         var element = document.getElementById("trackList");
-        newButton.onclick = function(){
-          var x = document.getElementById("remove_song");
-          x.style.display = "block";
-        selectedSong = i-1;
+        newButton.onclick = function(){selectedSong = i-1;
         selectedSongid = selectedPlaylist.items[i-1].track.id;
         updateIframe(selectedSongid);
         };
@@ -263,8 +256,6 @@ function removeSong()
       var element = document.getElementById("trackList");
       element.removeChild(element.childNodes[0]);
     }
-    var x = document.getElementById("remove_song");
-    x.style.display = "none";
 }
 
 /**
@@ -326,14 +317,6 @@ function updateSlider()
   showGraph();
 
 }
-/**
-* This runs through the playlist and removes songs that are outside a certain range
-*/
-function removeMisMatched(removePlaylist)
-{
-
-
-}
 
 /**
 * This function updates the iframe that lets a user play a specific song
@@ -344,9 +327,8 @@ function updateIframe(id)
   document.getElementById("playButton").src = url;
 
 }
-/**
- * prints the graph
- */
+
+var misMatchedSongs;
 function showGraph()
 {
   var c = document.getElementById("canvas");
@@ -354,6 +336,8 @@ function showGraph()
       const black = "#ffffff"
       var j=0;
       var other = 0;
+      misMatchedSongs = [];
+      console.log(selectedPlaylist.items.length);
       for(i = 0; i < selectedPlaylist.items.length;i++)
       {
 
@@ -368,6 +352,7 @@ function showGraph()
         if(sliderValue <=s1)
         {
           ctx.fillStyle = "red";
+          misMatchedSongs.push(i);
         }
         else
         {
