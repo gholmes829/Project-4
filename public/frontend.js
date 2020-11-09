@@ -41,6 +41,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         songRating : newRating
       }
       ratedPlaylist = [tempObj];
+      //console.log(selectedPlaylist);
       for(i = 1; i < selectedPlaylist.items.length;i++)
       {
         colin = newPlaylist.indexOf(':',colin+1);
@@ -52,8 +53,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
           songRating : newRating
         }
         ratedPlaylist.push(tempObj);
-        showGraph();
-      }},1000);
+
+      }
+      showGraph();
+    },1000);
   }
 });
 /**
@@ -313,7 +316,6 @@ function updateSlider()
   sliderValue = document.getElementById("range").value;
   document.getElementById("UpdateSlider").innerHTML = sliderValue;
   console.log(sliderValue);
-  removeMisMatched(ratedPlaylist);
   showGraph();
 
 }
@@ -349,6 +351,7 @@ function showGraph()
         ctx.beginPath();
         ctx.arc(90+other*150, 150*j+30, 60, 0, 2 * Math.PI);
         s1 = parseFloat(ratedPlaylist[i].songRating.substring(1))
+        //console.log(ratedPlaylist);
         if(sliderValue <=s1)
         {
           ctx.fillStyle = "red";
