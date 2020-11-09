@@ -148,7 +148,6 @@ function createPlaylistDictionary(data)
   var tempFeatures = null;
   var tempID = "";
   misMatchURL = document.getElementById("generate-remove");
-  //console.log(playListID);
   for(let i = 0;i<length;i++)
   {
     tempID = data.items[i].track.id;
@@ -200,8 +199,6 @@ function finishPlaylist()
 },250);
 
   setTimeout(() => {
-    console.log(finalPlaylist);
-    console.log(selected_playlist_name)
     spotifyApi.createPlaylist(userID,{name:"Flow Created Playlist"}).then(
       function (data) {
         spotifyApi.addTracksToPlaylist(data.id,finalPlaylist,null).then(
@@ -244,13 +241,11 @@ function removeSong()
         element.appendChild(newButton);
       }
       else if (i==selectedSong){
-        console.log("Splice");
         temp = i;
         offset = true;
       }
       else if(offset)
       {
-        console.log("Adding selected song " + i);
         var newButton = document.createElement("button");
         var node = document.createTextNode(selectedPlaylist.items[i].track.name);
         newButton.appendChild(node);
@@ -260,15 +255,18 @@ function removeSong()
         updateIframe(selectedSongid);
         };
         element.appendChild(newButton);
-        console.log("Incorrect");
       }
     }
     selectedPlaylist.items.splice(temp,1);
     for(let x=0;x<selectedPlaylist.items.length+1;x++)
     {
-      console.log("delete " + x);
       var element = document.getElementById("trackList");
       element.removeChild(element.childNodes[0]);
+    }
+    if(ratedPlaylist.length > 0)
+    {
+      console.log("remove");
+      showGraph();
     }
 }
 
