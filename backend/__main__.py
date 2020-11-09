@@ -63,17 +63,6 @@ def main(argv):
 	centroids = clusters.keys()
 	clusters.printInfo()
 
-	colors = {
-		0: "green",
-		1: "red",
-		2: "orange",
-		3: "purple",
-		4: "cyan",
-		5: "magenta",
-		6: "pink",
-		7: "yellow",
-	}
-
 	d, s = clusters.orderedData, clusters.orderedScores
 
 	#Creates a new dictionary called finalDict that, when filled, will have the IDs of the songs as the keys
