@@ -363,7 +363,7 @@ function showGraph()
   var c = document.getElementById("canvas");
       var ctx = c.getContext("2d");
       ctx.canvas.width  = window.innerWidth;
-      ctx.canvas.height = window.innerHeight;
+      ctx.canvas.height = selectedPlaylist.items.length*50;
       const black = "#ffffff"
       var j=0;
       var other = 0;
